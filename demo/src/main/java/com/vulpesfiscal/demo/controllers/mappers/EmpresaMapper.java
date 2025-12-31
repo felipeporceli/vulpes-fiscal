@@ -1,5 +1,6 @@
 package com.vulpesfiscal.demo.controllers.mappers;
 
+import com.vulpesfiscal.demo.controllers.dtos.CadastroEmpresaDTO;
 import com.vulpesfiscal.demo.controllers.dtos.ResultadoPesquisaEmpresaDTO;
 import com.vulpesfiscal.demo.entities.Empresa;
 import com.vulpesfiscal.demo.repositories.EmpresaRepository;
@@ -11,5 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public interface EmpresaMapper {
 
     ResultadoPesquisaEmpresaDTO toDTO(Empresa empresa);
+
+    public abstract Empresa toEntity(CadastroEmpresaDTO dto);
 }
 

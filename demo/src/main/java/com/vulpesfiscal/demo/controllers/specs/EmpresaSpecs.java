@@ -1,6 +1,8 @@
 package com.vulpesfiscal.demo.controllers.specs;
 
 import com.vulpesfiscal.demo.entities.Empresa;
+import com.vulpesfiscal.demo.entities.enums.PorteEmpresa;
+import com.vulpesfiscal.demo.entities.enums.RegimeTributarioEmpresa;
 import com.vulpesfiscal.demo.entities.enums.StatusEmpresa;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -28,13 +30,18 @@ public class EmpresaSpecs {
     }
 
     // SELECT * FROM empresa WHERE regimeTributario = : regimeTributario
-    public static Specification<Empresa> regimeTributarioIgual (String regimeTributario) {
+    public static Specification<Empresa> regimeTributarioIgual (RegimeTributarioEmpresa regimeTributario) {
         return (root, query, cb) -> cb.equal(root.get("regimeTributario"), regimeTributario);
     }
 
+    // SELECT * FROM empresa WHERE porte = :porte
+    public static Specification<Empresa> regimeTributarioIgual (PorteEmpresa porte) {
+        return (root, query, cb) -> cb.equal(root.get("porte"), porte);
+    }
+
     // SELECT * FROM empresa WHERE status = :status
-    public static Specification<Empresa> statusIgual (StatusEmpresa statusEmpresa) {
-        return (root, query, cb) -> cb.equal(root.get("statusEmpresa"), statusEmpresa);
+    public static Specification<Empresa> statusIgual (StatusEmpresa status) {
+        return (root, query, cb) -> cb.equal(root.get("status"), status);
     }
 
 }
