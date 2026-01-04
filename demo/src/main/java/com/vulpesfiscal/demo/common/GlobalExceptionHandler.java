@@ -3,7 +3,8 @@ package com.vulpesfiscal.demo.common;
 import com.vulpesfiscal.demo.controllers.dtos.ErroCampo;
 import com.vulpesfiscal.demo.controllers.dtos.ErroResposta;
 import com.vulpesfiscal.demo.exceptions.CampoInvalidoException;
-import com.vulpesfiscal.demo.exceptions.EmpresaNaoEncontradaException;
+import com.vulpesfiscal.demo.exceptions.EmpresaComEstabelecimentoException;
+import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
 import com.vulpesfiscal.demo.exceptions.RegistroDuplicadoException;
 import tools.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpStatus;
@@ -78,14 +79,25 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler(EmpresaNaoEncontradaException.class)
+    @ExceptionHandler(RecursoNaoEncontradoException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErroResposta handleEmpresaNaoEncontrada(EmpresaNaoEncontradaException e) {
+    public ErroResposta handleEmpresaNaoEncontrada(RecursoNaoEncontradoException e) {
         return new ErroResposta(
                 404,
                 "Recurso não encontrado",
                 List.of(new ErroCampo("cnpj", e.getMessage()))
         );
     }
+
+    @ExceptionHandler(EmpresaComEstabelecimentoException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErroResposta handleEmpresaComEstabelecimento(EmpresaComEstabelecimentoException e) {
+        return new ErroResposta(
+                409,
+                "Regra de negócio violada",
+                List.of(new ErroCampo("empresa", e.getMessage()))
+        );
+    }
+
 
 }

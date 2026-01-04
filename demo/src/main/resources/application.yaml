@@ -18,3 +18,5 @@ spring:
   jackson:
     date-format: dd/MM/yyyy
     time-zone: America/Sao_Paulo
+    deserialization:
+      fail-on-unknown-properties: true

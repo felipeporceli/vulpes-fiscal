@@ -1,5 +1,6 @@
 package com.vulpesfiscal.demo.controllers;
 
+import com.vulpesfiscal.demo.controllers.dtos.AtualizacaoEmpresaDTO;
 import com.vulpesfiscal.demo.controllers.dtos.CadastroEmpresaDTO;
 import com.vulpesfiscal.demo.controllers.dtos.ResultadoPesquisaEmpresaDTO;
 import com.vulpesfiscal.demo.controllers.mappers.EmpresaMapper;
@@ -79,13 +80,12 @@ public class EmpresaController implements ControllerGenerico{
     @PutMapping("{cnpj}")
     public ResponseEntity<Void> atualizar(
             @PathVariable String cnpj,
-            @RequestBody CadastroEmpresaDTO dto
+            @RequestBody AtualizacaoEmpresaDTO dto
     ) {
-        Empresa empresa = service.pesquisarPorCnpj(cnpj);
+        Empresa empresa = validator.pesquisarPorCnpj(cnpj);
 
-        Empresa dadosAtualizados = mapper.toEntity(dto);
+        Empresa dadosAtualizados = mapper.toEntityUpdate(dto, empresa);
 
-        empresa.setCnpj(dadosAtualizados.getCnpj());
         empresa.setStatus(dadosAtualizados.getStatus());
         empresa.setRazaoSocial(dadosAtualizados.getRazaoSocial());
         empresa.setRegimeTributario(dadosAtualizados.getRegimeTributario());

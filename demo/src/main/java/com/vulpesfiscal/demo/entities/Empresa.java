@@ -13,6 +13,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -25,6 +27,13 @@ public class Empresa {
     @Column (name = "id")
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @OneToMany(
+            mappedBy = "empresa",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Estabelecimento> estabelecimentos = new ArrayList<>();
 
     @Column (name = "razao_social", length = 300, nullable = false)
     private String razaoSocial;

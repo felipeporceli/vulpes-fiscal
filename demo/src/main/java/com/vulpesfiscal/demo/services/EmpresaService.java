@@ -5,22 +5,15 @@ import com.vulpesfiscal.demo.entities.Empresa;
 import com.vulpesfiscal.demo.entities.enums.PorteEmpresa;
 import com.vulpesfiscal.demo.entities.enums.RegimeTributarioEmpresa;
 import com.vulpesfiscal.demo.entities.enums.StatusEmpresa;
-import com.vulpesfiscal.demo.exceptions.EmpresaNaoEncontradaException;
+import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
 import com.vulpesfiscal.demo.repositories.EmpresaRepository;
 import com.vulpesfiscal.demo.validator.EmpresaValidator;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.constraints.br.CNPJ;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-
-import javax.swing.text.html.Option;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -73,6 +66,7 @@ public class EmpresaService {
         return repository.findAll(specification, pageRequest);
     }
     public void deletar(String cnpj) {
+        validator.validarDeletar(cnpj);
         repository.delete(validator.pesquisarPorCnpj(cnpj));
     }
 
@@ -81,6 +75,16 @@ public class EmpresaService {
         validator.pesquisarPorCnpj(empresa.getCnpj());
         repository.save(empresa);
     }
+
+    public Empresa buscarPorId(Integer id) {
+        return repository.findById(id)
+                .orElseThrow(() ->
+                            new RecursoNaoEncontradoException(
+                                "Empresa não encontrada para o ID informado"
+                        )
+                );
+    }
+
 
 
 

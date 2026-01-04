@@ -2,8 +2,8 @@ package com.vulpesfiscal.demo.validator;
 
 import com.vulpesfiscal.demo.entities.Empresa;
 import com.vulpesfiscal.demo.exceptions.CampoInvalidoException;
-import com.vulpesfiscal.demo.exceptions.EmpresaNaoEncontradaException;
-import com.vulpesfiscal.demo.exceptions.RegistroDuplicadoException;
+import com.vulpesfiscal.demo.exceptions.EmpresaComEstabelecimentoException;
+import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
 import com.vulpesfiscal.demo.repositories.EmpresaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -32,8 +32,25 @@ public class EmpresaValidator {
     public Empresa pesquisarPorCnpj(String cnpj) {
         return repository.findByCnpj(cnpj)
                 .orElseThrow(() ->
-                        new EmpresaNaoEncontradaException("Empresa não encontrada para o CNPJ informado")
+                        new RecursoNaoEncontradoException("Empresa não encontrada para o CNPJ informado")
                 );
     }
+
+    public void validarDeletar (String cnpj) {
+        Empresa empresa = repository.findByCnpj(cnpj)
+                .orElseThrow(() ->
+                        new RecursoNaoEncontradoException(
+                                "Empresa não encontrada para o CNPJ informado"
+                        )
+                );
+
+        if (!empresa.getEstabelecimentos().isEmpty()) {
+            throw new EmpresaComEstabelecimentoException(
+                    "Não é possível excluir a empresa pois existem estabelecimentos vinculados"
+            );
+        }
+    }
+
+
 }
 
