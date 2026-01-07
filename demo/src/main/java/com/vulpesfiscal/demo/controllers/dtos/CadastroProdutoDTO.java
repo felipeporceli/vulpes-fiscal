@@ -12,37 +12,33 @@ import org.hibernate.validator.constraints.br.CNPJ;
 
 import java.time.LocalDate;
 
-public record CadastroEmpresaDTO (
+public record CadastroProdutoDTO(
 
-        @NotNull
-        Integer id,
+        @NotNull(message = "Campo obrigatório")
+        Integer idProduto,
 
         @NotBlank(message = "Campo obrigatório")
-        String razaoSocial,
+        String descricao,
 
-        String nomeFantasia,
+        String codigoBarras,
+
+        @NotNull(message = "Campo obrigatório")
+        Integer ncm,
+
+        @NotNull(message = "Campo obrigatório")
+        Integer cfop,
 
         @NotBlank(message = "Campo obrigatório")
-        String cnpj,
-
-        @NotBlank(message = "Campo obrigatório")
-        String inscricaoEstadual,
+        String unidade,
 
         @NotNull(message = "Campo obrigatório")
-        RegimeTributarioEmpresa regimeTributario,
+        Double preco,
 
         @NotNull(message = "Campo obrigatório")
-        StatusEmpresa status,
+        Boolean ativo,
 
         @NotNull(message = "Campo obrigatório")
-        PorteEmpresa porte,
+        Integer qtdEstoque
 
-        @NotNull(message = "Campo obrigatório")
-        AmbienteSefazEmpresa ambienteSefaz,
-
-        @JsonFormat(pattern = "dd/MM/yyyy")
-        @NotNull
-        @Past(message = "Não pode ser data futura")
-        LocalDate dataAbertura
 ){
 }

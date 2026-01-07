@@ -35,6 +35,9 @@ public class Empresa {
     )
     private List<Estabelecimento> estabelecimentos = new ArrayList<>();
 
+    @OneToMany(mappedBy = "empresa")
+    private List<Produto> produtos;
+
     @Column (name = "razao_social", length = 300, nullable = false)
     private String razaoSocial;
 

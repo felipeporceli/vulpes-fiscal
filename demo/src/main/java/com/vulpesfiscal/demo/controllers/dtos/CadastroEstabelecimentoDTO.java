@@ -5,6 +5,7 @@ import com.vulpesfiscal.demo.entities.enums.StatusEmpresa;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
+import org.hibernate.validator.constraints.br.CNPJ;
 
 import java.time.LocalDate;
 
@@ -13,6 +14,7 @@ public record CadastroEstabelecimentoDTO(
         String nomeFantasia,
 
         @NotBlank(message = "Campo obrigatório")
+        @CNPJ
         String cnpj,
 
         @NotBlank(message = "Campo obrigatório")

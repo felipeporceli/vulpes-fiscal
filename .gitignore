@@ -1,2 +1,4 @@
 .env
 demo/src/main/resources/application.yaml
+*.sql
+database.sql
