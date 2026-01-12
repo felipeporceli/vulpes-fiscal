@@ -6,6 +6,7 @@ import com.vulpesfiscal.demo.controllers.specs.EstabelecimentoSpecs;
 import com.vulpesfiscal.demo.entities.Empresa;
 import com.vulpesfiscal.demo.entities.Estabelecimento;
 import com.vulpesfiscal.demo.entities.enums.StatusEmpresa;
+import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
 import com.vulpesfiscal.demo.repositories.EstabelecimentoRepository;
 import com.vulpesfiscal.demo.validator.EstabelecimentoValidator;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 
 @Service
@@ -85,6 +88,13 @@ public class EstabelecimentoService {
 
     public void atualizar(Estabelecimento estabelecimento) {
         repository.save(estabelecimento);
+    }
+
+    public Estabelecimento buscarPorId(Integer id) {
+        return repository.findById(id)
+                .orElseThrow(() ->
+                        new RecursoNaoEncontradoException("Estabelecimento não encontrada")
+                );
     }
 
 

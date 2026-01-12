@@ -25,4 +25,6 @@ public interface ProdutoRepository extends JpaRepository <Produto, Integer>, Jpa
             Integer idTecnico
     );
 
+
+
 }

@@ -2,10 +2,8 @@ package com.vulpesfiscal.demo.common;
 
 import com.vulpesfiscal.demo.controllers.dtos.ErroCampo;
 import com.vulpesfiscal.demo.controllers.dtos.ErroResposta;
-import com.vulpesfiscal.demo.exceptions.CampoInvalidoException;
-import com.vulpesfiscal.demo.exceptions.EmpresaComEstabelecimentoException;
-import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
-import com.vulpesfiscal.demo.exceptions.RegistroDuplicadoException;
+import com.vulpesfiscal.demo.entities.Produto;
+import com.vulpesfiscal.demo.exceptions.*;
 import tools.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -96,6 +94,16 @@ public class GlobalExceptionHandler {
                 409,
                 "Regra de negócio violada",
                 List.of(new ErroCampo("empresa", e.getMessage()))
+        );
+    }
+
+    @ExceptionHandler(ProdutoNaoEncontradoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErroResposta handleProdutoNaoEncontrado(ProdutoNaoEncontradoException e) {
+        return new ErroResposta(
+                404,
+                "Produto nao encontrado",
+                List.of(new ErroCampo("produto", e.getMessage()))
         );
     }
 
