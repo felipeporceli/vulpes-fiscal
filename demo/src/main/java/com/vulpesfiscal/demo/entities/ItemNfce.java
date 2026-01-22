@@ -23,7 +23,6 @@ public class ItemNfce {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "nfce_id", nullable = false)
     @JsonIgnore

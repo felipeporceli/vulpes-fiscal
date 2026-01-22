@@ -80,6 +80,7 @@ public class EstabelecimentoService {
         Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina);
         return repository.findAll(specification, pageRequest);
     }
+
     public void deletar(String cnpj) {
         validator.pesquisarPorCnpj(cnpj);
         repository.delete(validator.pesquisarPorCnpj(cnpj));

@@ -42,6 +42,7 @@ public class EmpresaService {
         Specification<Empresa> specification = Specification.where
                 ((root, query, cb) -> cb.conjunction());
 
+
         if (cnpj != null) {
             specification = specification.and(EmpresaSpecs.cnpjIgual(cnpj));
 

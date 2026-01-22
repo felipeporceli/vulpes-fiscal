@@ -4,6 +4,7 @@ import com.vulpesfiscal.demo.controllers.dtos.ErroCampo;
 import com.vulpesfiscal.demo.controllers.dtos.ErroResposta;
 import com.vulpesfiscal.demo.entities.Produto;
 import com.vulpesfiscal.demo.exceptions.*;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import tools.jackson.databind.exc.InvalidFormatException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -106,6 +107,17 @@ public class GlobalExceptionHandler {
                 List.of(new ErroCampo("produto", e.getMessage()))
         );
     }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErroResposta handleCampoInvalidoNulo(MethodArgumentTypeMismatchException e) {
+        return new ErroResposta(
+                409,
+                "Campo Invalido",
+                List.of(new ErroCampo("empresaId, estabelecimentoID", e.getMessage()))
+        );
+    }
+
 
 
 }
