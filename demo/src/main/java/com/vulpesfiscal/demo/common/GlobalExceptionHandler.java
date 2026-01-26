@@ -2,6 +2,7 @@ package com.vulpesfiscal.demo.common;
 
 import com.vulpesfiscal.demo.controllers.dtos.ErroCampo;
 import com.vulpesfiscal.demo.controllers.dtos.ErroResposta;
+import com.vulpesfiscal.demo.entities.Estabelecimento;
 import com.vulpesfiscal.demo.entities.Produto;
 import com.vulpesfiscal.demo.exceptions.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -46,7 +47,7 @@ public class GlobalExceptionHandler {
 
             String mensagem = tipo.equals("LocalDate")
                     ? "Data inválida. Use dd/MM/yyyy"
-                    : "Valor inválido";
+                    : "Valor invalido";
 
             return erro422(campo, mensagem);
         }
@@ -115,6 +116,36 @@ public class GlobalExceptionHandler {
                 409,
                 "Campo Invalido",
                 List.of(new ErroCampo("empresaId, estabelecimentoID", e.getMessage()))
+        );
+    }
+
+    @ExceptionHandler(ConsumidorNaoEncontradoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErroResposta handleConsumidorNaoEncontrado(ConsumidorNaoEncontradoException e) {
+        return new ErroResposta(
+                404,
+                "Recurso não encontrado",
+                List.of(new ErroCampo("consumidorId", e.getMessage()))
+        );
+    }
+
+    @ExceptionHandler(EmpresaDifereEstabelecimentoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErroResposta handlempresaDifereEstabelecimento(EmpresaDifereEstabelecimentoException e) {
+        return new ErroResposta(
+                404,
+                "Empresa ou Estabelecimento nao se pertencem",
+                List.of(new ErroCampo("Empresa", e.getMessage()))
+        );
+    }
+
+    @ExceptionHandler(EstabelecimentoNaoEncontrado.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErroResposta handleEstabelecimentoNaoEncontrado(EstabelecimentoNaoEncontrado e) {
+        return new ErroResposta(
+                404,
+                "Estabelecimento nao encontrado",
+                List.of(new ErroCampo("Estabelecimento", e.getMessage()))
         );
     }
 

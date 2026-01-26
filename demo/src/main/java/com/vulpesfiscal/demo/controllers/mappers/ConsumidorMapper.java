@@ -14,4 +14,6 @@ public interface ConsumidorMapper {
     public abstract Consumidor toEntity(CadastroConsumidorDTO dto);
 
     public abstract Consumidor toEntityUpdate(AtualizacaoConsumidorDTO dto, @MappingTarget Consumidor consumidor);
+
+    ConsumidorResponseDTO toResponseDTO(Consumidor consumidor);
 }

@@ -3,7 +3,7 @@ package com.vulpesfiscal.demo.entities;
 import com.vulpesfiscal.demo.entities.enums.MetodoPagamento;
 import com.vulpesfiscal.demo.entities.enums.StatusPagamento;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -13,19 +13,28 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "pagamento")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class Pagamento {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "metodo_pagamento")
+
     @Enumerated(EnumType.STRING)
+    @Column(name = "metodo_pagamento", nullable = false)
     private MetodoPagamento metodoPagamento;
 
-    @Column(name = "valor")
+    @Column(name = "valor", nullable = false)
     private BigDecimal valor;
+
+    @Column(name = "valor_recebido")
+    private BigDecimal valorRecebido;
+
 
     @Column(name = "troco")
     private BigDecimal troco;
@@ -33,30 +42,34 @@ public class Pagamento {
     @Column(name = "parcelas")
     private Integer parcelas;
 
-    @Column(name = "status_pagamento")
     @Enumerated(EnumType.STRING)
+    @Column(name = "status_pagamento", nullable = false)
     private StatusPagamento statusPagamento;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "empresa_id")
+    // 🔗 pagamento pertence a uma venda
+    @OneToOne
+    @JoinColumn(name = "venda_id", nullable = false)
+    private Venda venda;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "empresa_id", nullable = false)
     private Empresa empresa;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "estabelecimento_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "estabelecimento_id", nullable = false)
     private Estabelecimento estabelecimento;
 
-    // --------------- AUDITORIA ---------------
+    // -------- AUDITORIA --------
 
     @CreatedDate
-    @Column (name = "criado_em")
+    @Column(name = "criado_em")
     private LocalDateTime dataCriacao;
 
     private Integer criadoPor;
 
     @LastModifiedDate
-    @Column (name = "atualizado_em")
+    @Column(name = "atualizado_em")
     private LocalDateTime atualizadoEm;
 
     private Integer atualizadoPor;
-
 }

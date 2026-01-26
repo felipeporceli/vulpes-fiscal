@@ -99,5 +99,39 @@ public class PagamentoService {
         return repository.findAll(specification, pageRequest);
     }
 
+    public void processarPagamento(Pagamento pagamento, BigDecimal valorVenda) {
+        if (pagamento.getMetodoPagamento() == null) {
+            throw new IllegalArgumentException("Método de pagamento é obrigatório");
+        }
+        pagamento.setValor(valorVenda);
+        if (pagamento.getMetodoPagamento() == MetodoPagamento.DINHEIRO) {
+            calcularTroco(pagamento);
+        } else {
+            pagamento.setTroco(BigDecimal.ZERO);
+        }
+
+        pagamento.setStatusPagamento(StatusPagamento.PENDENTE);
+    }
+
+    private void calcularTroco(Pagamento pagamento) {
+
+        if (pagamento.getValorRecebido() == null) {
+            throw new IllegalArgumentException(
+                    "Valor recebido é obrigatório para pagamento em dinheiro"
+            );
+        }
+
+        if (pagamento.getValorRecebido().compareTo(pagamento.getValor()) < 0) {
+            throw new IllegalArgumentException(
+                    "Valor recebido é menor que o valor da venda"
+            );
+        }
+
+        BigDecimal troco = pagamento.getValorRecebido()
+                .subtract(pagamento.getValor());
+
+        pagamento.setTroco(troco);
+    }
+
 
 }
