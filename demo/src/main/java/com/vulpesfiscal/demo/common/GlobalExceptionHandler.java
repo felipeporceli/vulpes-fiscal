@@ -149,6 +149,16 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(UsuarioNaoEncontradoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErroResposta handleUsuarioNaoEncontrado(UsuarioNaoEncontradoException e) {
+        return new ErroResposta(
+                404,
+                "Usuario nao encontrado",
+                List.of(new ErroCampo("id", e.getMessage()))
+        );
+    }
+
 
 
 }

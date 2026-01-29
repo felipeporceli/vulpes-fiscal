@@ -1,8 +1,9 @@
 package com.vulpesfiscal.demo.entities.enums;
 
 public enum StatusNfce {
-    PENDENTE,
+    GERADA,
+    AUTORIZADA,
+    REJEITADA,
     CANCELADA,
-    EMITIDA,
     INUTILIZADA
 }
