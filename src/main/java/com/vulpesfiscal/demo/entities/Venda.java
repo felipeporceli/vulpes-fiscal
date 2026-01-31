@@ -59,6 +59,7 @@ public class Venda {
     @Column(name = "parcelas")
     private Integer parcelas;
 
+    @Transient
     private Boolean emitirNfce;
 
     @CreatedDate

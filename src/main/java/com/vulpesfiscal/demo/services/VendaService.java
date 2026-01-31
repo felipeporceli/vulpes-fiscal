@@ -1,7 +1,6 @@
 package com.vulpesfiscal.demo.services;
 
 import com.vulpesfiscal.demo.entities.*;
-import com.vulpesfiscal.demo.entities.enums.StatusPagamento;
 import com.vulpesfiscal.demo.exceptions.*;
 import com.vulpesfiscal.demo.repositories.ConsumidorRepository;
 import com.vulpesfiscal.demo.repositories.EstabelecimentoRepository;
@@ -12,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +21,7 @@ public class VendaService {
     private final PagamentoService pagamentoService;
     private final ConsumidorRepository consumidorRepository;
     private final EstabelecimentoRepository estabelecimentoRepository;
+    private final NfceService nfceService;
 
     @Transactional
     public Venda criarVenda(Venda venda, Integer empresaId, Integer estabelecimentoId) {
@@ -108,9 +107,7 @@ public class VendaService {
         }
 
         if (Boolean.TRUE.equals(venda.getEmitirNfce())) {
-            // emitir NFC-e
-            // criar entidade Nfce
-            // vincular à venda
+            Nfce nfce = nfceService.emitirNfceSeNecessario(venda);
         }
 
         return vendaRepository.save(venda);
