@@ -36,7 +36,7 @@ public class GlobalExceptionHandler {
     }
 
     /* Esse metodo trata erros de leitura do JSON enviados na requisição nos campos ENUMs e Datas. Caso o JSON esteja
-    formatado incorretamente ele retorna com mensagem personalizada. Impedindo que cheguem ao servidor.*/
+    formatado incorretamente ele retorna com mensagem personalizada. Impedindo que cheguem ao servidor.*//*
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ErroResposta handleJsonInvalido(HttpMessageNotReadableException ex) {
@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
         }
 
         return erro422("json", "JSON inválido");
-    }
+    }*/
 
     /* Esse metodo captura erros do Jakarta Validation (@NotBlank, @NotNull, @Past, etc.) Percorre todos os campos
     inválidos e retorna com uma mensagem padronizada. */

@@ -14,12 +14,15 @@ public class ConsumidorValidator {
 
     private final ConsumidorRepository repository;
 
-    public void validar(Consumidor Consumidor) {
-        if (Consumidor.getCpf() == null) {
-            return;
+    public void validar(Consumidor consumidor) {
+        if (consumidor.getCpf() == null) {
+            throw new CampoInvalidoException(
+                    "cpf",
+                    "CPF nao pode ser nulo"
+            );
         }
 
-        if (repository.existsByCpf(Consumidor.getCpf())) {
+        if (repository.existsByCpfAndEmpresaId(consumidor.getCpf(), consumidor.getEmpresa().getId())) {
             throw new CampoInvalidoException(
                     "cpf",
                     "Já existe uma Consumidor cadastrado com este CPF"

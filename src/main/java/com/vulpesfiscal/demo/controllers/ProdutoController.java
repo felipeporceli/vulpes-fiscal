@@ -23,9 +23,11 @@ public class ProdutoController implements ControllerGenerico{
     private final ProdutoValidator validator;
 
     // Salvar novo produto. Finalizando gerando a URL da nova entidade e entregando-a no header da response.
-    @PostMapping("/empresa/{empresaId}")
-    public ResponseEntity<Void> salvar (@RequestBody @Valid CadastroProdutoDTO dto, @PathVariable Integer empresaId) {
-        Produto produto = service.salvar(dto, empresaId);
+    @PostMapping("/empresa/{empresaId}/estabelecimento/{estabelecimentoId}")
+    public ResponseEntity<Void> salvar (@RequestBody @Valid CadastroProdutoDTO dto,
+                                        @PathVariable Integer empresaId,
+                                        @PathVariable Integer estabelecimentoId) {
+        Produto produto = service.salvar(dto, empresaId, estabelecimentoId);
         var url = gerarHeaderLocation(produto.getIdProduto());
         return ResponseEntity.created(url).build();
     }

@@ -46,7 +46,6 @@ public class NfceService {
         nfce.setSerie(1);
         nfce.setValorTotal(venda.getValorTotal().intValue());
         nfce.setStatusNfce(StatusNfce.GERADA);
-        nfce.setDataCriacao();
         nfce.setCriadoPor(venda.getCriadoPor());
         nfce.setAtualizadoPor(venda.getAtualizadoPor());
 

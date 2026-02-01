@@ -1,5 +1,6 @@
 package com.vulpesfiscal.demo.controllers;
 
+import com.vulpesfiscal.demo.controllers.dtos.CadastroVendaDTO;
 import com.vulpesfiscal.demo.controllers.dtos.VendaResponseDTO;
 import com.vulpesfiscal.demo.controllers.mappers.VendaMapper;
 import com.vulpesfiscal.demo.entities.Venda;
@@ -21,17 +22,18 @@ public class VendaController {
     public ResponseEntity<VendaResponseDTO> criarVenda(
             @PathVariable Integer empresaId,
             @PathVariable Integer estabelecimentoId,
-            @RequestBody Venda venda
+            @RequestBody CadastroVendaDTO dto
     ) {
 
         Venda vendaCriada = vendaService.criarVenda(
-                venda,
+                dto,
                 empresaId,
                 estabelecimentoId
         );
 
-        Venda vendaSalva = vendaService.criarVenda(venda, empresaId, estabelecimentoId);
-        return ResponseEntity.ok(vendaMapper.toResponseDTO(vendaSalva));
+        return ResponseEntity.ok(
+                vendaMapper.toResponseDTO(vendaCriada)
+        );
     }
 }
 

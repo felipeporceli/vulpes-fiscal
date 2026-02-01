@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table (name = "estabelecimento")
@@ -27,6 +28,9 @@ public class Estabelecimento {
             nullable = false
     )
     private Empresa empresa;
+
+    @OneToMany(mappedBy = "estabelecimento")
+    private List<Produto> produtos;
 
     @Column (name = "nome_fantasia", length = 100, nullable = true)
     private String nomeFantasia;

@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface ConsumidorRepository extends JpaRepository<Consumidor, Integer> , JpaSpecificationExecutor<Consumidor> {
 
-        boolean existsByCpf(String cpf);
+        boolean existsByCpfAndEmpresaId(String cpf, Integer empresaId);
 
 
 }

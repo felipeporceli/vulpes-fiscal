@@ -27,9 +27,10 @@ public class Venda {
     @OneToOne(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)
     private Pagamento pagamento;
 
-    /*// OneToOne
-    @OneToOne(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Integer nfce;*/
+    // OneToOne
+    @OneToOne
+    @JoinColumn(name = "nfce_id")
+    private Nfce nfce;
 
 
     @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)

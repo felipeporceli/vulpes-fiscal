@@ -5,6 +5,7 @@ import com.vulpesfiscal.demo.controllers.dtos.CadastroProdutoDTO;
 import com.vulpesfiscal.demo.controllers.mappers.ProdutoMapper;
 import com.vulpesfiscal.demo.controllers.specs.ProdutoSpecs;
 import com.vulpesfiscal.demo.entities.Empresa;
+import com.vulpesfiscal.demo.entities.Estabelecimento;
 import com.vulpesfiscal.demo.entities.Produto;
 import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
 import com.vulpesfiscal.demo.repositories.ProdutoRepository;
@@ -27,13 +28,18 @@ public class ProdutoService {
     private final ProdutoValidator validator;
     private final EmpresaService empresaService;
     private final ProdutoMapper mapper;
+    private final EstabelecimentoService estabelecimentoService;
 
 
     // Metodo para salvar a nivel de serviço. Utilizando o DTO para salvar apenas com o ID da empresa.
-    public Produto salvar(CadastroProdutoDTO dto, Integer empresaId) {
+    public Produto salvar(CadastroProdutoDTO dto,
+                          Integer empresaId,
+                          Integer estabelecimentoid) {
         Empresa empresa = empresaService.buscarPorId(empresaId);
+        Estabelecimento estabelecimento = estabelecimentoService.buscarPorId(estabelecimentoid);
         Produto produto = mapper.toEntity(dto);
         produto.setEmpresa(empresa);
+        produto.setEstabelecimento(estabelecimento);
         validator.validar(produto, empresa);
         return repository.save(produto);
     }

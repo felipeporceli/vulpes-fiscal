@@ -15,14 +15,8 @@ public record CadastroPagamentoDTO(
         MetodoPagamento metodoPagamento,
 
         @NotNull(message = "Campo obrigatório")
-        BigDecimal valor,
+        BigDecimal valorRecebido,
 
-        @NotNull(message = "Campo obrigatório")
-        BigDecimal troco,
-
-        Integer parcelas,
-
-        @NotNull(message = "Campo obrigatório")
-        StatusPagamento statusPagamento
+        Integer parcelas
 ){
 }

@@ -30,6 +30,10 @@ public class Produto {
     @JoinColumn(name = "empresa_id", nullable = false)
     private Empresa empresa;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "estabelecimento_id", nullable = false)
+    private Estabelecimento estabelecimento;
+
     @Column (name = "descricao", length = 300, nullable = false)
     private String descricao;
 

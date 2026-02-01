@@ -14,9 +14,6 @@ import java.time.LocalDate;
 
 public record CadastroEmpresaDTO (
 
-        @NotNull
-        Integer id,
-
         @NotBlank(message = "Campo obrigatório")
         String razaoSocial,
 

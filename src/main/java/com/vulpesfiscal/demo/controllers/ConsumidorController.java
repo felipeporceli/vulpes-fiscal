@@ -5,6 +5,7 @@ import com.vulpesfiscal.demo.controllers.dtos.CadastroConsumidorDTO;
 import com.vulpesfiscal.demo.controllers.dtos.ResultadoPesquisaConsumidorDTO;
 import com.vulpesfiscal.demo.controllers.mappers.ConsumidorMapper;
 import com.vulpesfiscal.demo.entities.Consumidor;
+import com.vulpesfiscal.demo.entities.Empresa;
 import com.vulpesfiscal.demo.services.ConsumidorService;
 import com.vulpesfiscal.demo.validator.ConsumidorValidator;
 import jakarta.validation.Valid;
@@ -14,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/consumidor")
+@RequestMapping("/consumidores")
 @RequiredArgsConstructor
 public class ConsumidorController implements ControllerGenerico{
 
@@ -23,11 +24,12 @@ public class ConsumidorController implements ControllerGenerico{
     private final ConsumidorValidator validator;
 
     // Salvar nova Consumidor. Finalizando gerando a URL da nova entidade e entregando-a no header da response.
-    @PostMapping
-    public ResponseEntity<Void> salvar (@RequestBody @Valid CadastroConsumidorDTO dto) {
-        Consumidor Consumidor = mapper.toEntity(dto);
-        service.salvar(Consumidor);
-        var url = gerarHeaderLocation(Consumidor.getId());
+    @PostMapping("/empresa/{empresaId}/estabelecimento/{estabelecimentoId}")
+    public ResponseEntity<Void> salvar (@RequestBody @Valid CadastroConsumidorDTO dto,
+                                        @PathVariable Integer empresaId,
+                                        @PathVariable Integer estabelecimentoId) {
+        Consumidor consumidor = service.salvar(dto, empresaId, estabelecimentoId);
+        var url = gerarHeaderLocation(consumidor.getId());
         return ResponseEntity.created(url).build();
     }
 

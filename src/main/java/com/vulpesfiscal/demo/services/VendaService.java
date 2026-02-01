@@ -1,5 +1,7 @@
 package com.vulpesfiscal.demo.services;
 
+import com.vulpesfiscal.demo.controllers.dtos.CadastroItemVendaDTO;
+import com.vulpesfiscal.demo.controllers.dtos.CadastroVendaDTO;
 import com.vulpesfiscal.demo.entities.*;
 import com.vulpesfiscal.demo.exceptions.*;
 import com.vulpesfiscal.demo.repositories.ConsumidorRepository;
@@ -11,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,92 +28,145 @@ public class VendaService {
     private final NfceService nfceService;
 
     @Transactional
-    public Venda criarVenda(Venda venda, Integer empresaId, Integer estabelecimentoId) {
+    public Venda criarVenda(
+            CadastroVendaDTO dto,
+            Integer empresaId,
+            Integer estabelecimentoId
+    ) {
 
+        Venda venda = new Venda();
+
+        // ===============================
+        // ESTABELECIMENTO / EMPRESA
+        // ===============================
         Estabelecimento estabelecimento = estabelecimentoRepository
                 .findById(estabelecimentoId)
-                .orElseThrow(() -> new EstabelecimentoNaoEncontrado("Estabelecimento não encontrado"));
+                .orElseThrow(() ->
+                        new EstabelecimentoNaoEncontrado("Estabelecimento não encontrado"));
 
         if (!estabelecimento.getEmpresa().getId().equals(empresaId)) {
-            throw new EmpresaDifereEstabelecimentoException("Estabelecimento não pertence à empresa informada");
+            throw new EmpresaDifereEstabelecimentoException(
+                    "Estabelecimento não pertence à empresa informada");
         }
 
-        venda.setEstabelecimento(estabelecimento);
         Empresa empresa = estabelecimento.getEmpresa();
+
+        venda.setEstabelecimento(estabelecimento);
         venda.setEmpresa(empresa);
 
+        // ===============================
+        // CONSUMIDOR
+        // ===============================
         Consumidor consumidor = consumidorRepository
-                .findById(venda.getConsumidor().getId())
+                .findById(dto.consumidorId())
                 .orElseThrow(() ->
-                        new ConsumidorNaoEncontradoException("Consumidor não encontrado")
-                );
+                        new ConsumidorNaoEncontradoException("Consumidor não encontrado"));
 
-        if (venda.getItens() == null || venda.getItens().isEmpty()) {
-            throw new CampoInvalidoException("Item", "A venda deve possuir ao menos um item");
+        venda.setConsumidor(consumidor);
+
+        // ===============================
+        // ITENS
+        // ===============================
+        if (dto.itens() == null || dto.itens().isEmpty()) {
+            throw new CampoInvalidoException(
+                    "itens",
+                    "A venda deve possuir ao menos um item"
+            );
         }
 
         BigDecimal totalVenda = BigDecimal.ZERO;
+        List<ItemVenda> itensVenda = new ArrayList<>();
 
-        for (ItemVenda item : venda.getItens()) {
+        for (CadastroItemVendaDTO itemDTO : dto.itens()) {
 
+            Produto produto = produtoRepository
+                    .findByEmpresaIdAndIdProduto(empresaId, itemDTO.idProduto())
+                    .orElseThrow(() ->
+                            new ProdutoNaoEncontradoException("Produto não encontrado"));
+
+            ItemVenda item = new ItemVenda();
             item.setVenda(venda);
-
-            Produto produto = produtoRepository.findByEmpresaIdAndIdProduto(empresaId, item.getProduto().getIdProduto())
-                    .orElseThrow(() -> new ProdutoNaoEncontradoException("idProduto não encontrado"));
-
             item.setProduto(produto);
+            item.setQuantidade(itemDTO.quantidade());
+            item.setCfop(itemDTO.cfop());
+
             item.setValorUnitario(produto.getPreco());
 
-            BigDecimal totalItem = item.getValorUnitario()
-                    .multiply(BigDecimal.valueOf(item.getQuantidade()));
+            BigDecimal totalItem = produto.getPreco()
+                    .multiply(BigDecimal.valueOf(itemDTO.quantidade()));
 
             item.setValorTotal(totalItem);
-            totalVenda = totalVenda.add(totalItem);
+            item.setEmpresa(empresa);
             item.setEstabelecimento(estabelecimento);
-            item.setEmpresa(estabelecimento.getEmpresa());
 
+            totalVenda = totalVenda.add(totalItem);
+            itensVenda.add(item);
         }
 
-        if (venda.getDesconto() != null
-                && venda.getDesconto().compareTo(BigDecimal.ZERO) < 0) {
+        venda.setItens(itensVenda);
+
+        // ===============================
+        // DESCONTO
+        // ===============================
+        if (dto.desconto() != null
+                && dto.desconto().compareTo(BigDecimal.ZERO) < 0) {
             throw new CampoInvalidoException(
                     "desconto",
                     "O desconto não pode ser negativo"
             );
         }
 
-        if (venda.getDesconto() != null) {
-            totalVenda = totalVenda.subtract(venda.getDesconto());
+        if (dto.desconto() != null) {
+            totalVenda = totalVenda.subtract(dto.desconto());
         }
 
+        venda.setDesconto(dto.desconto());
         venda.setValorTotal(totalVenda);
 
-        // ---------- PAGAMENTO ----------
-        Pagamento pagamento = venda.getPagamento();
-
-        if (pagamento == null) {
-            throw new CampoInvalidoException("Pagamento", "Pagamento é obrigatório");
+        // ===============================
+        // PAGAMENTO
+        // ===============================
+        if (dto.pagamento() == null) {
+            throw new CampoInvalidoException(
+                    "pagamento",
+                    "Pagamento é obrigatório"
+            );
         }
 
+        Pagamento pagamento = new Pagamento();
+        pagamento.setMetodoPagamento(dto.pagamento().metodoPagamento());
+        pagamento.setValorRecebido(dto.pagamento().valorRecebido());
+
         pagamentoService.processarPagamento(pagamento, totalVenda);
+
         pagamento.setVenda(venda);
         pagamento.setEmpresa(empresa);
         pagamento.setEstabelecimento(estabelecimento);
+
         venda.setPagamento(pagamento);
 
-        // ------------- NFCE ---------------
-
-        if (venda.getEmitirNfce() == null) {
+        // ===============================
+        // NFC-e
+        // ===============================
+        if (dto.emitirNfce() == null) {
             throw new CampoInvalidoException(
                     "emitirNfce",
                     "Informe se a NFC-e deve ser emitida"
             );
         }
 
-        if (Boolean.TRUE.equals(venda.getEmitirNfce())) {
+        venda.setEmitirNfce(dto.emitirNfce());
+
+        // Salva a venda primeiro
+
+
+        if (Boolean.TRUE.equals(dto.emitirNfce())) {
             Nfce nfce = nfceService.emitirNfceSeNecessario(venda);
+            venda.setNfce(nfce);
         }
 
-        return vendaRepository.save(venda);
+        Venda vendaSalva = vendaRepository.save(venda);
+        return vendaSalva;
     }
+
 }
