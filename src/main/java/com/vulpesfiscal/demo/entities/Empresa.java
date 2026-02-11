@@ -66,6 +66,14 @@ public class Empresa {
     @Column (name = "status", length = 7, nullable = false)
     private StatusEmpresa status;
 
+    @Column (name = "cnae", nullable = false)
+    private String cnae;
+
+    @Column (name = "uf", nullable = false)
+    private String uf;
+
+    //Auditoria
+
     @Column(name = "data_abertura", nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate dataAbertura;

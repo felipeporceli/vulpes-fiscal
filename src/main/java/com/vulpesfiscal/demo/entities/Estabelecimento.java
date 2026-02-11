@@ -47,8 +47,8 @@ public class Estabelecimento {
     @Column (name = "inscricao_estadual", length = 14, nullable = false)
     private String inscricaoEstadual;
 
-    @Column (name = "endereco", length = 100, nullable = false)
-    private String endereco;
+    @Column (name = "logradouro", length = 100, nullable = false)
+    private String logradouro;
 
     @Column (name = "cidade", length = 50, nullable = false)
     private String cidade;
@@ -66,6 +66,31 @@ public class Estabelecimento {
     @Column (name = "inscricao_municipal", length = 50, nullable = true)
     private String inscricaoMunicipal;
 
+    @Column (name = "numero")
+    private String numero;
+
+    @Column (name = "complemento")
+    private String complemento;
+
+    @Column (name = "bairro")
+    private String bairro;
+
+    @Column (name = "municipio_id")
+    private String municipioId;
+
+    @Column (name = "cep")
+    private String cep;
+
+    @Column (name = "pais_id")
+    private String paisId;
+
+    @Column (name = "pais")
+    private String pais;
+
+    @Column (name = "uf_id")
+    private String codUf;
+
+    // Auditoria
     @Column(name = "data_abertura", nullable = false)
     private LocalDate dataAbertura;
 

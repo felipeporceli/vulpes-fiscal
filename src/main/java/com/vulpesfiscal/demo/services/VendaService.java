@@ -2,6 +2,8 @@ package com.vulpesfiscal.demo.services;
 
 import com.vulpesfiscal.demo.controllers.dtos.CadastroItemVendaDTO;
 import com.vulpesfiscal.demo.controllers.dtos.CadastroVendaDTO;
+import com.vulpesfiscal.demo.controllers.dtos.nfce.NfceDTO;
+import com.vulpesfiscal.demo.controllers.mappers.NfceMapper;
 import com.vulpesfiscal.demo.entities.*;
 import com.vulpesfiscal.demo.exceptions.*;
 import com.vulpesfiscal.demo.repositories.ConsumidorRepository;
@@ -26,6 +28,7 @@ public class VendaService {
     private final ConsumidorRepository consumidorRepository;
     private final EstabelecimentoRepository estabelecimentoRepository;
     private final NfceService nfceService;
+    private final NfceMapper nfceMapper;
 
     @Transactional
     public Venda criarVenda(
@@ -87,7 +90,7 @@ public class VendaService {
             ItemVenda item = new ItemVenda();
             item.setVenda(venda);
             item.setProduto(produto);
-            item.setQuantidade(itemDTO.quantidade());
+            item.setQuantidade(BigDecimal.valueOf(itemDTO.quantidade()));
             item.setCfop(itemDTO.cfop());
 
             item.setValorUnitario(produto.getPreco());
@@ -161,8 +164,8 @@ public class VendaService {
 
 
         if (Boolean.TRUE.equals(dto.emitirNfce())) {
-            Nfce nfce = nfceService.emitirNfceSeNecessario(venda);
-            venda.setNfce(nfce);
+            NfceDTO nfceDTO = nfceService.gerarNfce(venda, estabelecimentoId);
+            venda.setNfce(nfceMapper.toEntity(nfceDTO));
         }
 
         Venda vendaSalva = vendaRepository.save(venda);
