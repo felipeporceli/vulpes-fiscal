@@ -5,6 +5,8 @@ import com.vulpesfiscal.demo.entities.*;
 import com.vulpesfiscal.demo.entities.enums.StatusNfce;
 import com.vulpesfiscal.demo.repositories.NfceRepository;
 import com.vulpesfiscal.demo.services.nfce.DestinatarioService;
+import com.vulpesfiscal.demo.services.nfce.EmitenteService;
+import com.vulpesfiscal.demo.services.nfce.IdeService;
 import com.vulpesfiscal.demo.services.nfce.ProdService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,8 @@ public class NfceService {
     private final DestinatarioService destinatarioService;
     private final ProdService prodService;
     private final EstabelecimentoService estabelecimentoService;
+    private final EmitenteService emitenteService;
+    private final IdeService ideService;
 
     /**
      * Emite NFC-e a partir de uma Venda
@@ -97,72 +101,12 @@ public class NfceService {
         }
     }
 
-    public IdeDTO gerarIdentificacaoNfce (Venda venda) {
-            Estabelecimento estabelecimento = venda.getEstabelecimento();
-
-            IdeDTO dto = IdeDTO.builder()
-                    .cUF(estabelecimento.getCodUf())
-                    .natOp("Venda de Mercadoria")
-                    .mod("65")
-                    .serie("1")
-                    .nNF(String.valueOf(venda.getNfce().getNumero()))
-                    .dhEmi(OffsetDateTime.now(ZoneId.of("America/Sao_Paulo")))
-                    .dhSaiEnt(OffsetDateTime.now(ZoneId.of("America/Sao_Paulo")))
-                    .tpNF("1")
-                    .idDest("1")
-                    .cMunFG(estabelecimento.getMunicipioId())
-                    .tpImp("4")
-                    .tpEmis("1")
-                    .tpAmb("2")
-                    .finNFe("1")
-                    .indFinal("1")
-                    .indPres("1")
-                    .procEmi("0")
-                    .verProc("Vulpes Fiscal 0.0.1 beta")
-                    .build();
-
-            return dto;
-        }
-
-    public EmitDTO gerarEmitente(Venda venda, Integer estabelecimentoId) {
-
-        Empresa empresa = venda.getEmpresa();
-
-        //Alterar posteriormente para venda.getEstabelecimento()
-        Estabelecimento estabelecimento = venda.getEstabelecimento();
-
-        EnderEmitDTO enderEmit = new EnderEmitDTO();
-        enderEmit.setXLgr(estabelecimento.getLogradouro());
-        enderEmit.setNro(estabelecimento.getNumero());
-        enderEmit.setXCpl(estabelecimento.getComplemento());
-        enderEmit.setXBairro(estabelecimento.getBairro());
-        enderEmit.setCMun(estabelecimento.getMunicipioId());
-        enderEmit.setXMun(estabelecimento.getMunicipioId());
-        enderEmit.setUF(estabelecimento.getCodUf());
-        enderEmit.setCEP(estabelecimento.getCep());
-        enderEmit.setCPais("1058");
-        enderEmit.setXPais("Brasil");
-        enderEmit.setFone(estabelecimento.getTelefone());
-
-        EmitDTO emit = new EmitDTO();
-        emit.setCNPJ(estabelecimento.getCnpj());
-        emit.setXNome(estabelecimento.getEmpresa().getRazaoSocial());
-        emit.setXFant(estabelecimento.getNomeFantasia());
-        emit.setEnderEmit(enderEmit);
-        emit.setIE(estabelecimento.getInscricaoEstadual());
-        emit.setIM(estabelecimento.getInscricaoMunicipal());
-        emit.setCNAE(estabelecimento.getEmpresa().getCnae());
-        emit.setCRT(estabelecimento.getEmpresa().getRegimeTributario().getCodigo());
-
-        return emit;
-    }
-
     public NfceDTO gerarNfce(Venda venda, Integer estabelecimentoId) {
 
         NfceDTO nfce = new NfceDTO();
 
-        nfce.setIde(gerarIdentificacaoNfce(venda));
-        nfce.setEmit(gerarEmitente(venda, estabelecimentoId));
+        nfce.setIde(ideService.gerarIdentificacaoNfce(venda));
+        nfce.setEmit(emitenteService.gerarEmitente(venda, estabelecimentoId));
         nfce.setDest(destinatarioService.gerarDestinatario(venda));
 
         // retirada, entrega, avulsa = null
