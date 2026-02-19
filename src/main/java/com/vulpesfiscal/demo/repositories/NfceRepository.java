@@ -8,13 +8,12 @@ import org.springframework.data.repository.query.Param;
 public interface NfceRepository extends JpaRepository<Nfce, Integer> {
 
     @Query("""
-        SELECT MAX(n.numero)
-        FROM Nfce n
-        WHERE n.empresa.id = :empresaId
-          AND n.estabelecimento.id = :estabelecimentoId
+   SELECT COALESCE(MAX(CAST(n.numero AS integer)), 0)
+   FROM Nfce n
+   WHERE n.estabelecimento.id = :estabelecimentoId
+     AND n.serie = :serie
     """)
-    Integer buscarUltimoNumero(
-            @Param("empresaId") Integer empresaId,
-            @Param("estabelecimentoId") Integer estabelecimentoId
-    );
+    Integer buscarUltimoNumero(@Param("estabelecimentoId") Integer estabelecimentoId,
+                               @Param("serie") Integer serie);
+
 }

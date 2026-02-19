@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> , JpaSpecificationExecutor<Usuario> {
 
+    Usuario findUsuarioById(Integer id);
+
 }

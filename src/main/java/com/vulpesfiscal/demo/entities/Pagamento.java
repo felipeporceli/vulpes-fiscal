@@ -35,9 +35,14 @@ public class Pagamento {
     @Column(name = "valor_recebido")
     private BigDecimal valorRecebido;
 
-
     @Column(name = "troco")
     private BigDecimal troco;
+
+    @Column(name = "desconto")
+    private BigDecimal desconto;
+
+    @Column(name = "valor_final")
+    private BigDecimal valorFinal;
 
     @Column(name = "parcelas")
     private Integer parcelas;

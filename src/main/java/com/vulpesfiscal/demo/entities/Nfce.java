@@ -9,6 +9,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.util.List;
 
 @Entity
@@ -53,7 +55,7 @@ public class Nfce {
      * A lógica de incremento será feita no Service
      */
     @Column(nullable = false)
-    private Integer numero;
+    private String numero;
 
     /**
      * Série padrão = 1
@@ -71,7 +73,7 @@ public class Nfce {
      * Valor total da venda vinculada à NFC-e
      */
     @Column(name = "valor_total", nullable = false)
-    private Integer valorTotal;
+    private BigDecimal valorTotal;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
@@ -82,6 +84,9 @@ public class Nfce {
      */
     @Column(name = "protocolo_autorizacao")
     private String protocoloAutorizacao;
+
+    @Column(name = "data_emissao", updatable = false)
+    private OffsetDateTime dataEmissao;
 
     // ===== AUDITORIA =====
 

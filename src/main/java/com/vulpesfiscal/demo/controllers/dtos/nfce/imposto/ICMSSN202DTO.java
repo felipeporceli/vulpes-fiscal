@@ -1,0 +1,21 @@
+package com.vulpesfiscal.demo.controllers.dtos.nfce.imposto;
+
+import lombok.Data;
+
+import java.math.BigDecimal;
+
+@Data
+public class ICMSSN202DTO {
+
+    private Integer orig = null;
+    private String CSOSN = null;
+    private Integer modBCST = null;
+    private BigDecimal pMVAST = null;
+    private BigDecimal pRedBCST = null;
+    private BigDecimal vBCST = null;
+    private BigDecimal pICMSST = null;
+    private BigDecimal vICMSST = null;
+    private BigDecimal vBCFCPST = null;
+    private BigDecimal pFCPST = null;
+    private BigDecimal vFCPST = null;
+}

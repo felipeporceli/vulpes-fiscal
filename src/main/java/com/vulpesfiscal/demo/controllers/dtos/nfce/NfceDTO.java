@@ -9,6 +9,8 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class NfceDTO {
 
+    String versao;
+    String id;
     private IdeDTO ide;
     private EmitDTO emit;
     private DestDTO dest;

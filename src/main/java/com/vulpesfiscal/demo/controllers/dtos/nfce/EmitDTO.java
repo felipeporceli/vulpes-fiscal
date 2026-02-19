@@ -15,7 +15,6 @@ public class EmitDTO {
 
     private EnderEmitDTO enderEmit;
 
-    private String IE;     // Inscrição Estadual
     private String IEST;   // IE do substituto tributário (quase nunca usado)
     private String IM;     // Inscrição Municipal
     private String CNAE;   // CNAE principal

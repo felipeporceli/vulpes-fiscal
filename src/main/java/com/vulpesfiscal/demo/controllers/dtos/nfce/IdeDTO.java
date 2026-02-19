@@ -23,13 +23,13 @@ public record IdeDTO (
     String natOp,
 
     // Modelo do documento: 65
-    String mod,
+    Integer mod,
 
     // 1
-    String serie,
+    Integer serie,
 
     // service.gerarProximonumero
-    String nNF,
+    Integer nNF,
 
     // Data da emissao
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ssXXX")
@@ -42,14 +42,14 @@ public record IdeDTO (
     // Tipo de operação
     // 1 - Saída (venda)
     // 0 - Entrada (compra)
-    String tpNF,
+    Integer tpNF,
 
     /* Destino da operação
     1 = Interna
     2 = Interestadual
     3 = Exterior
     NFC-e normalmente 1 */
-    String idDest,
+    Integer idDest,
 
     // Código IBGE do município do emitente.
     String cMunFG,
@@ -59,39 +59,39 @@ public record IdeDTO (
 
 
     // Tipo de Danfe. Valor 4 padrão.
-    String tpImp,
+    Integer tpImp,
 
     /* Tipo de emissão:
     1 - Normal
     2 - Contingência (Sefaz fora do ar) */
-    String tpEmis,
+    Integer tpEmis,
 
     // Digito verificador da chave, gerado pela API.
-    String cDV,
+    Integer cDV,
 
     /* 1 = Produção
     2 = Homologação */
-    String tpAmb,
+    Integer tpAmb,
 
     /* 1 = Normal
     4 = Devolução */
-    String finNFe,
+    Integer finNFe,
 
     // Consumidor final: 1
-    String indFinal,
+    Integer indFinal,
 
     /*Presença do comprador:
     1 = Presencial
     4 = NFC-e com entrega*/
-    String indPres,
+    Integer indPres,
 
     /* Intermediação
     0 = Sem intermediador
     1 = Marketplace*/
-    String indIntermed,
+    Integer indIntermed,
 
     // Processo emissor: 0 - aplicativo do contribuinte
-    String procEmi,
+    Integer procEmi,
 
     // Versão do sistema emissor: VulpesFiscal 0.0.1 - Beta
     String verProc,

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-02-12T19:16:09-0300",
+    date = "2026-02-17T22:20:06-0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.8 (Azul Systems, Inc.)"
 )
 @Component
@@ -26,8 +26,11 @@ public class PagamentoMapperImpl implements PagamentoMapper {
 
         Pagamento pagamento = new Pagamento();
 
-        pagamento.setMetodoPagamento( dto.metodoPagamento() );
+        pagamento.setStatusPagamento( dto.statusPagamento() );
         pagamento.setValorRecebido( dto.valorRecebido() );
+        pagamento.setMetodoPagamento( dto.metodoPagamento() );
+        pagamento.setValor( dto.valor() );
+        pagamento.setDesconto( dto.desconto() );
         pagamento.setParcelas( dto.parcelas() );
 
         return pagamento;

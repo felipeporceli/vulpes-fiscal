@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 
+import java.lang.reflect.Member;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -15,7 +16,15 @@ public record CadastroPagamentoDTO(
         MetodoPagamento metodoPagamento,
 
         @NotNull(message = "Campo obrigatório")
+        BigDecimal valor,
+
+        @NotNull(message = "Campo obrigatório")
         BigDecimal valorRecebido,
+
+        @NotNull(message = "Campo obrigatório")
+        StatusPagamento statusPagamento,
+
+        BigDecimal desconto,
 
         Integer parcelas
 ){

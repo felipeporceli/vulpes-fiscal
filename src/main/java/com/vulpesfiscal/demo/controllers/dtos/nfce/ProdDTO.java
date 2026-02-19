@@ -48,4 +48,5 @@ public class ProdDTO {
 
     // Totalização
     private Integer indTot;
+
 }

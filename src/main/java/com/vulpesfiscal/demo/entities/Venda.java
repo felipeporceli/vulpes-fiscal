@@ -54,9 +54,6 @@ public class Venda {
     @Column(name = "valor_total", nullable = false)
     private BigDecimal valorTotal;
 
-    @Column(name = "desconto")
-    private BigDecimal desconto;
-
     @Column(name = "parcelas")
     private Integer parcelas;
 

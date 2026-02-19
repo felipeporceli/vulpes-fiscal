@@ -10,7 +10,9 @@ import com.vulpesfiscal.demo.entities.Estabelecimento;
 import com.vulpesfiscal.demo.entities.Pagamento;
 import com.vulpesfiscal.demo.entities.enums.MetodoPagamento;
 import com.vulpesfiscal.demo.entities.enums.StatusPagamento;
+import com.vulpesfiscal.demo.exceptions.CampoInvalidoException;
 import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
+import com.vulpesfiscal.demo.exceptions.ValorRecebidoMenorException;
 import com.vulpesfiscal.demo.repositories.EmpresaRepository;
 import com.vulpesfiscal.demo.repositories.EstabelecimentoRepository;
 import com.vulpesfiscal.demo.repositories.PagamentoRepository;
@@ -99,39 +101,47 @@ public class PagamentoService {
         return repository.findAll(specification, pageRequest);
     }
 
-    public void processarPagamento(Pagamento pagamento, BigDecimal valorVenda) {
-        if (pagamento.getMetodoPagamento() == null) {
-            throw new IllegalArgumentException("Método de pagamento é obrigatório");
+
+    public void processarPagamento(Pagamento pagamento) {
+
+        // 1. Validação do valor bruto
+        if (pagamento.getValor() == null || pagamento.getValor().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("O valor da compra deve ser maior que zero.");
         }
-        pagamento.setValor(valorVenda);
-        if (pagamento.getMetodoPagamento() == MetodoPagamento.DINHEIRO) {
-            calcularTroco(pagamento);
+
+        // 2. Tratamento do desconto
+        if (pagamento.getDesconto() == null) {
+            pagamento.setDesconto(BigDecimal.ZERO);
+        }
+
+        if (pagamento.getDesconto().compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("O desconto não pode ser negativo.");
+        }
+
+        if (pagamento.getDesconto().compareTo(pagamento.getValor()) > 0) {
+            throw new IllegalArgumentException("O desconto não pode ser maior que o valor da compra.");
+        }
+
+        // 3. Cálculo do valor final
+        pagamento.setValorFinal(pagamento.getValor().subtract(pagamento.getDesconto()));
+
+        // 4. Validação do valor recebido (quando aplicável)
+        if (pagamento.getValorRecebido() != null) {
+
+            if (pagamento.getValorRecebido().compareTo(pagamento.getValorFinal()) < 0) {
+                throw new IllegalArgumentException(
+                        "O valor recebido é menor que o valor final da compra."
+                );
+            }
+
+            // 5. Cálculo do troco
+            pagamento.setTroco(pagamento.getValorRecebido().subtract(pagamento.getValorFinal()));
+
         } else {
+            // Se não houve valor recebido, não há troco
             pagamento.setTroco(BigDecimal.ZERO);
         }
-
-        pagamento.setStatusPagamento(StatusPagamento.PENDENTE);
     }
-
-    private void calcularTroco(Pagamento pagamento) {
-
-        if (pagamento.getValorRecebido() == null) {
-            throw new IllegalArgumentException(
-                    "Valor recebido é obrigatório para pagamento em dinheiro"
-            );
-        }
-
-        if (pagamento.getValorRecebido().compareTo(pagamento.getValor()) < 0) {
-            throw new IllegalArgumentException(
-                    "Valor recebido é menor que o valor da venda"
-            );
-        }
-
-        BigDecimal troco = pagamento.getValorRecebido()
-                .subtract(pagamento.getValor());
-
-        pagamento.setTroco(troco);
-    }
-
 
 }
+

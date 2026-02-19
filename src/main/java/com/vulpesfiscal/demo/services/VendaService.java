@@ -2,14 +2,13 @@ package com.vulpesfiscal.demo.services;
 
 import com.vulpesfiscal.demo.controllers.dtos.CadastroItemVendaDTO;
 import com.vulpesfiscal.demo.controllers.dtos.CadastroVendaDTO;
+import com.vulpesfiscal.demo.controllers.dtos.VendaResponseDTO;
 import com.vulpesfiscal.demo.controllers.dtos.nfce.NfceDTO;
 import com.vulpesfiscal.demo.controllers.mappers.NfceMapper;
 import com.vulpesfiscal.demo.entities.*;
+import com.vulpesfiscal.demo.entities.enums.StatusPagamento;
 import com.vulpesfiscal.demo.exceptions.*;
-import com.vulpesfiscal.demo.repositories.ConsumidorRepository;
-import com.vulpesfiscal.demo.repositories.EstabelecimentoRepository;
-import com.vulpesfiscal.demo.repositories.ProdutoRepository;
-import com.vulpesfiscal.demo.repositories.VendaRepository;
+import com.vulpesfiscal.demo.repositories.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,6 +28,8 @@ public class VendaService {
     private final EstabelecimentoRepository estabelecimentoRepository;
     private final NfceService nfceService;
     private final NfceMapper nfceMapper;
+    private final NfceRepository nfceRepository;
+
 
     @Transactional
     public Venda criarVenda(
@@ -107,24 +108,8 @@ public class VendaService {
         }
 
         venda.setItens(itensVenda);
-
-        // ===============================
-        // DESCONTO
-        // ===============================
-        if (dto.desconto() != null
-                && dto.desconto().compareTo(BigDecimal.ZERO) < 0) {
-            throw new CampoInvalidoException(
-                    "desconto",
-                    "O desconto não pode ser negativo"
-            );
-        }
-
-        if (dto.desconto() != null) {
-            totalVenda = totalVenda.subtract(dto.desconto());
-        }
-
-        venda.setDesconto(dto.desconto());
         venda.setValorTotal(totalVenda);
+
 
         // ===============================
         // PAGAMENTO
@@ -139,14 +124,17 @@ public class VendaService {
         Pagamento pagamento = new Pagamento();
         pagamento.setMetodoPagamento(dto.pagamento().metodoPagamento());
         pagamento.setValorRecebido(dto.pagamento().valorRecebido());
+        pagamento.setDesconto(dto.pagamento().desconto());
 
-        pagamentoService.processarPagamento(pagamento, totalVenda);
-
+        pagamento.setValor(venda.getValorTotal());
+        pagamentoService.processarPagamento(pagamento);
         pagamento.setVenda(venda);
         pagamento.setEmpresa(empresa);
         pagamento.setEstabelecimento(estabelecimento);
 
+        pagamento.setStatusPagamento(StatusPagamento.CONCLUIDO);
         venda.setPagamento(pagamento);
+        venda.setValorTotal(pagamento.getValorFinal());
 
         // ===============================
         // NFC-e
@@ -158,18 +146,17 @@ public class VendaService {
             );
         }
 
+        // Receber se irá emitir nota fiscal ou não.
         venda.setEmitirNfce(dto.emitirNfce());
 
-        // Salva a venda primeiro
-
-
         if (Boolean.TRUE.equals(dto.emitirNfce())) {
+            System.out.println("NFC-e sendo emitida...");
+
             NfceDTO nfceDTO = nfceService.gerarNfce(venda, estabelecimentoId);
-            venda.setNfce(nfceMapper.toEntity(nfceDTO));
         }
 
         Venda vendaSalva = vendaRepository.save(venda);
         return vendaSalva;
-    }
 
+    }
 }

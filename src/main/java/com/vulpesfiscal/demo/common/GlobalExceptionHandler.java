@@ -159,6 +159,16 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(ValorRecebidoMenorException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErroResposta handleValorRecebidoMenor(ValorRecebidoMenorException e) {
+        return new ErroResposta(
+                404,
+                "Valor recebido é menor que o valor da venda.",
+                List.of(new ErroCampo("id", e.getMessage()))
+        );
+    }
+
 
 
 }

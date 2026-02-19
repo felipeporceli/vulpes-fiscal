@@ -35,7 +35,7 @@ public class EmitenteService {
         emit.setXNome(estabelecimento.getEmpresa().getRazaoSocial());
         emit.setXFant(estabelecimento.getNomeFantasia());
         emit.setEnderEmit(enderEmit);
-        emit.setIE(estabelecimento.getInscricaoEstadual());
+        emit.setIEST(estabelecimento.getInscricaoEstadual());
         emit.setIM(estabelecimento.getInscricaoMunicipal());
         emit.setCNAE(estabelecimento.getEmpresa().getCnae());
         emit.setCRT(estabelecimento.getEmpresa().getRegimeTributario().getCodigo());

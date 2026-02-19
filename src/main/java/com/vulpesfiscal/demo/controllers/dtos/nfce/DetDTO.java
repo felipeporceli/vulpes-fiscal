@@ -11,5 +11,6 @@ public class DetDTO {
     private ProdDTO prod;
     //private ImpostoDTO imposto; // vem depois
     private String infAdProd;
+    private ImpostoDTO imposto;
 }
 
