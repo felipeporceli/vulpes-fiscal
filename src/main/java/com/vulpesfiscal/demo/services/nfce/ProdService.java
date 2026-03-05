@@ -75,7 +75,7 @@ public class ProdService {
             DetDTO det = new DetDTO();
             det.setNItem(nItem++);
             det.setProd(montarProduto(item));
-            det.setImposto(impostoService.gerarImposto());
+            det.setImposto(impostoService.gerarImposto(item));
             det.setImpostoDevol(impostoDevolService.gerarImpostoDevol());
             det.setObsItem(obsItemService.gerarObsItem());
             det.setDfeReferenciado(dfeReferenciadoService.gerarDfeReferenciado());

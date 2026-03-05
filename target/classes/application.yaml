@@ -3,9 +3,9 @@ spring:
     name: VulpesFiscal
 
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://localhost:5432/vulpesfiscaldb
+    username: vulpesfiscal
+    password: vulpesfiscal
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -15,6 +15,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
   jackson:
     date-format: dd/MM/yyyy
     time-zone: America/Sao_Paulo

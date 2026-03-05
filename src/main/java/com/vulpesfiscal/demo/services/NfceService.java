@@ -6,8 +6,10 @@ import com.vulpesfiscal.demo.entities.*;
 import com.vulpesfiscal.demo.repositories.NfceRepository;
 import com.vulpesfiscal.demo.repositories.UsuarioRepository;
 import com.vulpesfiscal.demo.services.nfce.*;
+import com.vulpesfiscal.demo.services.nfce.PagamentoServiceNfce;
 import com.vulpesfiscal.demo.services.nfce.det.ImpostoService;
 import com.vulpesfiscal.demo.services.nfce.total.TotalService;
+import com.vulpesfiscal.demo.services.nfce.transporte.TransporteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,8 @@ public class NfceService {
     private final UsuarioRepository usuarioRepository;
     private final ImpostoService impostoService;
     private final TotalService totalService;
+    private final TransporteService transporteService;
+    private final PagamentoServiceNfce pagamentoServiceNfce;
 
     /**
      * Emite NFC-e a partir de uma Venda
@@ -59,16 +63,18 @@ public class NfceService {
         }
     }
 
-    public NfceDTO gerarNfce(Venda venda, Integer estabelecimentoId) {
+    public InfNFe gerarNfce(Venda venda, Integer estabelecimentoId) {
 
-        NfceDTO nfce = new NfceDTO();
+        InfNFe nfce = new InfNFe();
 
         nfce.setVersao("v4.00");
         nfce.setId(null);
         nfce.setDest(destinatarioService.gerarDestinatario(venda));
         nfce.setEmit(emitenteService.gerarEmitente(venda, estabelecimentoId));
         nfce.setIde(ideService.gerarIdentificacaoNfce(venda));
-        nfce.setTotal(totalService.gerarTotal());
+        nfce.setTotal(totalService.gerarTotal(venda.getItens()));
+        nfce.setTransporte(transporteService.gerarTransporte());
+        nfce.setPagamento(pagamentoServiceNfce.gerarPagamento(venda));
 
         // retirada, entrega, avulsa = null
         nfce.setDet(prodService.montarItens(venda));;

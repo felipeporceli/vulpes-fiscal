@@ -1,7 +1,10 @@
 package com.vulpesfiscal.demo.services.nfce.det;
 
 import com.vulpesfiscal.demo.controllers.dtos.nfce.det.imposto.II.IIDTO;
+import com.vulpesfiscal.demo.controllers.dtos.nfce.det.imposto.cofins.COFINSAliqDTO;
 import com.vulpesfiscal.demo.controllers.dtos.nfce.det.imposto.cofins.COFINSDTO;
+import com.vulpesfiscal.demo.controllers.dtos.nfce.det.imposto.cofins.COFINSNTDTO;
+import com.vulpesfiscal.demo.controllers.dtos.nfce.det.imposto.cofins.COFINSOutrDTO;
 import com.vulpesfiscal.demo.controllers.dtos.nfce.det.imposto.cofinsst.COFINSSTDTO;
 import com.vulpesfiscal.demo.controllers.dtos.nfce.det.imposto.ibscbs.IBSCBSDTO;
 import com.vulpesfiscal.demo.controllers.dtos.nfce.det.imposto.icms.ICMSDTO;
@@ -12,11 +15,35 @@ import com.vulpesfiscal.demo.controllers.dtos.nfce.det.imposto.is.ISDTO;
 import com.vulpesfiscal.demo.controllers.dtos.nfce.det.imposto.issqn.ISSQNDTO;
 import com.vulpesfiscal.demo.controllers.dtos.nfce.det.imposto.pis.PISDTO;
 import com.vulpesfiscal.demo.controllers.dtos.nfce.det.imposto.pisst.PISSTDTO;
+import com.vulpesfiscal.demo.entities.ItemVenda;
+import com.vulpesfiscal.demo.entities.enums.RegimeTributarioEmpresa;
+import com.vulpesfiscal.demo.services.nfce.det.imposto.CofinsService;
+import com.vulpesfiscal.demo.services.nfce.det.imposto.ICMSService;
+import com.vulpesfiscal.demo.services.nfce.det.imposto.IPIService;
+import com.vulpesfiscal.demo.services.nfce.det.imposto.PISService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+import static com.vulpesfiscal.demo.entities.enums.RegimeTributarioEmpresa.*;
+
 @Service
+@RequiredArgsConstructor
 public class ImpostoService {
-    public ImpostoDTO gerarImposto () {
+
+    private static final BigDecimal CEM = new BigDecimal("100");
+    private static final BigDecimal ALIQUOTA_LUCRO_PRESUMIDO = new BigDecimal("3.00");
+    private static final BigDecimal ALIQUOTA_ZERO = BigDecimal.ZERO;
+
+    private final CofinsService cofinsService;
+    private final ICMSService icmsService;
+    private final IPIService ipiService;
+    private final PISService pisService;
+
+
+    public ImpostoDTO gerarImposto (ItemVenda item) {
         ImpostoDTO imposto = new ImpostoDTO();
         ICMSDTO icms = new ICMSDTO();
 
@@ -42,15 +69,6 @@ public class ImpostoService {
         icms.setIcmssn500DTO(null);
         icms.setIcmssn900DTO(null);
         icms.setIcmsstdto(null);
-
-        // Gerar IPI
-        IPIDTO ipi = new IPIDTO();
-        ipi.setCEnq(null);
-        ipi.setCnpjProd(null);
-        ipi.setQSelo(null);
-        ipi.setCSelo(null);
-        ipi.setIpiTribDTO(null);
-        ipi.setIpIntDTO(null);
 
         // Gerar imposto sobre importação
         IIDTO ii = new IIDTO();
@@ -79,13 +97,6 @@ public class ImpostoService {
         issqn.setNProcesso(null);
         issqn.setIndIncentivo(null);
 
-        // Gerar PIS
-        PISDTO pis = new PISDTO();
-        pis.setPisAliq(null);
-        pis.setPisOutr(null);
-        pis.setPisnt(null);
-        pis.setPisQtde(null);
-
         // Gerar PISST
         PISSTDTO pisst = new PISSTDTO();
         pisst.setVBC(null);
@@ -95,12 +106,7 @@ public class ImpostoService {
         pisst.setVPIS(null);
         pisst.setIndSomaPISST(null);
 
-        // Gerar COFINS
-        COFINSDTO cofins = new COFINSDTO();
-        cofins.setCofinsAliq(null);
-        cofins.setCofinsnt(null);
-        cofins.setCofinsOutr(null);
-        cofins.setCofinsQtde(null);
+
 
         // Gerar COFINSST
         COFINSSTDTO cofinsst = new COFINSSTDTO();
@@ -108,7 +114,7 @@ public class ImpostoService {
         cofinsst.setPCOFINS(null);
         cofinsst.setQBCProd(null);
         cofinsst.setVAliqProd(null);
-        cofinsst.setVCOFINS(null);
+        cofinsst.setVCOFINS(new BigDecimal("0.00"));
         cofinsst.setIndSomaCOFINSST(null);
 
         // Gerar ICMSUFDEST
@@ -147,18 +153,19 @@ public class ImpostoService {
         ibscbs.setGCredPresOper(null);
         ibscbs.setGCredPresIBSZFM(null);
 
-
-        imposto.setIcms(icms);
-        imposto.setIpi(ipi);
         imposto.setIi(ii);
         imposto.setIssqn(issqn);
-        imposto.setPis(pis);
         imposto.setPisst(pisst);
-        imposto.setCofins(cofins);
         imposto.setCofinsst(cofinsst);
         imposto.setIcmsufDest(icmsufDest);
         imposto.setIs(is);
         imposto.setIbscbs(ibscbs);
+
+        imposto.setCofins(cofinsService.gerarCofins(item));
+        imposto.setIcms(icmsService.gerarIcms(item));
+        imposto.setIpi(ipiService.gerarIPI(item));
+        imposto.setPis(pisService.gerarPis(item));
         return imposto;
     }
+
 }

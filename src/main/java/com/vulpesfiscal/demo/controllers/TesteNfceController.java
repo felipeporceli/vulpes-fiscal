@@ -1,7 +1,8 @@
 package com.vulpesfiscal.demo.controllers;
 
 import com.vulpesfiscal.demo.controllers.dtos.CadastroVendaDTO;
-import com.vulpesfiscal.demo.controllers.dtos.nfce.NfceDTO;
+import com.vulpesfiscal.demo.controllers.dtos.nfce.InfNFe;
+import com.vulpesfiscal.demo.controllers.dtos.nfce.NfceResponseDTO;
 import com.vulpesfiscal.demo.controllers.mappers.VendaMapper;
 import com.vulpesfiscal.demo.entities.Venda;
 import com.vulpesfiscal.demo.services.NfceService;
@@ -26,18 +27,24 @@ public class TesteNfceController {
     }
 
     @PostMapping("/empresa/{empresaId}/nfce/{estabelecimentoId}")
-    public ResponseEntity<NfceDTO> testarNfce(@RequestBody CadastroVendaDTO vendaDTO,
-                                              @PathVariable Integer estabelecimentoId,
-                                              @PathVariable Integer empresaId) {
+    public ResponseEntity<NfceResponseDTO> testarNfce(
+            @RequestBody CadastroVendaDTO vendaDTO,
+            @PathVariable Integer estabelecimentoId,
+            @PathVariable Integer empresaId) {
 
         Venda venda = vendaService.criarVenda(
                 vendaDTO,
                 empresaId,
                 estabelecimentoId
         );
-        NfceDTO nfce = nfceService.gerarNfce(venda, estabelecimentoId);
 
-        return ResponseEntity.ok(nfce);
+        InfNFe nfce = nfceService.gerarNfce(venda, estabelecimentoId);
+
+        String ambiente = "homologacao";
+
+        NfceResponseDTO response = new NfceResponseDTO(ambiente, nfce);
+
+        return ResponseEntity.ok(response);
     }
 }
 

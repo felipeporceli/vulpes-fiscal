@@ -3,7 +3,7 @@ package com.vulpesfiscal.demo.services;
 import com.vulpesfiscal.demo.controllers.dtos.CadastroItemVendaDTO;
 import com.vulpesfiscal.demo.controllers.dtos.CadastroVendaDTO;
 import com.vulpesfiscal.demo.controllers.dtos.VendaResponseDTO;
-import com.vulpesfiscal.demo.controllers.dtos.nfce.NfceDTO;
+import com.vulpesfiscal.demo.controllers.dtos.nfce.InfNFe;
 import com.vulpesfiscal.demo.controllers.mappers.NfceMapper;
 import com.vulpesfiscal.demo.entities.*;
 import com.vulpesfiscal.demo.entities.enums.StatusPagamento;
@@ -152,7 +152,7 @@ public class VendaService {
         if (Boolean.TRUE.equals(dto.emitirNfce())) {
             System.out.println("NFC-e sendo emitida...");
 
-            NfceDTO nfceDTO = nfceService.gerarNfce(venda, estabelecimentoId);
+            InfNFe nfceDTO = nfceService.gerarNfce(venda, estabelecimentoId);
         }
 
         Venda vendaSalva = vendaRepository.save(venda);

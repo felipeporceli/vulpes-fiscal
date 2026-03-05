@@ -1,7 +1,10 @@
 package com.vulpesfiscal.demo.controllers.dtos.nfce.det.imposto.ipi;
 
+import lombok.Data;
+
 import java.math.BigDecimal;
 
+@Data
 public class IPITribDTO {
     private String CST = null;
     private BigDecimal vBC = null;
