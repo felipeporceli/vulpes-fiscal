@@ -169,6 +169,36 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(TributacaoNaoEncontradaException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErroResposta handleTributacaoNaoEncontrada(TributacaoNaoEncontradaException e) {
+        return new ErroResposta(
+                404,
+                "Tributação não encontrada",
+                List.of(new ErroCampo("id", e.getMessage()))
+        );
+    }
+
+    @ExceptionHandler(TributacaoNaoPertenceAEmpresaException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErroResposta handleTributacaoNaoPertenceAEmpresa(TributacaoNaoPertenceAEmpresaException e) {
+        return new ErroResposta(
+                404,
+                "Tributação não pertence a empresa informada.",
+                List.of(new ErroCampo("id", e.getMessage()))
+        );
+    }
+
+    @ExceptionHandler(TributacaoNaoEncontradaParaUfException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErroResposta handleTributacaoNaoEncontradaParaUf(TributacaoNaoEncontradaParaUfException e) {
+        return new ErroResposta(
+                404,
+                "Tributação não encontrada para o produto e UF informados.",
+                List.of(new ErroCampo("id", e.getMessage()))
+        );
+    }
+
 
 
 }

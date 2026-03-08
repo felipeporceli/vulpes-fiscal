@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-02-24T19:20:43-0300",
+    date = "2026-03-05T22:33:53-0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.8 (Azul Systems, Inc.)"
 )
 @Component
@@ -35,7 +35,9 @@ public class ProdutoMapperImpl implements ProdutoMapper {
         descricao = produto.getDescricao();
         codigoBarras = produto.getCodigoBarras();
         idProduto = produto.getIdProduto();
-        ncm = produto.getNcm();
+        if ( produto.getNcm() != null ) {
+            ncm = Integer.parseInt( produto.getNcm() );
+        }
         cfop = produto.getCfop();
         unidade = produto.getUnidade();
         preco = produto.getPreco();
@@ -56,10 +58,13 @@ public class ProdutoMapperImpl implements ProdutoMapper {
         Produto produto = new Produto();
 
         produto.setIdProduto( dto.idProduto() );
+        produto.setOrig( dto.orig() );
         produto.setDescricao( dto.descricao() );
         produto.setCodigoBarras( dto.codigoBarras() );
         produto.setQtdEstoque( dto.qtdEstoque() );
-        produto.setNcm( dto.ncm() );
+        if ( dto.ncm() != null ) {
+            produto.setNcm( String.valueOf( dto.ncm() ) );
+        }
         produto.setCfop( dto.cfop() );
         produto.setUnidade( dto.unidade() );
         if ( dto.preco() != null ) {
@@ -68,6 +73,7 @@ public class ProdutoMapperImpl implements ProdutoMapper {
         if ( dto.ativo() != null ) {
             produto.setAtivo( dto.ativo() );
         }
+        produto.setCest( dto.cest() );
 
         return produto;
     }
@@ -80,7 +86,12 @@ public class ProdutoMapperImpl implements ProdutoMapper {
 
         produto.setDescricao( dto.descricao() );
         produto.setQtdEstoque( dto.qtdEstoque() );
-        produto.setNcm( dto.ncm() );
+        if ( dto.ncm() != null ) {
+            produto.setNcm( String.valueOf( dto.ncm() ) );
+        }
+        else {
+            produto.setNcm( null );
+        }
         produto.setCfop( dto.cfop() );
         produto.setUnidade( dto.unidade() );
         produto.setPreco( dto.preco() );

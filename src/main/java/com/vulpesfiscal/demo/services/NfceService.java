@@ -65,6 +65,7 @@ public class NfceService {
 
     public InfNFe gerarNfce(Venda venda, Integer estabelecimentoId) {
 
+        System.out.println("Emitindo Nfce...");
         InfNFe nfce = new InfNFe();
 
         nfce.setVersao("v4.00");
@@ -78,7 +79,7 @@ public class NfceService {
 
         // retirada, entrega, avulsa = null
         nfce.setDet(prodService.montarItens(venda));;
-
+        System.out.println("Nfce emitida! NFCE n: " + nfce.getIde().nNF());
 
 
         return nfce;

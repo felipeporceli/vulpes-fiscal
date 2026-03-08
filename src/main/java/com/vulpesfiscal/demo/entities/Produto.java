@@ -37,14 +37,14 @@ public class Produto {
     @Column (name = "descricao", length = 300, nullable = false)
     private String descricao;
 
-    @Column (name = "codigo_barras", nullable = false)
+    @Column (name = "codigo_barras")
     private String codigoBarras;
 
     @Column (name = "qtd_estoque", nullable = false)
     private Integer qtdEstoque;
 
     @Column (name = "ncm", nullable = false)
-    private Integer ncm;
+    private String ncm;
 
     @Column (name = "cfop", nullable = false)
     private Integer cfop;
@@ -57,6 +57,12 @@ public class Produto {
 
     @Column (name = "ativo", nullable = false)
     private boolean ativo;
+
+    @Column(name = "cest", length = 7)
+    private String cest;
+
+    @Column(name = "orig", nullable = false)
+    private Integer orig; // 0..8
 
     @CreatedDate
     @Column (name = "criado_em")

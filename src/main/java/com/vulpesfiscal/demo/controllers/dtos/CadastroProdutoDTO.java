@@ -38,7 +38,16 @@ public record CadastroProdutoDTO(
         Boolean ativo,
 
         @NotNull(message = "Campo obrigatório")
-        Integer qtdEstoque
+        Integer qtdEstoque,
+
+        @NotNull(message = "Campo obrigatório")
+        String cest,
+
+        @NotNull(message = "Campo obrigatório")
+        Integer orig
+
+
+
 
 ){
 }

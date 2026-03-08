@@ -1,5 +1,6 @@
 package com.vulpesfiscal.demo.controllers.dtos;
 
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.math.BigDecimal;

@@ -4,6 +4,7 @@ import com.vulpesfiscal.demo.controllers.dtos.CadastroVendaDTO;
 import com.vulpesfiscal.demo.controllers.dtos.VendaResponseDTO;
 import com.vulpesfiscal.demo.controllers.mappers.VendaMapper;
 import com.vulpesfiscal.demo.entities.Venda;
+import com.vulpesfiscal.demo.services.NfceService;
 import com.vulpesfiscal.demo.services.VendaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ public class VendaController {
 
     private final VendaService vendaService;
     private final VendaMapper vendaMapper;
+    private final NfceService nfceService;
 
     @PostMapping("/empresa/{empresaId}/estabelecimento/{estabelecimentoId}")
     public ResponseEntity<VendaResponseDTO> criarVenda(
@@ -25,14 +27,18 @@ public class VendaController {
             @RequestBody CadastroVendaDTO dto
     ) {
 
-        Venda vendaCriada = vendaService.criarVenda(
+        Venda venda = vendaService.criarVenda(
                 dto,
                 empresaId,
                 estabelecimentoId
         );
 
+        if (dto.emitirNfce() == true) {
+            nfceService.gerarNfce(venda, estabelecimentoId);
+        }
+
         return ResponseEntity.ok(
-                vendaMapper.toResponseDTO(vendaCriada)
+                vendaMapper.toResponseDTO(venda)
         );
     }
 }

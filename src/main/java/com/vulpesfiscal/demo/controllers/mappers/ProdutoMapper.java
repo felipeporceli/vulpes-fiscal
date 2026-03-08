@@ -16,6 +16,7 @@ public interface ProdutoMapper {
     @Mapping(target = "idTecnico", ignore = true)
     @Mapping(target = "empresa", ignore = true)
     @Mapping(source = "idProduto", target = "idProduto")
+    @Mapping(source = "orig", target = "orig")
     Produto toEntity(CadastroProdutoDTO dto);
 
     Produto toEntityUpdate(AtualizacaoProdutoDTO dto, @MappingTarget Produto produto);
