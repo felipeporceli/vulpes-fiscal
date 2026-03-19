@@ -21,13 +21,34 @@ public record CadastroEstabelecimentoDTO(
         String inscricaoEstadual,
 
         @NotBlank(message = "Campo obrigatório")
-        String endereco,
+        String logradouro,
 
         @NotBlank(message = "Campo obrigatório")
-        String cidade,
+        String numero,
+
+        @NotBlank(message = "Campo obrigatório")
+        String complemento,
+
+        @NotBlank(message = "Campo obrigatório")
+        String bairro,
+
+        @NotBlank(message = "Campo obrigatório")
+        String municipioId,
+
+        @NotBlank(message = "Campo obrigatório")
+        String cep,
+
+        @NotBlank(message = "Campo obrigatório")
+        String paisId,
 
         @NotBlank(message = "Campo obrigatório")
         String estado,
+
+        @NotBlank(message = "Campo obrigatório")
+        String pais,
+
+        @NotBlank(message = "Campo obrigatório")
+        String codUf,
 
         @NotNull(message = "Campo obrigatório")
         StatusEmpresa status,

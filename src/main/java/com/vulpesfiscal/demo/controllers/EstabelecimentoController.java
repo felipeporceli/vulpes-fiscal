@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -29,6 +30,10 @@ public class EstabelecimentoController implements ControllerGenerico{
     /* Endpoint responsável por cadastrar um novo estabelecimento vinculado a uma empresa existente.
     O ID da empresa é informado na URL e os dados do estabelecimento são enviados no corpo da requisição.
     Em caso de sucesso, retorna HTTP 201 com a URL do novo recurso no header Location. */
+    @PreAuthorize(
+            "hasAnyRole('ADMIN','SUPORTE') or " +
+                    "(hasAnyRole('GERENTE') and #empresaId.equals(authentication.principal.empresaId))"
+    )
     @PostMapping("/empresa/{empresaId}")
     public ResponseEntity<Void> salvar(
             @PathVariable Integer empresaId,
@@ -41,6 +46,10 @@ public class EstabelecimentoController implements ControllerGenerico{
 
     /* Obter detalhes por ID obtendo filtros opcionais pela URL, busca Estabelecimentos paginadas no banco e devolve o
     resultado convertido para DTO. */
+    @PreAuthorize(
+            "hasAnyRole('ADMIN','SUPORTE') or " +
+                    "(hasAnyRole('GERENTE','CAIXA') and #empresaId.equals(authentication.principal.empresaId))"
+    )
     @GetMapping
     public ResponseEntity<Page<ResultadoPesquisaEstabelecimentoDTO>> pesquisa (
             @RequestParam (value = "cnpj", required = false)
@@ -83,11 +92,19 @@ public class EstabelecimentoController implements ControllerGenerico{
 
     /* Deletar Estabelecimento por id na URL, .map para seguir práticas Rest */
     @DeleteMapping("{id}")
+    @PreAuthorize(
+            "hasAnyRole('ADMIN','SUPORTE') or " +
+                    "(hasAnyRole('GERENTE') and #empresaId == authentication.principal.empresaId)"
+    )
     public void deletar (@PathVariable("id") String cnpj) {
         service.deletar(cnpj);
     }
 
     /* Atualizar Estabelecimento por id na URL, mas novos atributos no body da requisicao. */
+    @PreAuthorize(
+            "hasAnyRole('ADMIN','SUPORTE') or " +
+                    "(hasAnyRole('GERENTE','CAIXA') and #empresaId == authentication.principal.empresaId)"
+    )
     @PutMapping("{cnpj}")
     public ResponseEntity<Void> atualizar(
             @PathVariable String cnpj,

@@ -5,9 +5,11 @@ import com.vulpesfiscal.demo.controllers.mappers.EstabelecimentoMapper;
 import com.vulpesfiscal.demo.controllers.specs.EstabelecimentoSpecs;
 import com.vulpesfiscal.demo.entities.Empresa;
 import com.vulpesfiscal.demo.entities.Estabelecimento;
+import com.vulpesfiscal.demo.entities.Usuario;
 import com.vulpesfiscal.demo.entities.enums.StatusEmpresa;
 import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
 import com.vulpesfiscal.demo.repositories.EstabelecimentoRepository;
+import com.vulpesfiscal.demo.security.SecurityService;
 import com.vulpesfiscal.demo.validator.EstabelecimentoValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,6 +29,7 @@ public class EstabelecimentoService {
     private final EmpresaService empresaService;
     private final EstabelecimentoValidator validator;
     private final EstabelecimentoMapper mapper;
+    private final SecurityService securityService;
 
 
     /* Salva um estabelecimento vinculado a uma empresa já existente. A empresa é buscada pelo ID informado
@@ -35,8 +38,10 @@ public class EstabelecimentoService {
     public Estabelecimento salvar(Integer empresaId, CadastroEstabelecimentoDTO dto) {
         Empresa empresa = empresaService.buscarPorId(empresaId);
         Estabelecimento estabelecimento = mapper.toEntity(dto);
+        Usuario usuario = securityService.obterUsuariologado();
         estabelecimento.setEmpresa(empresa);
         validator.validar(estabelecimento);
+        estabelecimento.setUsuario(usuario);
         return repository.save(estabelecimento);
     }
 

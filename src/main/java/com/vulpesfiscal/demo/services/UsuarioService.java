@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -33,6 +34,7 @@ public class UsuarioService {
     private final EstabelecimentoRepository estabelecimentoRepository;
     private final UsuarioMapper usuarioMapper;
     private final UsuarioValidator validator;
+    private final PasswordEncoder encoder;
 
     // Metodo para salvar a nivel de serviço.
     public Usuario salvar(Integer empresaId,
@@ -49,6 +51,8 @@ public class UsuarioService {
                 ));
 
         Usuario usuario = usuarioMapper.toEntity(dto);
+        var senha = usuario.getSenha();
+        usuario.setSenha(encoder.encode(senha));
         usuario.setEmpresa(empresa);
         usuario.setEstabelecimento(estabelecimento);
         return repository.save(usuario);
@@ -113,5 +117,8 @@ public class UsuarioService {
         repository.delete(validator.pesquisarPorId(id));
     }
 
+    public Usuario obterPorEmail (String email) {
+        return repository.findByEmail(email);
+    }
 
 }

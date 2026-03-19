@@ -4,8 +4,8 @@ import com.vulpesfiscal.demo.entities.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-public interface UsuarioRepository extends JpaRepository<Usuario, Integer> , JpaSpecificationExecutor<Usuario> {
+public interface UsuarioRepository extends JpaRepository<Usuario, Integer>, JpaSpecificationExecutor<Usuario> {
 
     Usuario findUsuarioById(Integer id);
-
+    Usuario findByEmail(String email);
 }

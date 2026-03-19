@@ -1,5 +1,6 @@
 package com.vulpesfiscal.demo.exceptions;
 
+import lombok.Builder;
 import lombok.Getter;
 
 public class CampoInvalidoException extends RuntimeException {

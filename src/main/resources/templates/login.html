@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | VulpesFiscal</title>
+    <style>
+        :root {
+            --azul-principal: #0F2A44;
+            --azul-secundario: #1E4F7A;
+            --laranja-principal: #FF6A1A;
+            --laranja-claro: #FF8A3D;
+            --cinza-texto: #2D2D2D;
+            --cinza-fundo: #F5F7FA;
+            --branco: #FFFFFF;
+            --borda: #DCE3EB;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #eef3f8 100%);
+            color: var(--cinza-texto);
+        }
+
+        .header {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid var(--borda);
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand img {
+            width: 52px;
+            height: 52px;
+            object-fit: contain;
+        }
+
+        .brand-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--azul-principal);
+        }
+
+        .brand-subtitle {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 2px;
+        }
+
+        .license {
+            text-align: right;
+        }
+
+        .license-label {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .license-name {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--azul-principal);
+            margin-top: 4px;
+        }
+
+        .page {
+            min-height: calc(100vh - 85px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page::before,
+        .page::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            z-index: 0;
+            filter: blur(10px);
+        }
+
+        .page::before {
+            width: 320px;
+            height: 320px;
+            background: rgba(255, 106, 26, 0.10);
+            top: 40px;
+            left: -80px;
+        }
+
+        .page::after {
+            width: 380px;
+            height: 380px;
+            background: rgba(30, 79, 122, 0.10);
+            bottom: -120px;
+            right: -100px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 40px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero {
+            padding: 20px;
+        }
+
+        .tag {
+            display: inline-block;
+            background: var(--branco);
+            color: var(--laranja-principal);
+            border: 1px solid rgba(255, 106, 26, 0.18);
+            padding: 10px 16px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 22px;
+        }
+
+        .hero h1 {
+            font-size: 46px;
+            line-height: 1.1;
+            color: var(--azul-principal);
+            margin-bottom: 18px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            line-height: 1.7;
+            color: #5f6b7a;
+            max-width: 620px;
+            margin-bottom: 28px;
+        }
+
+        .cards {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .info-card {
+            background: var(--branco);
+            border: 1px solid var(--borda);
+            border-radius: 18px;
+            padding: 18px;
+            width: 180px;
+            box-shadow: 0 8px 24px rgba(15, 42, 68, 0.05);
+        }
+
+        .info-card strong {
+            display: block;
+            color: var(--azul-principal);
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        .info-card span {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        .login-card {
+            background: var(--branco);
+            border-radius: 28px;
+            padding: 36px 32px;
+            border: 1px solid var(--borda);
+            box-shadow: 0 20px 60px rgba(15, 42, 68, 0.12);
+            max-width: 440px;
+            width: 100%;
+            margin-left: auto;
+        }
+
+        .logo-box {
+            width: 110px;
+            height: 110px;
+            background: var(--cinza-fundo);
+            border: 1px solid var(--borda);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 22px;
+            overflow: hidden;
+        }
+
+        .logo-box img {
+            width: 82px;
+            height: 82px;
+            object-fit: contain;
+        }
+
+        .login-title {
+            text-align: center;
+            color: var(--azul-principal);
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--azul-principal);
+        }
+
+        .input {
+            width: 100%;
+            height: 50px;
+            border: 1px solid var(--borda);
+            border-radius: 16px;
+            padding: 0 16px;
+            background: #f8fafc;
+            font-size: 15px;
+            outline: none;
+            transition: 0.2s ease;
+        }
+
+        .input:focus {
+            border-color: var(--azul-secundario);
+            box-shadow: 0 0 0 4px rgba(30, 79, 122, 0.12);
+            background: var(--branco);
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .link {
+            font-size: 13px;
+            color: var(--laranja-principal);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .link:hover {
+            color: var(--laranja-claro);
+        }
+
+        .btn {
+            width: 100%;
+            height: 52px;
+            border: none;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--laranja-principal), var(--laranja-claro));
+            color: var(--branco);
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 10px;
+            box-shadow: 0 14px 30px rgba(255, 106, 26, 0.25);
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 18px 34px rgba(255, 106, 26, 0.30);
+        }
+
+        .footer-text {
+            text-align: center;
+            font-size: 12px;
+            color: #7b8794;
+            margin-top: 18px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 980px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                display: none;
+            }
+
+            .login-card {
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .header {
+                padding: 14px 16px;
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+
+            .license {
+                text-align: left;
+            }
+
+            .login-card {
+                padding: 28px 20px;
+                border-radius: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="brand">
+        <div>
+            <div class="brand-title">VulpesFiscal</div>
+            <div class="brand-subtitle">Sistema emissor fiscal</div>
+        </div>
+    </div>
+
+    <div class="license">
+        <div class="license-label">Licença pertencente a</div>
+        <div class="license-name">VulpesFiscal</div>
+    </div>
+</header>
+
+<main class="page">
+    <div class="container">
+        <section class="hero">
+            <div class="tag">Plataforma fiscal moderna</div>
+            <h1>Controle fiscal com uma experiência simples, segura e profissional.</h1>
+            <p>
+                Acesse seu ambiente VulpesFiscal para emitir documentos, gerenciar operações e acompanhar seus processos com rapidez e confiança.
+            </p>
+
+            <div class="cards">
+                <div class="info-card">
+                    <strong>Segurança</strong>
+                    <span>Acesso protegido e confiável para sua operação.</span>
+                </div>
+
+                <div class="info-card">
+                    <strong>Performance</strong>
+                    <span>Fluxo rápido para atender a rotina do seu negócio.</span>
+                </div>
+
+                <div class="info-card">
+                    <strong>Controle</strong>
+                    <span>Gestão fiscal centralizada em um só lugar.</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="login-card">
+
+            <h2 class="login-title">Entrar na plataforma</h2>
+            <p class="login-subtitle">Informe suas credenciais para acessar sua conta.</p>
+
+            <form id="loginForm" method="post" th:action="@{/login}">
+                <div class="form-group">
+                    <label for="usuario">Usuário</label>
+                    <input class="input" type="text" id="usuario" name="username" placeholder="Digite seu usuário" />
+                </div>
+
+                <div class="form-group">
+                    <div class="row">
+                        <label for="senha">Senha</label>
+                        <a class="link" href="#">Esqueci minha senha</a>
+                    </div>
+                    <input class="input" type="password" id="senha" name="password" placeholder="Digite sua senha" />
+                </div>
+
+                <button class="btn" type="submit">Entrar</button>
+            </form>
+
+            <div class="footer-text">
+                © 2026 VulpesFiscal. Todos os direitos reservados.<br />
+                Solução moderna para emissão e gestão fiscal.
+            </div>
+        </section>
+    </div>
+</main>
+
+<script>
+    const loginForm = document.getElementById('loginForm');
+
+    loginForm.addEventListener('submit', function (event) {
+        const usuario = document.getElementById('username').value.trim();
+        const senha = document.getElementById('password').value.trim();
+
+        if (!usuario || !senha) {
+            event.preventDefault();
+            alert('Preencha usuário e senha para continuar.');
+        }
+    });
+</script>
+</body>
+</html>

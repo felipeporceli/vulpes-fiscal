@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-05T22:28:59-0300",
+    date = "2026-03-15T00:36:33-0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.8 (Azul Systems, Inc.)"
 )
 @Component
@@ -54,11 +54,19 @@ public class EstabelecimentoMapperImpl implements EstabelecimentoMapper {
         estabelecimento.setTelefone( dto.telefone() );
         estabelecimento.setEmail( dto.email() );
         estabelecimento.setInscricaoEstadual( dto.inscricaoEstadual() );
-        estabelecimento.setCidade( dto.cidade() );
+        estabelecimento.setLogradouro( dto.logradouro() );
         estabelecimento.setEstado( dto.estado() );
         estabelecimento.setStatus( dto.status() );
         estabelecimento.setMatriz( dto.matriz() );
         estabelecimento.setInscricaoMunicipal( dto.inscricaoMunicipal() );
+        estabelecimento.setNumero( dto.numero() );
+        estabelecimento.setComplemento( dto.complemento() );
+        estabelecimento.setBairro( dto.bairro() );
+        estabelecimento.setMunicipioId( dto.municipioId() );
+        estabelecimento.setCep( dto.cep() );
+        estabelecimento.setPaisId( dto.paisId() );
+        estabelecimento.setPais( dto.pais() );
+        estabelecimento.setCodUf( dto.codUf() );
         estabelecimento.setDataAbertura( dto.dataAbertura() );
 
         return estabelecimento;

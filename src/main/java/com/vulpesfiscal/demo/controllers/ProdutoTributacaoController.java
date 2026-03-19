@@ -1,8 +1,10 @@
 package com.vulpesfiscal.demo.controllers;
 
 import com.vulpesfiscal.demo.controllers.dtos.CadastroProdutoTributacaoDTO;
+import com.vulpesfiscal.demo.controllers.dtos.ResultadoPesquisaProdutoTributacaoDTO;
 import com.vulpesfiscal.demo.entities.ProdutoTributacao;
 import com.vulpesfiscal.demo.services.ProdutoTributacaoService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,31 +19,46 @@ public class ProdutoTributacaoController {
     }
 
     @PostMapping
-    public ResponseEntity<ProdutoTributacao> cadastrar(
+    public ResponseEntity<Void> cadastrar(
             @PathVariable Integer empresaId,
             @RequestBody CadastroProdutoTributacaoDTO dto
     ) {
         ProdutoTributacao tributacao = produtoTributacaoService.cadastrar(dto, empresaId);
-        return ResponseEntity.ok(tributacao);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProdutoTributacao> atualizar(
+    public ResponseEntity<Void> atualizar(
             @PathVariable Integer empresaId,
             @PathVariable Long id,
             @RequestBody CadastroProdutoTributacaoDTO dto
     ) {
         ProdutoTributacao tributacao = produtoTributacaoService.atualizar(id, dto, empresaId);
-        return ResponseEntity.ok(tributacao);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/produto/{idProduto}/uf/{uf}")
-    public ResponseEntity<ProdutoTributacao> buscarPorProdutoEUf(
+    public ResponseEntity<ResultadoPesquisaProdutoTributacaoDTO> buscar(
             @PathVariable Integer empresaId,
             @PathVariable Integer idProduto,
             @PathVariable String uf
     ) {
-        ProdutoTributacao tributacao = produtoTributacaoService.buscarPorProdutoEUf(empresaId, idProduto, uf);
-        return ResponseEntity.ok(tributacao);
+        ProdutoTributacao tributacao = produtoTributacaoService.buscarPorProdutoEUf(
+                empresaId,
+                idProduto,
+                uf
+        );
+
+        return ResponseEntity.ok(ResultadoPesquisaProdutoTributacaoDTO.fromEntity(tributacao));
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(
+            @PathVariable Integer empresaId,
+            @PathVariable Long id
+    ) {
+        produtoTributacaoService.deletar(id, empresaId);
+    }
+
 }

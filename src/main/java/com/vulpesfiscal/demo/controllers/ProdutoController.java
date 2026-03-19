@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -34,6 +35,7 @@ public class ProdutoController implements ControllerGenerico{
 
     /* Obter detalhes por ID obtendo filtros opcionais pela URL, busca produtos paginados no banco e devolve o
     resultado convertido para DTO. */
+    @PreAuthorize("hasRole('GERENTE') and #empresaId == authentication.principal.empresaId")
     @GetMapping("/empresa/{empresaId}")
     public ResponseEntity<Page<ResultadoPesquisaProdutoDTO>> pesquisa (
             @RequestParam (value = "descricao", required = false)

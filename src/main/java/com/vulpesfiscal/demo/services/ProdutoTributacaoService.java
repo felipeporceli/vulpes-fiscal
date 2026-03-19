@@ -11,30 +11,24 @@ import com.vulpesfiscal.demo.exceptions.*;
 import com.vulpesfiscal.demo.repositories.EmpresaRepository;
 import com.vulpesfiscal.demo.repositories.ProdutoRepository;
 import com.vulpesfiscal.demo.repositories.ProdutoTributacaoRepository;
+import com.vulpesfiscal.demo.validator.ProdutoTributacaoValidator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ProdutoTributacaoService {
 
     private final ProdutoRepository produtoRepository;
     private final ProdutoTributacaoRepository produtoTributacaoRepository;
     private final EmpresaRepository empresaRepository;
-
-    public ProdutoTributacaoService(
-            ProdutoRepository produtoRepository,
-            ProdutoTributacaoRepository produtoTributacaoRepository,
-            EmpresaRepository empresaRepository
-    ) {
-        this.produtoRepository = produtoRepository;
-        this.produtoTributacaoRepository = produtoTributacaoRepository;
-        this.empresaRepository = empresaRepository;
-    }
+    private final ProdutoTributacaoValidator validator;
 
     public ProdutoTributacao cadastrar(CadastroProdutoTributacaoDTO dto, Integer empresaId) {
         Objects.requireNonNull(dto, "DTO de tributação não pode ser nulo");
-        validarCamposObrigatorios(dto);
+        validator.validarCamposObrigatorios(dto);
 
         Empresa empresa = empresaRepository.findById(empresaId)
                 .orElseThrow(() -> new RuntimeException("Empresa não encontrada: " + empresaId));
@@ -65,7 +59,7 @@ public class ProdutoTributacaoService {
     public ProdutoTributacao atualizar(Long id, CadastroProdutoTributacaoDTO dto, Integer empresaId) {
         Objects.requireNonNull(id, "Id da tributação não pode ser nulo");
         Objects.requireNonNull(dto, "DTO de tributação não pode ser nulo");
-        validarCamposObrigatorios(dto);
+        validator.validarCamposObrigatorios(dto);
 
         ProdutoTributacao tributacao = produtoTributacaoRepository.findById(id)
                 .orElseThrow(() -> new TributacaoNaoEncontradaException(
@@ -98,13 +92,14 @@ public class ProdutoTributacaoService {
 
         return produtoTributacaoRepository.save(tributacao);
     }
-    
+
     public void deletar(Long id, Integer empresaId) {
+
         ProdutoTributacao tributacao = produtoTributacaoRepository.findById(id)
-                .orElseThrow(() -> new TributacaoNaoEncontradaException("Tributação não encontrada: " + id));
+                .orElseThrow(() -> new RuntimeException("Tributação não encontrada."));
 
         if (!tributacao.getEmpresa().getId().equals(empresaId)) {
-            throw new TributacaoNaoPertenceAEmpresaException("Tributação não pertence à empresa informada.");
+            throw new RuntimeException("Tributação não pertence à empresa informada.");
         }
 
         produtoTributacaoRepository.delete(tributacao);
@@ -139,33 +134,20 @@ public class ProdutoTributacaoService {
         tributacao.setRegimeTributarioEmpresa(dto.getRegimeTributarioEmpresa());
     }
 
-    private void validarCamposObrigatorios(CadastroProdutoTributacaoDTO dto) {
-        if (dto.getIdProduto() == null) {
-            throw new CampoInvalidoException("idProduto",
-                    "O idProduto é obrigatório.");
-        }
+    @Transactional(readOnly = true)
+    public ProdutoTributacao buscarPorProdutoEUf(Integer empresaId, Integer idProduto, String uf) {
 
-        if (dto.getUf() == null || dto.getUf().isBlank()) {
-            throw new CampoInvalidoException("uf", "Uf é obrigatória.");
-        }
+        Produto produto = produtoRepository
+                .findByEmpresaIdAndIdProduto(empresaId, idProduto)
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado para a referência informada."));
 
-        if (dto.getCfop() == null || dto.getCfop().isBlank()) {
-            throw new CampoInvalidoException("cfop",
-                    "O CFOP é obrigatório.");
-        }
-
-        boolean temCstNormal = dto.getCstCofins() != null && !dto.getCstCofins().isBlank();
-        boolean temCsosn = dto.getCsosnIcms() != null && !dto.getCsosnIcms().isBlank();
-
-        if (!temCstNormal && !temCsosn) {
-            throw new CampoInvalidoException("CST ICMS/CSOSN ICMS",
-                    "Informe CST ICMS ou CSOSN ICMS.");
-        }
-
-        if (temCstNormal && temCsosn) {
-            throw new CampoInvalidoException("CST Normal/CSOSN",
-                    "Informe apenas CST ICMS ou CSOSN ICMS, não os dois.");
-        }
+        return produtoTributacaoRepository
+                .findByEmpresaIdAndProdutoIdTecnicoAndUf(
+                        empresaId,
+                        produto.getIdTecnico(),
+                        uf.toUpperCase()
+                )
+                .orElseThrow(() -> new RuntimeException("Tributação não encontrada para o produto e UF."));
     }
 
     private String normalizarUf(String uf) {

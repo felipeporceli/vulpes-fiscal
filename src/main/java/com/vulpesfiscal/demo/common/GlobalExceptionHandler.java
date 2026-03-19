@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RestControllerAdvice
@@ -198,6 +199,18 @@ public class GlobalExceptionHandler {
                 List.of(new ErroCampo("id", e.getMessage()))
         );
     }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErroResposta handleAccessDeniedException(AccessDeniedException e) {
+        return ErroResposta.builder()
+                .status(403)
+                .mensagem("Usuário não possui permissão para acessar este recurso")
+                .erros(List.of(new ErroCampo("id", e.getMessage())))
+                .build();
+    }
+
+
 
 
 

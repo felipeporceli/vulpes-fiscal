@@ -4,12 +4,14 @@ import com.vulpesfiscal.demo.controllers.dtos.AtualizacaoUsuarioDTO;
 import com.vulpesfiscal.demo.controllers.dtos.CadastroUsuarioDTO;
 import com.vulpesfiscal.demo.controllers.dtos.ResultadoPesquisaUsuarioDTO;
 import com.vulpesfiscal.demo.entities.Usuario;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-05T22:28:59-0300",
+    date = "2026-03-15T00:36:33-0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.8 (Azul Systems, Inc.)"
 )
 @Component
@@ -27,7 +29,12 @@ public class UsuarioMapperImpl implements UsuarioMapper {
         usuario.setPerfilId( dto.perfilId() );
         usuario.setNome( dto.nome() );
         usuario.setEmail( dto.email() );
+        usuario.setUsername( dto.username() );
         usuario.setAtivo( dto.ativo() );
+        List<String> list = dto.roles();
+        if ( list != null ) {
+            usuario.setRoles( new ArrayList<String>( list ) );
+        }
 
         return usuario;
     }
