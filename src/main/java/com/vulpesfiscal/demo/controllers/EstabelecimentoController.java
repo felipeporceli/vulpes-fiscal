@@ -6,6 +6,8 @@ import com.vulpesfiscal.demo.controllers.dtos.ResultadoPesquisaEstabelecimentoDT
 import com.vulpesfiscal.demo.controllers.mappers.EstabelecimentoMapper;
 import com.vulpesfiscal.demo.entities.Estabelecimento;
 import com.vulpesfiscal.demo.entities.enums.StatusEmpresa;
+import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
+import com.vulpesfiscal.demo.repositories.EstabelecimentoRepository;
 import com.vulpesfiscal.demo.services.EstabelecimentoService;
 import com.vulpesfiscal.demo.validator.EstabelecimentoValidator;
 import jakarta.validation.Valid;
@@ -25,14 +27,16 @@ public class EstabelecimentoController implements ControllerGenerico{
     private final EstabelecimentoService service;
     private final EstabelecimentoMapper mapper;
     private final EstabelecimentoValidator validator;
+    private final EstabelecimentoRepository estabelecimentoRepository;
 
 
     /* Endpoint responsável por cadastrar um novo estabelecimento vinculado a uma empresa existente.
     O ID da empresa é informado na URL e os dados do estabelecimento são enviados no corpo da requisição.
     Em caso de sucesso, retorna HTTP 201 com a URL do novo recurso no header Location. */
     @PreAuthorize(
-            "hasAnyRole('ADMIN','SUPORTE') or " +
-                    "(hasAnyRole('GERENTE') and #empresaId.equals(authentication.principal.empresaId))"
+            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
+                    "((hasAnyRole('EMPRESARIO')) and " +
+                    "(#empresaId == authentication.principal.empresaId))"
     )
     @PostMapping("/empresa/{empresaId}")
     public ResponseEntity<Void> salvar(
@@ -47,10 +51,11 @@ public class EstabelecimentoController implements ControllerGenerico{
     /* Obter detalhes por ID obtendo filtros opcionais pela URL, busca Estabelecimentos paginadas no banco e devolve o
     resultado convertido para DTO. */
     @PreAuthorize(
-            "hasAnyRole('ADMIN','SUPORTE') or " +
-                    "(hasAnyRole('GERENTE','CAIXA') and #empresaId.equals(authentication.principal.empresaId))"
+            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
+                    "((hasAnyRole('EMPRESARIO','GERENTE','CAIXA','VENDEDOR')) and " +
+                    "(#empresaId == authentication.principal.empresaId))"
     )
-    @GetMapping
+    @GetMapping("/empresa/{empresaId}")
     public ResponseEntity<Page<ResultadoPesquisaEstabelecimentoDTO>> pesquisa (
             @RequestParam (value = "cnpj", required = false)
             String cnpj,
@@ -74,7 +79,9 @@ public class EstabelecimentoController implements ControllerGenerico{
             Integer pagina,
 
             @RequestParam (value = "tamanho-pagina", defaultValue = "10")
-            Integer tamanhoPagina
+            Integer tamanhoPagina,
+
+            @PathVariable Integer empresaId
     ) {
         Page<Estabelecimento> paginaResultado = service.pesquisar(
                 cnpj,
@@ -91,26 +98,31 @@ public class EstabelecimentoController implements ControllerGenerico{
 
 
     /* Deletar Estabelecimento por id na URL, .map para seguir práticas Rest */
-    @DeleteMapping("{id}")
     @PreAuthorize(
-            "hasAnyRole('ADMIN','SUPORTE') or " +
-                    "(hasAnyRole('GERENTE') and #empresaId == authentication.principal.empresaId)"
+            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
+                    "((hasAnyRole('EMPRESARIO')) and " +
+                    "(#empresaId == authentication.principal.empresaId))"
     )
-    public void deletar (@PathVariable("id") String cnpj) {
+    @DeleteMapping("/empresa/{empresaId}/{id}")
+    public void deletar (@PathVariable("id") String cnpj,
+                         @PathVariable("empresaId") Integer empresaId) {
         service.deletar(cnpj);
     }
 
     /* Atualizar Estabelecimento por id na URL, mas novos atributos no body da requisicao. */
     @PreAuthorize(
-            "hasAnyRole('ADMIN','SUPORTE') or " +
-                    "(hasAnyRole('GERENTE','CAIXA') and #empresaId == authentication.principal.empresaId)"
+            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
+                    "((hasAnyRole('EMPRESARIO')) and " +
+                    "(#empresaId == authentication.principal.empresaId))"
     )
-    @PutMapping("{cnpj}")
+    @PutMapping("/empresa/{empresaId}/{id}")
     public ResponseEntity<Void> atualizar(
-            @PathVariable String cnpj,
+            @PathVariable Integer empresaId,
+            @PathVariable Integer id,
             @RequestBody AtualizacaoEstabelecimentoDTO dto
     ) {
-        Estabelecimento estabelecimento = validator.pesquisarPorCnpj(cnpj);
+        Estabelecimento estabelecimento = estabelecimentoRepository.findByIdAndEmpresaId(id, empresaId)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Estabelecimento nao encontrado para o id informado"));
 
         Estabelecimento dadosAtualizados = mapper.toEntityUpdate(dto, estabelecimento);
 
@@ -122,7 +134,16 @@ public class EstabelecimentoController implements ControllerGenerico{
         estabelecimento.setInscricaoEstadual(dadosAtualizados.getInscricaoEstadual());
         estabelecimento.setMatriz(dadosAtualizados.isMatriz());
         estabelecimento.setDataAbertura(dadosAtualizados.getDataAbertura());
-        estabelecimento.setInscricaoMunicipal(dadosAtualizados.getInscricaoMunicipal());
+        estabelecimento.setCidade(dadosAtualizados.getCidade());
+        estabelecimento.setEstado(dadosAtualizados.getEstado());
+        estabelecimento.setNumero(dadosAtualizados.getNumero());
+        estabelecimento.setComplemento(dadosAtualizados.getComplemento());
+        estabelecimento.setBairro(dadosAtualizados.getMunicipioId());
+        estabelecimento.setCep(dadosAtualizados.getCep());
+        estabelecimento.setPaisId(dadosAtualizados.getPaisId());
+        estabelecimento.setPais(dadosAtualizados.getPais());
+        estabelecimento.setCodUf(dadosAtualizados.getCodUf());
+        estabelecimento.setDataFechamento(dadosAtualizados.getDataFechamento());
 
         service.atualizar(estabelecimento);
 

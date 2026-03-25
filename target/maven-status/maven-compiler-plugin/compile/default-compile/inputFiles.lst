@@ -1,143 +1,244 @@
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\common\GlobalExceptionHandler.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\ConsumidorController.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\ControllerGenerico.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\AtualizacaoConsumidorDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\AtualizacaoEmpresaDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\AtualizacaoEstabelecimentoDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\AtualizacaoProdutoDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\AtualizacaoUsuarioDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\CadastroConsumidorDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\CadastroEmpresaDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\CadastroEstabelecimentoDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\CadastroItemVendaDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\CadastroPagamentoDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\CadastroProdutoDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\CadastroUsuarioDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\CadastroVendaDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\ConsumidorResponseDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\EmpresaResponseDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\ErroCampo.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\ErroResposta.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\EstabelecimentoResponseDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\AutXMLDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\AvulsaDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\DestDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\DetDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\EmitDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\EnderDestDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\EnderEmitDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\EntregaDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\IdeDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\imposto\ICMS00DTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\imposto\ICMS02DTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\imposto\ICMS10DTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\imposto\ICMS15DTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\imposto\ICMS20DTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\imposto\ICMS30DTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\imposto\ICMS40DTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\imposto\ICMS51DTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\imposto\ICMS53DTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\imposto\ICMS60DTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\imposto\ICMS61DTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\imposto\ICMS70DTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\imposto\ICMS90DTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\imposto\ICMSDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\imposto\ICMSPartDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\imposto\ICMSSN101DTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\imposto\ICMSSN102DTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\imposto\ICMSSN201DTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\imposto\ICMSSN202DTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\imposto\ICMSSN500DTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\imposto\ICMSSN900DTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\imposto\ICMSSTDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\imposto\ImpostoDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\NfceDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\ProdDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\RetiradaDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\ResultadoPesquisaConsumidorDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\ResultadoPesquisaEmpresaDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\ResultadoPesquisaEstabelecimentoDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\ResultadoPesquisaPagamentoDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\ResultadoPesquisaProdutoDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\ResultadoPesquisaUsuarioDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\dtos\VendaResponseDTO.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\EmpresaController.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\EstabelecimentoController.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\mappers\ConsumidorMapper.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\mappers\EmpresaMapper.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\mappers\EmpresaResponseMapper.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\mappers\EstabelecimentoMapper.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\mappers\EstabelecimentoResponseMapper.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\mappers\NfceMapper.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\mappers\PagamentoMapper.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\mappers\ProdutoMapper.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\mappers\UsuarioMapper.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\mappers\VendaMapper.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\PagamentoController.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\ProdutoController.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\specs\ConsumidorSpecs.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\specs\EmpresaSpecs.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\specs\EstabelecimentoSpecs.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\specs\PagamentoSpecs.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\specs\ProdutoSpecs.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\specs\UsuarioSpecs.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\TesteNfceController.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\UsuarioController.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\controllers\VendaController.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\entities\components\IdentificacaoNfce.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\entities\Consumidor.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\entities\Empresa.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\entities\enums\AmbienteSefazEmpresa.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\entities\enums\MetodoPagamento.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\entities\enums\PorteEmpresa.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\entities\enums\RegimeTributarioEmpresa.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\entities\enums\StatusEmpresa.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\entities\enums\StatusNfce.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\entities\enums\StatusPagamento.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\entities\Estabelecimento.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\entities\ItemVenda.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\entities\Nfce.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\entities\Pagamento.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\entities\Produto.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\entities\Usuario.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\entities\Venda.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\exceptions\CampoInvalidoException.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\exceptions\ConsumidorNaoEncontradoException.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\exceptions\EmpresaComEstabelecimentoException.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\exceptions\EmpresaDifereEstabelecimentoException.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\exceptions\EstabelecimentoNaoEncontrado.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\exceptions\ProdutoNaoEncontradoException.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\exceptions\RecursoInativoException.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\exceptions\RecursoNaoEncontradoException.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\exceptions\RegistroDuplicadoException.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\exceptions\UsuarioNaoEncontradoException.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\exceptions\ValorRecebidoMenorException.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\repositories\ConsumidorRepository.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\repositories\EmpresaRepository.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\repositories\EstabelecimentoRepository.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\repositories\ItemVendaRepository.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\repositories\NfceRepository.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\repositories\PagamentoRepository.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\repositories\ProdutoRepository.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\repositories\UsuarioRepository.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\repositories\VendaRepository.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\services\ConsumidorService.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\services\EmpresaService.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\services\EstabelecimentoService.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\services\nfce\DestinatarioService.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\services\nfce\EmitenteService.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\services\nfce\IdeService.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\services\nfce\ImpostoService.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\services\nfce\ProdService.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\services\NfceService.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\services\PagamentoService.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\services\ProdutoService.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\services\UsuarioService.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\services\VendaService.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\validator\ConsumidorValidator.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\validator\EmpresaValidator.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\validator\EstabelecimentoValidator.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\validator\PagamentoValidator.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\validator\ProdutoValidator.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\validator\UsuarioValidator.java
-C:\Users\felip\Desktop\Projetos\vulpes-fiscal\demo\src\main\java\com\vulpesfiscal\demo\VulpesFiscalApplication.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\common\CustomAccessDeniedHandler.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\common\GlobalExceptionHandler.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\configuration\SecurityConfiguration.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\configuration\WebConfiguration.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\ConsumidorController.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\ControllerGenerico.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\AtualizacaoConsumidorDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\AtualizacaoEmpresaDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\AtualizacaoEstabelecimentoDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\AtualizacaoProdutoDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\AtualizacaoUsuarioDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\CadastroConsumidorDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\CadastroEmpresaDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\CadastroEstabelecimentoDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\CadastroItemVendaDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\CadastroPagamentoDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\CadastroProdutoDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\CadastroProdutoTributacaoDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\CadastroUsuarioDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\CadastroVendaDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\ConsumidorResponseDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\EmpresaResponseDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\ErroCampo.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\ErroResposta.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\EstabelecimentoResponseDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\AutXMLDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\AvulsaDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\DestDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\DetDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\dfereferenciado\DfeReferenciadoDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\cofins\COFINSAliqDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\cofins\COFINSDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\cofins\COFINSNTDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\cofins\COFINSOutrDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\cofins\COFINSQtdeDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\cofinsst\COFINSSTDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\GAjusteCompetDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\GCredPresIBSZFMDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\gcredpresoper\gcbscredpres\GCBSCredPresDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\gcredpresoper\GCredPresOperDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\gcredpresoper\gibscredpres\GIBSCredPresDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\GEstornoCredDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\gibscbs\gcbs\GCBSDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\gibscbs\gcbs\gdevtrib\GDevTribDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\gibscbs\gcbs\gdif\GDifDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\gibscbs\gcbs\gred\GRedDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\gibscbs\GIBSCBSDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\gibscbs\gibsmun\gdevtrib\GDevTribDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\gibscbs\gibsmun\gdif\GDifDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\gibscbs\gibsmun\GIBSMunDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\gibscbs\gibsmun\gred\GRedDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\gibscbs\gibsuf\gdevtrib\GDevTribDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\gibscbs\gibsuf\gdif\GDifDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\gibscbs\gibsuf\GIBSUfDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\gibscbs\gibsuf\gred\GRedDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\gibscbs\gtribcompragov\GTribCompraGovDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\gibscbs\gtribregular\GTribRegularDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\gibscbsmono\GIBSCBSMonoDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\gibscbsmono\gmonodif\GMonoDifDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\gibscbsmono\gmonopadrao\GMonoPadraoDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\gibscbsmono\gmonoret\GMonoRetDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\gibscbsmono\gmonoreten\GMonoRetenDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\GIBSCBSMonoDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\GTransfCredDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ibscbs\IBSCBSDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\icms\ICMS00DTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\icms\ICMS02DTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\icms\ICMS10DTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\icms\ICMS15DTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\icms\ICMS20DTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\icms\ICMS30DTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\icms\ICMS40DTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\icms\ICMS51DTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\icms\ICMS53DTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\icms\ICMS60DTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\icms\ICMS61DTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\icms\ICMS70DTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\icms\ICMS90DTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\icms\ICMSDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\icms\ICMSPartDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\icms\ICMSSN101DTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\icms\ICMSSN102DTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\icms\ICMSSN201DTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\icms\ICMSSN202DTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\icms\ICMSSN500DTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\icms\ICMSSN900DTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\icms\ICMSSTDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\icmsufdest\ICMSUFDestDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\II\IIDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ImpostoDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ipi\IPIDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ipi\IPIntDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\ipi\IPITribDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\is\ISDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\issqn\ISSQNDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\pis\PISAliqDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\pis\PISDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\pis\PISNTDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\pis\PISOutrDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\pis\PISQtdeDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\imposto\pisst\PISSTDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\impostodevol\ImpostoDevolDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\impostodevol\ipi\IPIDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\obsitem\obscont\ObsContDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\obsitem\obsfisco\ObsFiscoDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\det\obsitem\ObsItemDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\EmitDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\EnderDestDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\EnderEmitDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\EntregaDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\IdeDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\InfNFe.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\NfceResponseDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\pagamento\card\CardDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\pagamento\detpag\DetPagDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\pagamento\PagamentoDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\ProdDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\RetiradaDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\total\ibscbstot\gcbs\GCBSDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\total\ibscbstot\gestornocred\GEstornoCredDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\total\ibscbstot\gibs\GIBSDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\total\ibscbstot\gibs\gibsmun\GIBSMunDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\total\ibscbstot\gibs\gibsuf\GIBSUfDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\total\ibscbstot\gmono\GMonoDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\total\ibscbstot\IBSCBSTotDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\total\icmstot\ICMSTotDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\total\issqntot\ISSQNtotDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\total\istot\IsTotDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\total\rettrib\RetTribDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\total\TotalDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\nfce\transporte\TransporteDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\ResultadoPesquisaConsumidorDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\ResultadoPesquisaEmpresaDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\ResultadoPesquisaEstabelecimentoDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\ResultadoPesquisaPagamentoDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\ResultadoPesquisaProdutoDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\ResultadoPesquisaProdutoTributacaoDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\ResultadoPesquisaUsuarioDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\dtos\VendaResponseDTO.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\EmpresaController.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\EstabelecimentoController.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\LoginViewController.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\mappers\ConsumidorMapper.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\mappers\EmpresaMapper.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\mappers\EmpresaResponseMapper.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\mappers\EstabelecimentoMapper.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\mappers\EstabelecimentoResponseMapper.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\mappers\NfceMapper.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\mappers\PagamentoMapper.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\mappers\ProdutoMapper.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\mappers\UsuarioMapper.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\mappers\VendaMapper.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\PagamentoController.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\ProdutoController.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\ProdutoTributacaoController.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\specs\ConsumidorSpecs.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\specs\EmpresaSpecs.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\specs\EstabelecimentoSpecs.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\specs\PagamentoSpecs.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\specs\ProdutoSpecs.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\specs\UsuarioSpecs.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\TesteNfceController.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\UsuarioController.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\VendaController.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\entities\components\IdentificacaoNfce.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\entities\Consumidor.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\entities\Empresa.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\entities\enums\AmbienteSefazEmpresa.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\entities\enums\MetodoPagamento.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\entities\enums\PorteEmpresa.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\entities\enums\RegimeTributarioEmpresa.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\entities\enums\StatusEmpresa.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\entities\enums\StatusNfce.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\entities\enums\StatusPagamento.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\entities\Estabelecimento.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\entities\ItemVenda.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\entities\Nfce.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\entities\Pagamento.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\entities\Produto.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\entities\ProdutoTributacao.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\entities\Usuario.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\entities\Venda.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\exceptions\CampoInvalidoException.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\exceptions\ConsumidorNaoEncontradoException.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\exceptions\EmpresaComEstabelecimentoException.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\exceptions\EmpresaDifereEstabelecimentoException.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\exceptions\EstabelecimentoNaoEncontrado.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\exceptions\ProdutoNaoEncontradoException.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\exceptions\RecursoInativoException.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\exceptions\RecursoNaoEncontradoException.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\exceptions\RegistroDuplicadoException.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\exceptions\TributacaoNaoEncontradaException.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\exceptions\TributacaoNaoEncontradaParaUfException.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\exceptions\TributacaoNaoPertenceAEmpresaException.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\exceptions\UsuarioNaoEncontradoException.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\exceptions\ValorRecebidoMenorException.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\repositories\ConsumidorRepository.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\repositories\EmpresaRepository.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\repositories\EstabelecimentoRepository.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\repositories\ItemVendaRepository.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\repositories\NfceRepository.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\repositories\PagamentoRepository.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\repositories\ProdutoRepository.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\repositories\ProdutoTributacaoRepository.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\repositories\UsuarioRepository.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\repositories\VendaRepository.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\security\CustomAuthentication.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\security\CustomAuthenticationProvider.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\security\CustomUserDetails.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\security\CustomUserDetailsService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\security\SecurityService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\ConsumidorService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\EmpresaService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\EstabelecimentoService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\nfce\DestinatarioService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\nfce\det\DfeReferenciadoService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\nfce\det\imposto\CofinsService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\nfce\det\imposto\ICMSService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\nfce\det\imposto\IPIService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\nfce\det\imposto\ObterRegimeService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\nfce\det\imposto\PISService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\nfce\det\ImpostoDevolService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\nfce\det\ImpostoService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\nfce\det\ObsItemService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\nfce\EmitenteService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\nfce\IdeService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\nfce\PagamentoServiceNfce.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\nfce\ProdService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\nfce\total\TotalService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\nfce\transporte\TransporteService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\NfceService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\PagamentoService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\ProdutoService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\ProdutoTributacaoService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\UsuarioService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\VendaService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\validator\ConsumidorValidator.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\validator\EmpresaValidator.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\validator\EstabelecimentoValidator.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\validator\PagamentoValidator.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\validator\ProdutoTributacaoValidator.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\validator\ProdutoValidator.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\validator\UsuarioValidator.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\VulpesFiscalApplication.java

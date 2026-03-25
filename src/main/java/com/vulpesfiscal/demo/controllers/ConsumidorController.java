@@ -5,13 +5,13 @@ import com.vulpesfiscal.demo.controllers.dtos.CadastroConsumidorDTO;
 import com.vulpesfiscal.demo.controllers.dtos.ResultadoPesquisaConsumidorDTO;
 import com.vulpesfiscal.demo.controllers.mappers.ConsumidorMapper;
 import com.vulpesfiscal.demo.entities.Consumidor;
-import com.vulpesfiscal.demo.entities.Empresa;
 import com.vulpesfiscal.demo.services.ConsumidorService;
 import com.vulpesfiscal.demo.validator.ConsumidorValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,6 +24,12 @@ public class ConsumidorController implements ControllerGenerico{
     private final ConsumidorValidator validator;
 
     // Salvar nova Consumidor. Finalizando gerando a URL da nova entidade e entregando-a no header da response.
+
+    @PreAuthorize(
+            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
+                    "((hasAnyRole('EMPRESARIO','GERENTE','CAIXA','VENDEDOR')) and " +
+                    "(#empresaId == authentication.principal.empresaId))"
+    )
     @PostMapping("/empresa/{empresaId}/estabelecimento/{estabelecimentoId}")
     public ResponseEntity<Void> salvar (@RequestBody @Valid CadastroConsumidorDTO dto,
                                         @PathVariable Integer empresaId,
@@ -35,7 +41,12 @@ public class ConsumidorController implements ControllerGenerico{
 
     /* Obter detalhes por ID obtendo filtros opcionais pela URL, busca Consumidors paginadas no banco e devolve o
     resultado convertido para DTO. */
-    @GetMapping
+    @PreAuthorize(
+            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
+                    "((hasAnyRole('EMPRESARIO','GERENTE','CAIXA','VENDEDOR')) and " +
+                    "(#empresaId == authentication.principal.empresaId))"
+    )
+    @GetMapping("/empresa/{empresaId}")
     public ResponseEntity<Page<ResultadoPesquisaConsumidorDTO>> pesquisa (
             @RequestParam (value = "id", required = false)
             Integer id,
@@ -53,35 +64,69 @@ public class ConsumidorController implements ControllerGenerico{
             Integer pagina,
 
             @RequestParam (value = "tamanho-pagina", defaultValue = "10")
-            Integer tamanhoPagina
+            Integer tamanhoPagina,
+
+            @RequestParam (value = "cep", required = false)
+            String cep,
+
+            @RequestParam (value = "uf", required = false)
+            String uf,
+
+            @RequestParam (value = "municipio", required = false)
+            String municipio,
+
+            @RequestParam (value = "municipio", required = false)
+            String telefone,
+
+            @PathVariable
+            Integer empresaId
     ) {
-        Page<Consumidor> paginaResultado = service.pesquisar(id, cpf, nome, email, pagina, tamanhoPagina);
+        Page<Consumidor> paginaResultado = service.pesquisar(empresaId,
+                id,
+                cpf,
+                nome,
+                email,
+                pagina,
+                uf,
+                municipio,
+                cep,
+                telefone,
+                tamanhoPagina);
         Page<ResultadoPesquisaConsumidorDTO> resultado = paginaResultado.map(mapper::toDTO);
         return ResponseEntity.ok(resultado);
     }
 
 
+
     /* Deletar Consumidor por id na URL, .map para seguir práticas Rest */
-    @DeleteMapping("{id}")
-    public void deletar (@PathVariable("id") Integer id) {
-        service.deletar(id);
+    @PreAuthorize(
+            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
+                    "((hasAnyRole('EMPRESARIO','GERENTE','CAIXA')) and " +
+                    "(#empresaId == authentication.principal.empresaId))"
+    )
+    @DeleteMapping("/empresa/{empresaId}/{cpf}")
+    public void deletar (@PathVariable("cpf") String cpf,
+                         @PathVariable("empresaId") Integer empresaId) {
+        service.deletar(cpf);
     }
 
     /* Atualizar Consumidor por id na URL, mas novos atributos no body da requisicao. */
-    @PutMapping("{id}")
+    @PreAuthorize(
+            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
+                    "((hasAnyRole('EMPRESARIO','GERENTE','CAIXA','VENDEDOR')) and " +
+                    "(#empresaId == authentication.principal.empresaId))"
+    )
+    @PutMapping("/empresa/{empresaId}/{cpf}")
     public ResponseEntity<Void> atualizar(
-            @PathVariable Integer id,
+            @PathVariable Integer empresaId,
+            @PathVariable String cpf,
             @RequestBody AtualizacaoConsumidorDTO dto
     ) {
-        Consumidor Consumidor = validator.pesquisarPorId(id);
+        Consumidor consumidor = validator.pesquisarPorCpfEempresa(cpf, empresaId);
 
-        Consumidor dadosAtualizados = mapper.toEntityUpdate(dto, Consumidor);
+        mapper.toEntityUpdate(dto, consumidor);
 
-        Consumidor.setNome(dadosAtualizados.getNome());
-        Consumidor.setCpf(dadosAtualizados.getCpf());
-        Consumidor.setEmail(dadosAtualizados.getEmail());
-
-        service.atualizar(Consumidor);
+        service.atualizar(consumidor);
 
         return ResponseEntity.noContent().build();
     }

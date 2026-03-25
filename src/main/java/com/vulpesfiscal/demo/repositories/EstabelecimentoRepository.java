@@ -11,5 +11,6 @@ public interface EstabelecimentoRepository extends JpaRepository <Estabeleciment
     boolean existsByCnpj(String cnpj);
     Optional<Estabelecimento> findByCnpj(String cnpj);
     Optional<Estabelecimento> findByIdAndEmpresaId(Integer estabelecimentoId, Integer empresaId);
+    boolean existsByIdAndEmpresaId(Integer estabelecimentoId, Integer empresaId);
 
 }

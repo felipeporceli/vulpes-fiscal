@@ -8,12 +8,15 @@ import com.vulpesfiscal.demo.entities.Empresa;
 import com.vulpesfiscal.demo.entities.enums.PorteEmpresa;
 import com.vulpesfiscal.demo.entities.enums.RegimeTributarioEmpresa;
 import com.vulpesfiscal.demo.entities.enums.StatusEmpresa;
+import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
+import com.vulpesfiscal.demo.repositories.EmpresaRepository;
 import com.vulpesfiscal.demo.services.EmpresaService;
 import com.vulpesfiscal.demo.validator.EmpresaValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,8 +27,11 @@ public class EmpresaController implements ControllerGenerico{
     private final EmpresaService service;
     private final EmpresaMapper mapper;
     private final EmpresaValidator validator;
+    private final EmpresaRepository repository;
+
 
     // Salvar nova empresa. Finalizando gerando a URL da nova entidade e entregando-a no header da response.
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'SUPORTE')")
     @PostMapping
     public ResponseEntity<Void> salvar (@RequestBody @Valid CadastroEmpresaDTO dto) {
         Empresa empresa = mapper.toEntity(dto);
@@ -38,7 +44,12 @@ public class EmpresaController implements ControllerGenerico{
 
     /* Obter detalhes por ID obtendo filtros opcionais pela URL, busca empresas paginadas no banco e devolve o
     resultado convertido para DTO. */
-    @GetMapping
+    @PreAuthorize(
+            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
+                    "((hasAnyRole('EMPRESARIO','GERENTE','CAIXA','VENDEDOR')) and " +
+                    "(#empresaId == authentication.principal.empresaId))"
+    )
+    @GetMapping("/{empresaId}")
     public ResponseEntity<Page<ResultadoPesquisaEmpresaDTO>> pesquisa (
             @RequestParam (value = "cnpj", required = false)
             String cnpj,
@@ -62,27 +73,39 @@ public class EmpresaController implements ControllerGenerico{
             Integer pagina,
 
             @RequestParam (value = "tamanho-pagina", defaultValue = "10")
-            Integer tamanhoPagina
+            Integer tamanhoPagina,
+
+            @PathVariable
+            Integer empresaId
     ) {
-        Page<Empresa> paginaResultado = service.pesquisar(cnpj, razaoSocial, inscricaoEstadual, regimeTributario, status, porte, pagina, tamanhoPagina);
+        Page<Empresa> paginaResultado = service.pesquisar(cnpj, razaoSocial, inscricaoEstadual, regimeTributario, status, porte, empresaId, pagina, tamanhoPagina);
         Page<ResultadoPesquisaEmpresaDTO> resultado = paginaResultado.map(mapper::toDTO);
         return ResponseEntity.ok(resultado);
     }
 
 
+
     /* Deletar empresa por id na URL, .map para seguir práticas Rest */
-    @DeleteMapping("{id}")
-    public void deletar (@PathVariable("id") String cnpj) {
-        service.deletar(cnpj);
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR','SUPORTE')")
+    @DeleteMapping("/{empresaId}")
+    public void deletar (@PathVariable("empresaId") Integer empresaId) {
+        service.deletar(empresaId);
     }
 
     /* Atualizar empresa por id na URL, mas novos atributos no body da requisicao. */
-    @PutMapping("{cnpj}")
+
+    @PutMapping("/{empresaId}")
+    @PreAuthorize(
+            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
+                    "((hasAnyRole('EMPRESARIO')) and " +
+                    "(#empresaId == authentication.principal.empresaId))"
+    )
     public ResponseEntity<Void> atualizar(
-            @PathVariable String cnpj,
+            @PathVariable Integer empresaId,
             @RequestBody AtualizacaoEmpresaDTO dto
     ) {
-        Empresa empresa = validator.pesquisarPorCnpj(cnpj);
+        Empresa empresa = repository.findById(empresaId)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Empresa não encontrada"));
 
         Empresa dadosAtualizados = mapper.toEntityUpdate(dto, empresa);
 

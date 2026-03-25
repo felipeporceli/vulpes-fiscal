@@ -3,7 +3,7 @@ spring:
     name: VulpesFiscal
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/vulpesfiscaldb
+    url: jdbc:postgresql://localhost:5432/vulpesfiscal
     username: vulpesfiscal
     password: vulpesfiscal
     driver-class-name: org.postgresql.Driver

@@ -13,9 +13,9 @@ import java.time.LocalDate;
 
 @JsonIgnoreProperties(ignoreUnknown = false)
 public record AtualizacaoEmpresaDTO(
-        @NotBlank String razaoSocial,
+        String razaoSocial,
         String nomeFantasia,
-        @NotBlank String inscricaoEstadual,
+        String inscricaoEstadual,
         RegimeTributarioEmpresa regimeTributario,
         PorteEmpresa porte,
         AmbienteSefazEmpresa ambienteSefaz,

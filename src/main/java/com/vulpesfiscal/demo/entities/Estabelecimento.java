@@ -94,6 +94,9 @@ public class Estabelecimento {
     @Column(name = "data_abertura", nullable = false)
     private LocalDate dataAbertura;
 
+    @Column(name = "data_fechamento")
+    private LocalDate dataFechamento;
+
     @CreatedDate
     @Column (name = "criado_em")
     private LocalDateTime dataCriacao;
@@ -106,12 +109,8 @@ public class Estabelecimento {
     @Column(name = "atualizado_em")
     private LocalDateTime atualizadoEm;
 
-    private Integer atualizadoPor;
-
-
-
-
-
-
+    @ManyToOne
+    @JoinColumn (name = "atualizado_por")
+    private Usuario atualizadoPor;
 
 }

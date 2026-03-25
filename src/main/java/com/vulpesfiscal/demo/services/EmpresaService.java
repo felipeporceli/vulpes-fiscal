@@ -1,12 +1,15 @@
 package com.vulpesfiscal.demo.services;
 
+import com.vulpesfiscal.demo.controllers.specs.ConsumidorSpecs;
 import com.vulpesfiscal.demo.controllers.specs.EmpresaSpecs;
 import com.vulpesfiscal.demo.entities.Empresa;
+import com.vulpesfiscal.demo.entities.Usuario;
 import com.vulpesfiscal.demo.entities.enums.PorteEmpresa;
 import com.vulpesfiscal.demo.entities.enums.RegimeTributarioEmpresa;
 import com.vulpesfiscal.demo.entities.enums.StatusEmpresa;
 import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
 import com.vulpesfiscal.demo.repositories.EmpresaRepository;
+import com.vulpesfiscal.demo.security.SecurityService;
 import com.vulpesfiscal.demo.validator.EmpresaValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,11 +24,14 @@ public class EmpresaService {
 
     private final EmpresaRepository repository;
     private final EmpresaValidator validator;
+    private final SecurityService securityService;
 
 
     // Metodo para salvar a nivel de serviço.
     public Empresa salvar(Empresa empresa) {
+        Usuario usuario = securityService.obterUsuariologado();
         validator.validar(empresa);
+        empresa.setUsuario(usuario);
         return repository.save(empresa);
     }
 
@@ -36,12 +42,15 @@ public class EmpresaService {
                                    RegimeTributarioEmpresa regimeTributario,
                                    StatusEmpresa statusEmpresa,
                                    PorteEmpresa porte,
+                                   Integer empresaId,
                                    Integer pagina,
                                    Integer tamanhoPagina) {
         // SELECT * FROM empresa WHERE 0 = 0
         Specification<Empresa> specification = Specification.where
                 ((root, query, cb) -> cb.conjunction());
 
+
+        specification = specification.and(EmpresaSpecs.empresaIdIgual(empresaId));
 
         if (cnpj != null) {
             specification = specification.and(EmpresaSpecs.cnpjIgual(cnpj));
@@ -66,14 +75,16 @@ public class EmpresaService {
         Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina);
         return repository.findAll(specification, pageRequest);
     }
-    public void deletar(String cnpj) {
-        validator.validarDeletar(cnpj);
-        repository.delete(validator.pesquisarPorCnpj(cnpj));
+    public void deletar(Integer empresaId) {
+        validator.validarDeletar(empresaId);
+        repository.deleteById(empresaId);
     }
 
 
     public void atualizar(Empresa empresa) {
         validator.pesquisarPorCnpj(empresa.getCnpj());
+        Usuario usuario = securityService.obterUsuariologado();
+        empresa.setAtualizadoPor(usuario);
         repository.save(empresa);
     }
 

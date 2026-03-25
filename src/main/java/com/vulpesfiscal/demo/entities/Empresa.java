@@ -72,21 +72,25 @@ public class Empresa {
     @Column (name = "uf", nullable = false)
     private String uf;
 
-    //Auditoria
-
     @Column(name = "data_abertura", nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     private LocalDate dataAbertura;
+
+    // Auditoria
 
     @CreatedDate
     @Column (name = "criado_em")
     private LocalDateTime dataCriacao;
 
-    private Integer criadoPor;
+    @ManyToOne
+    @JoinColumn (name = "criado_por")
+    private Usuario usuario;
 
     @LastModifiedDate
-    @Column (name = "atualizado_em")
+    @Column(name = "atualizado_em")
     private LocalDateTime atualizadoEm;
 
-    private Integer atualizadoPor;
+    @ManyToOne
+    @JoinColumn (name = "atualizado_por")
+    private Usuario atualizadoPor;
 }

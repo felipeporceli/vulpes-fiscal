@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-15T00:36:33-0300",
+    date = "2026-03-23T06:49:14-0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.8 (Azul Systems, Inc.)"
 )
 @Component
@@ -65,6 +65,8 @@ public class EmpresaMapperImpl implements EmpresaMapper {
         empresa.setPorte( dto.porte() );
         empresa.setAmbienteSefaz( dto.ambienteSefaz() );
         empresa.setStatus( dto.status() );
+        empresa.setCnae( dto.cnae() );
+        empresa.setUf( dto.uf() );
         empresa.setDataAbertura( dto.dataAbertura() );
 
         return empresa;
@@ -76,14 +78,30 @@ public class EmpresaMapperImpl implements EmpresaMapper {
             return empresa;
         }
 
-        empresa.setRazaoSocial( dto.razaoSocial() );
-        empresa.setNomeFantasia( dto.nomeFantasia() );
-        empresa.setInscricaoEstadual( dto.inscricaoEstadual() );
-        empresa.setRegimeTributario( dto.regimeTributario() );
-        empresa.setPorte( dto.porte() );
-        empresa.setAmbienteSefaz( dto.ambienteSefaz() );
-        empresa.setStatus( dto.status() );
-        empresa.setDataAbertura( dto.dataAbertura() );
+        if ( dto.razaoSocial() != null ) {
+            empresa.setRazaoSocial( dto.razaoSocial() );
+        }
+        if ( dto.nomeFantasia() != null ) {
+            empresa.setNomeFantasia( dto.nomeFantasia() );
+        }
+        if ( dto.inscricaoEstadual() != null ) {
+            empresa.setInscricaoEstadual( dto.inscricaoEstadual() );
+        }
+        if ( dto.regimeTributario() != null ) {
+            empresa.setRegimeTributario( dto.regimeTributario() );
+        }
+        if ( dto.porte() != null ) {
+            empresa.setPorte( dto.porte() );
+        }
+        if ( dto.ambienteSefaz() != null ) {
+            empresa.setAmbienteSefaz( dto.ambienteSefaz() );
+        }
+        if ( dto.status() != null ) {
+            empresa.setStatus( dto.status() );
+        }
+        if ( dto.dataAbertura() != null ) {
+            empresa.setDataAbertura( dto.dataAbertura() );
+        }
 
         return empresa;
     }

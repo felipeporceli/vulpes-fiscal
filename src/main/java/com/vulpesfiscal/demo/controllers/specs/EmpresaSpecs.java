@@ -1,5 +1,6 @@
 package com.vulpesfiscal.demo.controllers.specs;
 
+import com.vulpesfiscal.demo.entities.Consumidor;
 import com.vulpesfiscal.demo.entities.Empresa;
 import com.vulpesfiscal.demo.entities.enums.PorteEmpresa;
 import com.vulpesfiscal.demo.entities.enums.RegimeTributarioEmpresa;
@@ -42,6 +43,11 @@ public class EmpresaSpecs {
     // SELECT * FROM empresa WHERE status = :status
     public static Specification<Empresa> statusIgual (StatusEmpresa status) {
         return (root, query, cb) -> cb.equal(root.get("status"), status);
+    }
+
+    public static Specification<Empresa> empresaIdIgual(Integer empresaId) {
+        return (root, query, cb) ->
+                cb.equal(root.get("id"), empresaId);
     }
 
 }

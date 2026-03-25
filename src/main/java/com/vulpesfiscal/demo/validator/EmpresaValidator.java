@@ -36,11 +36,11 @@ public class EmpresaValidator {
                 );
     }
 
-    public void validarDeletar (String cnpj) {
-        Empresa empresa = repository.findByCnpj(cnpj)
+    public void validarDeletar (Integer empresaId) {
+        Empresa empresa = repository.findById(empresaId)
                 .orElseThrow(() ->
                         new RecursoNaoEncontradoException(
-                                "Empresa não encontrada para o CNPJ informado"
+                                "Empresa não encontrada para o ID informado"
                         )
                 );
 

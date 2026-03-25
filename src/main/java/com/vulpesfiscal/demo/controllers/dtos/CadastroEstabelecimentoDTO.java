@@ -33,6 +33,9 @@ public record CadastroEstabelecimentoDTO(
         String bairro,
 
         @NotBlank(message = "Campo obrigatório")
+        String cidade,
+
+        @NotBlank(message = "Campo obrigatório")
         String municipioId,
 
         @NotBlank(message = "Campo obrigatório")
@@ -58,6 +61,7 @@ public record CadastroEstabelecimentoDTO(
 
         @NotNull(message = "Campo obrigatório")
         boolean matriz,
+
 
         String telefone,
 

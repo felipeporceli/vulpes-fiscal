@@ -4,8 +4,11 @@ package com.vulpesfiscal.demo.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -23,6 +26,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EntityListeners(AuditingEntityListener.class)
 public class Consumidor {
 
     @Id
@@ -106,8 +110,22 @@ public class Consumidor {
     @Column (name = "telefone")
     private String telefone;
 
+    // AUDITORIA
 
+    @CreatedDate
+    @Column (name = "criado_em")
+    private LocalDateTime dataCriacao;
 
+    @ManyToOne
+    @JoinColumn (name = "criado_por")
+    private Usuario usuario;
 
+    @LastModifiedDate
+    @Column(name = "atualizado_em")
+    private LocalDateTime atualizadoEm;
+
+    @ManyToOne
+    @JoinColumn (name = "atualizado_por")
+    private Usuario atualizadoPor;
 
 }

@@ -93,6 +93,9 @@ public class EstabelecimentoService {
 
 
     public void atualizar(Estabelecimento estabelecimento) {
+        validator.pesquisarPorCnpj(estabelecimento.getCnpj());
+        Usuario usuario = securityService.obterUsuariologado();
+        estabelecimento.setAtualizadoPor(usuario);
         repository.save(estabelecimento);
     }
 

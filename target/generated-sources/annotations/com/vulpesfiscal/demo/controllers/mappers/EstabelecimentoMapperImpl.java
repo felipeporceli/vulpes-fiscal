@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-15T00:36:33-0300",
+    date = "2026-03-23T06:49:15-0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.8 (Azul Systems, Inc.)"
 )
 @Component
@@ -55,6 +55,7 @@ public class EstabelecimentoMapperImpl implements EstabelecimentoMapper {
         estabelecimento.setEmail( dto.email() );
         estabelecimento.setInscricaoEstadual( dto.inscricaoEstadual() );
         estabelecimento.setLogradouro( dto.logradouro() );
+        estabelecimento.setCidade( dto.cidade() );
         estabelecimento.setEstado( dto.estado() );
         estabelecimento.setStatus( dto.status() );
         estabelecimento.setMatriz( dto.matriz() );
@@ -78,16 +79,66 @@ public class EstabelecimentoMapperImpl implements EstabelecimentoMapper {
             return estabelecimento;
         }
 
-        estabelecimento.setNomeFantasia( dto.nomeFantasia() );
-        estabelecimento.setTelefone( dto.telefone() );
-        estabelecimento.setEmail( dto.email() );
-        estabelecimento.setInscricaoEstadual( dto.inscricaoEstadual() );
-        estabelecimento.setCidade( dto.cidade() );
-        estabelecimento.setEstado( dto.estado() );
-        estabelecimento.setStatus( dto.status() );
-        estabelecimento.setMatriz( dto.matriz() );
-        estabelecimento.setInscricaoMunicipal( dto.inscricaoMunicipal() );
-        estabelecimento.setDataAbertura( dto.dataAbertura() );
+        if ( dto.nomeFantasia() != null ) {
+            estabelecimento.setNomeFantasia( dto.nomeFantasia() );
+        }
+        if ( dto.telefone() != null ) {
+            estabelecimento.setTelefone( dto.telefone() );
+        }
+        if ( dto.email() != null ) {
+            estabelecimento.setEmail( dto.email() );
+        }
+        if ( dto.inscricaoEstadual() != null ) {
+            estabelecimento.setInscricaoEstadual( dto.inscricaoEstadual() );
+        }
+        if ( dto.logradouro() != null ) {
+            estabelecimento.setLogradouro( dto.logradouro() );
+        }
+        if ( dto.cidade() != null ) {
+            estabelecimento.setCidade( dto.cidade() );
+        }
+        if ( dto.estado() != null ) {
+            estabelecimento.setEstado( dto.estado() );
+        }
+        if ( dto.status() != null ) {
+            estabelecimento.setStatus( dto.status() );
+        }
+        if ( dto.matriz() != null ) {
+            estabelecimento.setMatriz( dto.matriz() );
+        }
+        if ( dto.inscricaoMunicipal() != null ) {
+            estabelecimento.setInscricaoMunicipal( dto.inscricaoMunicipal() );
+        }
+        if ( dto.numero() != null ) {
+            estabelecimento.setNumero( dto.numero() );
+        }
+        if ( dto.complemento() != null ) {
+            estabelecimento.setComplemento( dto.complemento() );
+        }
+        if ( dto.bairro() != null ) {
+            estabelecimento.setBairro( dto.bairro() );
+        }
+        if ( dto.municipioId() != null ) {
+            estabelecimento.setMunicipioId( dto.municipioId() );
+        }
+        if ( dto.cep() != null ) {
+            estabelecimento.setCep( dto.cep() );
+        }
+        if ( dto.paisId() != null ) {
+            estabelecimento.setPaisId( dto.paisId() );
+        }
+        if ( dto.pais() != null ) {
+            estabelecimento.setPais( dto.pais() );
+        }
+        if ( dto.codUf() != null ) {
+            estabelecimento.setCodUf( dto.codUf() );
+        }
+        if ( dto.dataAbertura() != null ) {
+            estabelecimento.setDataAbertura( dto.dataAbertura() );
+        }
+        if ( dto.dataFechamento() != null ) {
+            estabelecimento.setDataFechamento( dto.dataFechamento() );
+        }
 
         return estabelecimento;
     }

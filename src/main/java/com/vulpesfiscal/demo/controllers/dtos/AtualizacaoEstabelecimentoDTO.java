@@ -14,33 +14,44 @@ public record AtualizacaoEstabelecimentoDTO(
 
         String nomeFantasia,
 
-        @NotBlank(message = "Campo obrigatório")
         String inscricaoEstadual,
 
-        @NotBlank(message = "Campo obrigatório")
-        String endereco,
+        String logradouro,
 
-        @NotBlank(message = "Campo obrigatório")
+        String numero,
+
+        String complemento,
+
+        String bairro,
+
+        String municipioId,
+
+        String cep,
+
+        String paisId,
+
+        String pais,
+
+        String codUf,
+
         String cidade,
 
-        @NotBlank(message = "Campo obrigatório")
         String estado,
 
-        @NotNull(message = "Campo obrigatório")
         StatusEmpresa status,
 
-        @NotNull(message = "Campo obrigatório")
         String inscricaoMunicipal,
 
-        @NotNull(message = "Campo obrigatório")
-        boolean matriz,
+        Boolean matriz,
 
         String telefone,
 
         String email,
 
         @JsonFormat(pattern = "dd/MM/yyyy")
-        @NotNull
+        LocalDate dataFechamento,
+
+        @JsonFormat(pattern = "dd/MM/yyyy")
         @Past(message = "Não pode ser data futura")
         LocalDate dataAbertura
 ){

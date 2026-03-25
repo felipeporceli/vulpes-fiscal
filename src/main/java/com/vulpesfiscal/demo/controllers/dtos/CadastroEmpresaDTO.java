@@ -25,6 +25,12 @@ public record CadastroEmpresaDTO (
         @NotBlank(message = "Campo obrigatório")
         String inscricaoEstadual,
 
+        @NotBlank(message = "Campo obrigatório")
+        String cnae,
+
+        @NotBlank(message = "Campo obrigatório")
+        String uf,
+
         @NotNull(message = "Campo obrigatório")
         RegimeTributarioEmpresa regimeTributario,
 
