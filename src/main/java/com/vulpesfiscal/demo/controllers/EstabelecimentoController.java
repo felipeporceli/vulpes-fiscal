@@ -119,7 +119,7 @@ public class EstabelecimentoController implements ControllerGenerico{
     public ResponseEntity<Void> atualizar(
             @PathVariable Integer empresaId,
             @PathVariable Integer id,
-            @RequestBody AtualizacaoEstabelecimentoDTO dto
+            @RequestBody @Valid AtualizacaoEstabelecimentoDTO dto
     ) {
         Estabelecimento estabelecimento = estabelecimentoRepository.findByIdAndEmpresaId(id, empresaId)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Estabelecimento nao encontrado para o id informado"));

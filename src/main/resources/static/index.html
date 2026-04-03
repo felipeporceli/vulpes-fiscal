@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vulpes Fiscal — Emissor de NFC-e</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,700;12..96,800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange:       #E8470A;
+      --orange-light: #FF6B2B;
+      --orange-dim:   rgba(232,71,10,0.14);
+      --navy:         #1A2744;
+      --navy-mid:     #223060;
+      --cream:        #F6F1E8;
+      --white:        #FFFFFF;
+      --text-dark:    #0F1929;
+      --text-muted:   #68738F;
+      --font-d:       'Bricolage Grotesque', sans-serif;
+      --font-b:       'Instrument Sans', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-b); background: var(--white); color: var(--text-dark); overflow-x: hidden; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      height: 68px; display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5vw;
+      background: rgba(26,39,68,0.97); backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo-wrap {
+      width: 36px; height: 36px; border-radius: 10px; overflow: hidden;
+      background: rgba(232,71,10,0.1); border: 1.5px solid rgba(232,71,10,0.45);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-logo-wrap img { width: 56px; transform: translate(5px, 7px); }
+    .nav-wm { font-family: var(--font-d); font-weight: 800; font-size: 1.1rem; color: var(--white); letter-spacing: -0.01em; }
+    .nav-wm span { color: var(--orange); }
+    .nav-links { display: flex; align-items: center; gap: 30px; list-style: none; }
+    .nav-links a { font-size: 0.875rem; font-weight: 500; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta {
+      padding: 9px 20px; background: var(--orange); color: var(--white) !important;
+      border-radius: 8px; font-weight: 600 !important;
+      box-shadow: 0 4px 18px rgba(232,71,10,0.4);
+      transition: background 0.2s, transform 0.15s !important;
+    }
+    .nav-cta:hover { background: var(--orange-light) !important; transform: translateY(-1px); }
+    .nav-burger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+    .nav-burger span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; }
+    .mobile-menu {
+      display: none; position: fixed; top: 68px; left: 0; right: 0; z-index: 199;
+      background: rgba(26,39,68,0.99); padding: 24px 5vw 32px;
+      flex-direction: column; gap: 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { font-size: 1rem; font-weight: 500; color: rgba(255,255,255,0.75); text-decoration: none; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .mobile-menu .mm-cta { background: var(--orange); color: var(--white); border-radius: 10px; padding: 13px 20px; text-align: center; font-weight: 700; margin-top: 12px; border-bottom: none; }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh; background: var(--navy);
+      padding-top: 68px; /* push below fixed nav */
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center; gap: 40px;
+      padding-left: 5vw; padding-right: 5vw;
+      position: relative; overflow: hidden;
+    }
+    .hero-noise { position: absolute; inset: 0; opacity: 0.03; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    .hero-grid-bg { position: absolute; inset: 0; pointer-events: none;
+      background-image: linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px), linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);
+      background-size: 56px 56px;
+    }
+    .hero-glow { position: absolute; right: 5%; top: 50%; transform: translateY(-50%); pointer-events: none;
+      width: 700px; height: 700px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,71,10,0.17) 0%, transparent 65%);
+    }
+
+    .hero-left { position: relative; z-index: 2; padding: 80px 0; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 14px; border-radius: 100px;
+      background: rgba(232,71,10,0.12); border: 1px solid rgba(232,71,10,0.3);
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      color: #FF8C5A; margin-bottom: 28px;
+    }
+    .hero-badge::before { content: ''; width: 6px; height: 6px; background: var(--orange); border-radius: 50%; animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+    .hero-h1 {
+      font-family: var(--font-d); font-size: clamp(2.4rem, 4.5vw, 3.9rem);
+      font-weight: 800; line-height: 1.07; letter-spacing: -0.02em;
+      color: var(--white); margin-bottom: 22px;
+    }
+    .hero-h1 .accent { color: var(--orange); }
+    .hero-h1 .ul-accent { position: relative; display: inline-block; }
+    .hero-h1 .ul-accent::after { content: ''; position: absolute; left: 0; bottom: 2px; right: 0; height: 3px; background: var(--orange); border-radius: 3px; opacity: 0.5; }
+
+    .hero-sub { font-size: 1rem; line-height: 1.75; color: rgba(255,255,255,0.5); margin-bottom: 40px; max-width: 460px; }
+
+    .hero-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 28px; background: var(--orange); color: var(--white);
+      font-family: var(--font-d); font-weight: 700; font-size: 0.95rem;
+      border-radius: 10px; text-decoration: none; border: none; cursor: pointer;
+      box-shadow: 0 6px 28px rgba(232,71,10,0.4);
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    .btn-primary:hover { background: var(--orange-light); transform: translateY(-2px); box-shadow: 0 12px 36px rgba(232,71,10,0.5); }
+    .btn-primary svg { transition: transform 0.2s; }
+    .btn-primary:hover svg { transform: translateX(4px); }
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 24px; background: transparent; color: rgba(255,255,255,0.65);
+      font-size: 0.95rem; border-radius: 10px; text-decoration: none;
+      border: 1.5px solid rgba(255,255,255,0.15); transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.4); color: var(--white); }
+
+    /* Stats row — below actions, fully separate */
+    .hero-stats {
+      display: flex; gap: 36px; margin-top: 52px; flex-wrap: wrap;
+      padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .h-stat { display: flex; flex-direction: column; gap: 3px; }
+    .h-stat-n { font-family: var(--font-d); font-weight: 800; font-size: 1.45rem; color: var(--white); }
+    .h-stat-n em { font-style: normal; color: var(--orange); }
+    .h-stat-l { font-size: 0.7rem; color: rgba(255,255,255,0.35); letter-spacing: 0.08em; text-transform: uppercase; }
+
+    /* Hero right — fox visual */
+    .hero-right { position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; padding: 80px 0; }
+    .fox-stage { position: relative; width: 340px; height: 400px; }
+    .fox-ring {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      width: 320px; height: 320px; border-radius: 50%;
+      border: 1.5px dashed rgba(232,71,10,0.22);
+      animation: spin 28s linear infinite;
+    }
+    .fox-ring-inner {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      width: 240px; height: 240px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    @keyframes spin { to { transform: translate(-50%,-50%) rotate(360deg); } }
+    .fox-dot { position: absolute; width: 7px; height: 7px; background: var(--orange); border-radius: 50%; }
+    .fox-dot:nth-child(1){ top:0; left:50%; transform:translate(-50%,-50%); }
+    .fox-dot:nth-child(2){ bottom:0; left:50%; transform:translate(-50%,50%); }
+    .fox-dot:nth-child(3){ left:0; top:50%; transform:translate(-50%,-50%); }
+    .fox-dot:nth-child(4){ right:0; top:50%; transform:translate(50%,-50%); }
+    .fox-img {
+      position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 265px; filter: drop-shadow(0 20px 60px rgba(232,71,10,0.42));
+      animation: foxFloat 4.5s ease-in-out infinite;
+    }
+    @keyframes foxFloat { 0%,100%{transform:translateX(-50%) translateY(0);} 50%{transform:translateX(-50%) translateY(-14px);} }
+    .fox-pill {
+      position: absolute;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px; padding: 10px 14px; backdrop-filter: blur(10px);
+      display: flex; align-items: center; gap: 10px; white-space: nowrap;
+    }
+    .fox-pill.p1 { top: 28px; right: -10px; animation: pf1 5s ease-in-out infinite; }
+    .fox-pill.p2 { bottom: 52px; left: -24px; animation: pf2 6s ease-in-out infinite; }
+    @keyframes pf1 { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-7px);} }
+    @keyframes pf2 { 0%,100%{transform:translateY(0);} 50%{transform:translateY(6px);} }
+    .pill-ico { width: 30px; height: 30px; border-radius: 8px; background: rgba(232,71,10,0.2); display: flex; align-items: center; justify-content: center; }
+    .pill-ico svg { width: 14px; height: 14px; }
+    .pill-v { font-family: var(--font-d); font-weight: 700; font-size: 0.83rem; color: var(--white); }
+    .pill-s { font-size: 0.68rem; color: rgba(255,255,255,0.4); }
+
+    /* SECTIONS */
+    section { padding: 100px 5vw; }
+    .stag { display: inline-block; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange); margin-bottom: 12px; }
+    .stitle { font-family: var(--font-d); font-size: clamp(1.75rem, 3.2vw, 2.6rem); font-weight: 800; line-height: 1.12; letter-spacing: -0.02em; color: var(--text-dark); margin-bottom: 14px; }
+    .ssub { font-size: 0.96rem; line-height: 1.75; color: var(--text-muted); max-width: 500px; }
+
+    /* VALORES */
+    #valores { background: var(--cream); overflow: hidden; position: relative; }
+    #valores::after { content: ''; position: absolute; right: -60px; bottom: -100px; width: 460px; height: 460px; border-radius: 50%; background: radial-gradient(circle, rgba(232,71,10,0.06) 0%, transparent 70%); pointer-events: none; }
+    .val-inner { display: grid; grid-template-columns: 1fr 1.1fr; gap: 72px; align-items: center; }
+    .val-text p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.8; margin-top: 16px; }
+    .val-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .val-card { background: var(--white); border-radius: 16px; padding: 26px 22px; border: 1.5px solid rgba(26,39,68,0.07); transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s; }
+    .val-card:hover { transform: translateY(-5px); box-shadow: 0 18px 48px rgba(26,39,68,0.1); border-color: rgba(232,71,10,0.2); }
+    .vi { width: 42px; height: 42px; background: var(--orange-dim); border-radius: 11px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+    .vi svg { width: 20px; height: 20px; }
+    .vn { font-family: var(--font-d); font-weight: 700; font-size: 0.9rem; color: var(--navy); margin-bottom: 6px; }
+    .vd { font-size: 0.81rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* SERVICES */
+    #servicos { background: var(--white); }
+    .svc-head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 24px; margin-bottom: 52px; }
+    .svc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
+    .svc-card { border: 1.5px solid rgba(26,39,68,0.08); border-radius: 20px; padding: 32px 26px; background: var(--white); transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s; }
+    .svc-card:hover { transform: translateY(-6px); border-color: var(--orange); box-shadow: 0 18px 52px rgba(232,71,10,0.1); }
+    .svc-card.feat { background: var(--navy); border-color: transparent; }
+    .svc-card.feat:hover { border-color: var(--orange); box-shadow: 0 18px 52px rgba(232,71,10,0.25); }
+    .svc-num { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em; color: var(--orange); margin-bottom: 16px; text-transform: uppercase; }
+    .svc-card.feat .svc-num { color: rgba(232,71,10,0.65); }
+    .svc-ico { width: 48px; height: 48px; background: var(--orange-dim); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+    .svc-card.feat .svc-ico { background: rgba(232,71,10,0.2); }
+    .svc-ico svg { width: 23px; height: 23px; }
+    .svc-name { font-family: var(--font-d); font-weight: 700; font-size: 1rem; color: var(--text-dark); margin-bottom: 10px; }
+    .svc-card.feat .svc-name { color: var(--white); }
+    .svc-desc { font-size: 0.83rem; color: var(--text-muted); line-height: 1.65; }
+    .svc-card.feat .svc-desc { color: rgba(255,255,255,0.48); }
+    .svc-link { display: inline-flex; align-items: center; gap: 5px; margin-top: 16px; font-size: 0.8rem; font-weight: 600; color: var(--orange); text-decoration: none; transition: gap 0.2s; }
+    .svc-link:hover { gap: 9px; }
+
+    /* HOW IT WORKS */
+    #como { background: var(--navy); }
+    #como .stitle { color: var(--white); }
+    #como .ssub { color: rgba(255,255,255,0.45); }
+    #como .stag { color: rgba(232,71,10,0.9); }
+    .steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; margin-top: 60px; position: relative; }
+    .steps::before { content: ''; position: absolute; top: 34px; left: 12%; right: 12%; height: 1px; background: linear-gradient(90deg,transparent,rgba(232,71,10,0.5) 20%,rgba(232,71,10,0.5) 80%,transparent); }
+    .step { padding: 0 22px; display: flex; flex-direction: column; gap: 16px; }
+    .step-n { width: 68px; height: 68px; border-radius: 50%; background: var(--navy-mid); border: 2px solid var(--orange); display: flex; align-items: center; justify-content: center; font-family: var(--font-d); font-weight: 800; font-size: 1.05rem; color: var(--orange); position: relative; z-index: 2; transition: background 0.3s, color 0.3s; }
+    .step:hover .step-n { background: var(--orange); color: var(--white); }
+    .step-t { font-family: var(--font-d); font-weight: 700; font-size: 0.93rem; color: var(--white); }
+    .step-d { font-size: 0.82rem; color: rgba(255,255,255,0.42); line-height: 1.65; }
+
+    /* CONTACT */
+    #contato { background: var(--cream); }
+    .ct-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 80px; align-items: center; }
+    .ct-left p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.78; margin-top: 14px; margin-bottom: 28px; }
+    .ci-list { display: flex; flex-direction: column; gap: 14px; }
+    .ci { display: flex; align-items: center; gap: 12px; font-size: 0.875rem; color: var(--text-dark); }
+    .ci-ico { width: 38px; height: 38px; min-width: 38px; background: var(--orange-dim); border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+    .ci-ico svg { width: 16px; height: 16px; }
+    .ct-form { display: flex; flex-direction: column; gap: 16px; }
+    .fr { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .fg { display: flex; flex-direction: column; gap: 5px; }
+    .fg label { font-size: 0.75rem; font-weight: 600; color: var(--navy); letter-spacing: 0.05em; text-transform: uppercase; }
+    .fg input, .fg textarea { padding: 12px 16px; border: 1.5px solid rgba(26,39,68,0.13); border-radius: 10px; font-family: var(--font-b); font-size: 0.9rem; color: var(--text-dark); background: var(--white); outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+    .fg input:focus, .fg textarea:focus { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(232,71,10,0.1); }
+    .fg textarea { resize: none; height: 110px; }
+    .btn-send { padding: 14px; background: var(--orange); color: var(--white); font-family: var(--font-d); font-weight: 700; font-size: 0.95rem; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 6px 24px rgba(232,71,10,0.3); transition: background 0.2s, transform 0.15s, box-shadow 0.2s; }
+    .btn-send:hover { background: var(--orange-light); transform: translateY(-1px); box-shadow: 0 10px 32px rgba(232,71,10,0.4); }
+
+    /* FOOTER */
+    footer { background: var(--navy); padding: 64px 5vw 32px; }
+    .ft-banner { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 36px 40px; border-radius: 20px; background: linear-gradient(135deg,rgba(232,71,10,0.14) 0%,rgba(46,63,122,0.3) 100%); border: 1px solid rgba(232,71,10,0.22); margin-bottom: 56px; flex-wrap: wrap; }
+    .ft-banner-t { display: flex; flex-direction: column; gap: 6px; }
+    .ft-banner-h { font-family: var(--font-d); font-weight: 800; font-size: 1.25rem; color: var(--white); }
+    .ft-banner-s { font-size: 0.875rem; color: rgba(255,255,255,0.5); }
+    .ft-banner-fox { width: 96px; filter: drop-shadow(0 8px 22px rgba(232,71,10,0.4)); }
+    .ft-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .ft-brand-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .ft-logo-w { width: 34px; height: 34px; border-radius: 9px; overflow: hidden; background: rgba(232,71,10,0.1); border: 1.5px solid rgba(232,71,10,0.42); display: flex; align-items: center; justify-content: center; }
+    .ft-logo-w img { width: 52px; transform: translate(5px,7px); }
+    .ft-wm { font-family: var(--font-d); font-weight: 800; font-size: 1rem; color: var(--white); }
+    .ft-wm span { color: var(--orange); }
+    .ft-desc { font-size: 0.82rem; color: rgba(255,255,255,0.37); line-height: 1.7; }
+    .ft-ct { font-family: var(--font-d); font-weight: 700; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 16px; }
+    .ft-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .ft-links a { font-size: 0.85rem; color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s; }
+    .ft-links a:hover { color: var(--orange-light); }
+    .ft-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 28px; flex-wrap: wrap; gap: 10px; }
+    .ft-copy { font-size: 0.77rem; color: rgba(255,255,255,0.27); }
+    .ft-copy span { color: var(--orange); }
+    .ft-legal { display: flex; gap: 20px; }
+    .ft-legal a { font-size: 0.75rem; color: rgba(255,255,255,0.27); text-decoration: none; }
+    .ft-legal a:hover { color: rgba(255,255,255,0.55); }
+
+    /* REVEAL */
+    .rv { opacity: 0; transform: translateY(26px); transition: opacity 0.6s, transform 0.6s; }
+    .rv.vis { opacity: 1; transform: none; }
+
+    /* RESPONSIVE */
+    @media(max-width:960px){
+      .nav-links { display: none; }
+      .nav-burger { display: flex; }
+      #hero { grid-template-columns: 1fr; padding-bottom: 60px; }
+      .hero-left { padding: 60px 0 32px; }
+      .hero-right { display: none; }
+      .val-inner { grid-template-columns: 1fr; }
+      .svc-grid { grid-template-columns: 1fr 1fr; }
+      .steps { grid-template-columns: 1fr 1fr; }
+      .steps::before { display: none; }
+      .ct-grid { grid-template-columns: 1fr; }
+      .ft-top { grid-template-columns: 1fr 1fr; }
+      .fr { grid-template-columns: 1fr; }
+      .ft-banner { flex-direction: column; align-items: flex-start; }
+    }
+    @media(max-width:580px){
+      .svc-grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr; }
+      .val-cards { grid-template-columns: 1fr; }
+      .hero-h1 { font-size: 2.1rem; }
+      .ft-top { grid-template-columns: 1fr; }
+      .hero-stats { gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-brand">
+    <div class="nav-logo-wrap"><img src="logo_head.png" alt=""/></div>
+    <span class="nav-wm">Vulpes <span>Fiscal</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#valores">Valores</a></li>
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#como">Como Funciona</a></li>
+    <li><a href="#contato">Contato</a></li>
+    <li><a href="login.html" class="nav-cta">Acessar Emissor</a></li>
+  </ul>
+  <button class="nav-burger" id="burger"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-menu" id="mm">
+  <a href="#valores" class="mml">Valores</a>
+  <a href="#servicos" class="mml">Serviços</a>
+  <a href="#como" class="mml">Como Funciona</a>
+  <a href="#contato" class="mml">Contato</a>
+  <a href="login.html" class="mm-cta">Acessar Emissor</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-noise"></div>
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+
+  <div class="hero-left">
+    <div class="hero-badge">Emissor de NFC-e Homologado</div>
+    <h1 class="hero-h1">
+      Emita suas notas<br>
+      fiscais com<br>
+      <span class="accent ul-accent">inteligência</span><br>
+      e agilidade
+    </h1>
+    <p class="hero-sub">O Vulpes Fiscal é a solução SaaS para emissão de NFC-e mais eficiente do mercado. Seguro, simples e pensado para o seu negócio.</p>
+    <div class="hero-actions">
+      <a href="login.html" class="btn-primary">
+        Acessar o Emissor
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" width="17" height="17"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
+      </a>
+      <a href="#servicos" class="btn-ghost">Ver serviços</a>
+    </div>
+    <div class="hero-stats">
+      <div class="h-stat"><div class="h-stat-n">99<em>%</em></div><div class="h-stat-l">Uptime garantido</div></div>
+      <div class="h-stat"><div class="h-stat-n">&lt;2<em>s</em></div><div class="h-stat-l">Tempo de emissão</div></div>
+      <div class="h-stat"><div class="h-stat-n">100<em>%</em></div><div class="h-stat-l">SEFAZ integrado</div></div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="fox-stage">
+      <div class="fox-ring">
+        <div class="fox-dot"></div><div class="fox-dot"></div>
+        <div class="fox-dot"></div><div class="fox-dot"></div>
+      </div>
+      <div class="fox-ring-inner"></div>
+      <img src="logo_nobg.png" alt="Vulpes" class="fox-img"/>
+      <div class="fox-pill p1">
+        <div class="pill-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#E8470A" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div><div class="pill-v">1.247 notas</div><div class="pill-s">emitidas hoje</div></div>
+      </div>
+      <div class="fox-pill p2">
+        <div class="pill-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#E8470A" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div><div class="pill-v">100% seguro</div><div class="pill-s">certificado A1/A3</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALORES -->
+<section id="valores">
+  <div class="val-inner">
+    <div class="val-text rv">
+      <span class="stag">Nossos Valores</span>
+      <h2 class="stitle">Por que escolher<br>o Vulpes Fiscal?</h2>
+      <p>Somos movidos pela crença de que tecnologia fiscal deve ser acessível, confiável e eficiente para qualquer tipo de negócio — do pequeno varejo ao grande atacado.</p>
+      <p style="margin-top:10px">Desenvolvemos cada funcionalidade pensando no comerciante que precisa emitir notas rápido, sem burocracia e sem surpresas.</p>
+    </div>
+    <div class="val-cards rv">
+      <div class="val-card"><div class="vi"><svg viewBox="0 0 24 24" fill="none" stroke="#E8470A" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="vn">Segurança Total</div><div class="vd">Certificado digital, criptografia ponta a ponta e conformidade com a LGPD.</div></div>
+      <div class="val-card"><div class="vi"><svg viewBox="0 0 24 24" fill="none" stroke="#E8470A" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="vn">Velocidade</div><div class="vd">Emissão em menos de 2 segundos. Sem travamentos, sem filas.</div></div>
+      <div class="val-card"><div class="vi"><svg viewBox="0 0 24 24" fill="none" stroke="#E8470A" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div class="vn">Fácil de Usar</div><div class="vd">Interface intuitiva. Qualquer pessoa aprende em minutos.</div></div>
+      <div class="val-card"><div class="vi"><svg viewBox="0 0 24 24" fill="none" stroke="#E8470A" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="vn">Suporte Humano</div><div class="vd">Time especialista via chat, e-mail e telefone para te apoiar.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVIÇOS -->
+<section id="servicos">
+  <div class="svc-head rv">
+    <div><span class="stag">Nossos Serviços</span><h2 class="stitle">Tudo que você precisa<br>em um só lugar</h2></div>
+    <a href="login.html" class="btn-primary">Começar agora <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M4 10h12M11 5l5 5-5 5"/></svg></a>
+  </div>
+  <div class="svc-grid rv">
+    <div class="svc-card"><div class="svc-num">01</div><div class="svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#E8470A" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="svc-name">Emissão de NFC-e</div><div class="svc-desc">Emita NFC-e de forma rápida, automatizada e homologada pela SEFAZ em todos os estados.</div><a href="#" class="svc-link">Saiba mais →</a></div>
+    <div class="svc-card feat"><div class="svc-num">02</div><div class="svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#FF6B2B" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/></svg></div><div class="svc-name">Painel de Gestão</div><div class="svc-desc">Emissões, cancelamentos e relatórios fiscais em um painel moderno e intuitivo.</div><a href="login.html" class="svc-link">Acessar painel →</a></div>
+    <div class="svc-card"><div class="svc-num">03</div><div class="svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#E8470A" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="svc-name">Contingência Offline</div><div class="svc-desc">Emita mesmo sem internet. Sincronização automática ao reconectar.</div><a href="#" class="svc-link">Saiba mais →</a></div>
+    <div class="svc-card"><div class="svc-num">04</div><div class="svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#E8470A" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><div class="svc-name">Múltiplos CNPJs</div><div class="svc-desc">Gerencie vários estabelecimentos em uma única conta com controle de acesso.</div><a href="#" class="svc-link">Saiba mais →</a></div>
+    <div class="svc-card"><div class="svc-num">05</div><div class="svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#E8470A" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div><div class="svc-name">Integração via API</div><div class="svc-desc">Conecte seu PDV, e-commerce ou ERP via API RESTful documentada.</div><a href="#" class="svc-link">Ver docs →</a></div>
+    <div class="svc-card"><div class="svc-num">06</div><div class="svc-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#E8470A" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13 19.79 19.79 0 0 1 1.61 4.4 2 2 0 0 1 3.6 2.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17z"/></svg></div><div class="svc-name">Suporte Especializado</div><div class="svc-desc">Equipe técnica e fiscal disponível para configuração e conformidade tributária.</div><a href="#contato" class="svc-link">Falar com especialista →</a></div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section id="como">
+  <div style="text-align:center" class="rv">
+    <span class="stag">Como Funciona</span>
+    <h2 class="stitle" style="color:var(--white)">Emitir nunca foi<br>tão simples</h2>
+    <p class="ssub" style="margin:0 auto;color:rgba(255,255,255,0.45)">Do cadastro à emissão em poucos passos.</p>
+  </div>
+  <div class="steps rv">
+    <div class="step"><div class="step-n">01</div><div class="step-t">Crie sua conta</div><div class="step-d">Cadastre seu CNPJ, configure o certificado digital e defina seus produtos.</div></div>
+    <div class="step"><div class="step-n">02</div><div class="step-t">Selecione os itens</div><div class="step-d">Escolha os produtos da venda no emissor ou via API do seu PDV.</div></div>
+    <div class="step"><div class="step-n">03</div><div class="step-t">Emita com 1 clique</div><div class="step-d">Transmissão à SEFAZ e autorização em menos de 2 segundos.</div></div>
+    <div class="step"><div class="step-n">04</div><div class="step-t">Compartilhe ao cliente</div><div class="step-d">Envie DANFE por e-mail, WhatsApp, QR Code ou impressão direta.</div></div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section id="contato">
+  <div class="ct-grid">
+    <div class="rv">
+      <span class="stag">Contato</span>
+      <h2 class="stitle ct-left">Fale com nosso<br>time de especialistas</h2>
+      <p class="ct-left">Tem dúvidas sobre planos, integração ou conformidade fiscal? Nosso time está pronto para te ajudar.</p>
+      <div class="ci-list">
+        <div class="ci"><div class="ci-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#E8470A" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>contato@vulpesfiscal.com.br</div>
+        <div class="ci"><div class="ci-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#E8470A" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13 19.79 19.79 0 0 1 1.61 4.4 2 2 0 0 1 3.6 2.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17z"/></svg></div>(11) 9 9999-0000</div>
+        <div class="ci"><div class="ci-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#E8470A" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>Seg–Sex, 8h às 18h (Brasília)</div>
+      </div>
+    </div>
+    <div class="rv">
+      <form class="ct-form" onsubmit="sendForm(event)">
+        <div class="fr"><div class="fg"><label>Nome</label><input type="text" placeholder="Seu nome completo"/></div><div class="fg"><label>Empresa</label><input type="text" placeholder="Razão social"/></div></div>
+        <div class="fg"><label>E-mail</label><input type="email" placeholder="seuemail@empresa.com"/></div>
+        <div class="fg"><label>Mensagem</label><textarea placeholder="Como podemos ajudar?"></textarea></div>
+        <button type="submit" class="btn-send">Enviar Mensagem</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-banner">
+    <div class="ft-banner-t">
+      <div class="ft-banner-h">Pronto para emitir com inteligência?</div>
+      <div class="ft-banner-s">Crie sua conta e comece a emitir NFC-e em minutos.</div>
+    </div>
+    <img src="logo_nobg.png" alt="" class="ft-banner-fox"/>
+    <a href="login.html" class="btn-primary" style="white-space:nowrap">Começar agora <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M4 10h12M11 5l5 5-5 5"/></svg></a>
+  </div>
+  <div class="ft-top">
+    <div>
+      <div class="ft-brand-row"><div class="ft-logo-w"><img src="logo_head.png" alt=""/></div><span class="ft-wm">Vulpes <span>Fiscal</span></span></div>
+      <p class="ft-desc">Emissão de NFC-e rápida, segura e eficiente. Homologado pela SEFAZ em todos os estados.</p>
+    </div>
+    <div><div class="ft-ct">Produto</div><ul class="ft-links"><li><a href="#servicos">Serviços</a></li><li><a href="#como">Como Funciona</a></li><li><a href="login.html">Acessar Emissor</a></li><li><a href="#">Planos</a></li></ul></div>
+    <div><div class="ft-ct">Empresa</div><ul class="ft-links"><li><a href="#valores">Sobre Nós</a></li><li><a href="#contato">Contato</a></li><li><a href="#">Blog</a></li><li><a href="#">Carreiras</a></li></ul></div>
+    <div><div class="ft-ct">Suporte</div><ul class="ft-links"><li><a href="#">Central de Ajuda</a></li><li><a href="#">Docs API</a></li><li><a href="#">Status</a></li><li><a href="#">LGPD</a></li></ul></div>
+  </div>
+  <div class="ft-bottom">
+    <div class="ft-copy">© 2025 <span>Vulpes Fiscal</span>. Todos os direitos reservados.</div>
+    <div class="ft-legal"><a href="#">Privacidade</a><a href="#">Termos de Uso</a></div>
+  </div>
+</footer>
+
+<script>
+  const rvs = document.querySelectorAll('.rv');
+  const obs = new IntersectionObserver(e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('vis'); }), {threshold:0.1});
+  rvs.forEach(el => obs.observe(el));
+
+  const burger = document.getElementById('burger');
+  const mm = document.getElementById('mm');
+  burger.addEventListener('click', () => mm.classList.toggle('open'));
+  document.querySelectorAll('.mml').forEach(a => a.addEventListener('click', () => mm.classList.remove('open')));
+
+  function sendForm(e) {
+    e.preventDefault();
+    const btn = e.target.querySelector('.btn-send');
+    btn.textContent = '✓ Mensagem enviada!';
+    btn.style.background = '#16a34a';
+    setTimeout(() => { btn.textContent = 'Enviar Mensagem'; btn.style.background = ''; }, 3000);
+  }
+</script>
+</body>
+</html>

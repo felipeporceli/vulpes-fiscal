@@ -3,6 +3,7 @@ package com.vulpesfiscal.demo.controllers.dtos;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.vulpesfiscal.demo.entities.enums.StatusEmpresa;
+import com.vulpesfiscal.demo.validator.annotation.DataMaiorOuIgual;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -10,6 +11,11 @@ import jakarta.validation.constraints.Past;
 import java.time.LocalDate;
 
 @JsonIgnoreProperties(ignoreUnknown = false)
+@DataMaiorOuIgual(
+        campoInicial = "dataAbertura",
+        campoFinal = "dataFechamento",
+        message = "A data de fechamento não pode ser anterior à data de abertura"
+)
 public record AtualizacaoEstabelecimentoDTO(
 
         String nomeFantasia,

@@ -6,6 +6,7 @@ import com.vulpesfiscal.demo.entities.ProdutoTributacao;
 import com.vulpesfiscal.demo.services.ProdutoTributacaoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,6 +20,11 @@ public class ProdutoTributacaoController {
     }
 
     @PostMapping
+    @PreAuthorize(
+            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
+                    "((hasAnyRole('EMPRESARIO','GERENTE')) and " +
+                    "(#empresaId == authentication.principal.empresaId))"
+    )
     public ResponseEntity<Void> cadastrar(
             @PathVariable Integer empresaId,
             @RequestBody CadastroProdutoTributacaoDTO dto
@@ -28,6 +34,11 @@ public class ProdutoTributacaoController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize(
+            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
+                    "((hasAnyRole('EMPRESARIO','GERENTE')) and " +
+                    "(#empresaId == authentication.principal.empresaId))"
+    )
     public ResponseEntity<Void> atualizar(
             @PathVariable Integer empresaId,
             @PathVariable Long id,
@@ -37,6 +48,11 @@ public class ProdutoTributacaoController {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize(
+            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
+                    "((hasAnyRole('EMPRESARIO','GERENTE')) and " +
+                    "(#empresaId == authentication.principal.empresaId))"
+    )
     @GetMapping("/produto/{idProduto}/uf/{uf}")
     public ResponseEntity<ResultadoPesquisaProdutoTributacaoDTO> buscar(
             @PathVariable Integer empresaId,
@@ -52,6 +68,11 @@ public class ProdutoTributacaoController {
         return ResponseEntity.ok(ResultadoPesquisaProdutoTributacaoDTO.fromEntity(tributacao));
     }
 
+    @PreAuthorize(
+            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
+                    "((hasAnyRole('EMPRESARIO','GERENTE')) and " +
+                    "(#empresaId == authentication.principal.empresaId))"
+    )
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(

@@ -24,6 +24,11 @@ public class ProdutoController implements ControllerGenerico{
     private final ProdutoValidator validator;
 
     // Salvar novo produto. Finalizando gerando a URL da nova entidade e entregando-a no header da response.
+    @PreAuthorize(
+            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
+                    "((hasAnyRole('EMPRESARIO','GERENTE','CAIXA','VENDEDOR')) and " +
+                    "(#empresaId == authentication.principal.empresaId))"
+    )
     @PostMapping("/empresa/{empresaId}/estabelecimento/{estabelecimentoId}")
     public ResponseEntity<Void> salvar (@RequestBody @Valid CadastroProdutoDTO dto,
                                         @PathVariable Integer empresaId,
@@ -35,7 +40,11 @@ public class ProdutoController implements ControllerGenerico{
 
     /* Obter detalhes por ID obtendo filtros opcionais pela URL, busca produtos paginados no banco e devolve o
     resultado convertido para DTO. */
-    @PreAuthorize("hasRole('GERENTE') and #empresaId == authentication.principal.empresaId")
+    @PreAuthorize(
+            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
+                    "((hasAnyRole('EMPRESARIO','GERENTE','CAIXA','VENDEDOR')) and " +
+                    "(#empresaId == authentication.principal.empresaId))"
+    )
     @GetMapping("/empresa/{empresaId}")
     public ResponseEntity<Page<ResultadoPesquisaProdutoDTO>> pesquisa (
             @RequestParam (value = "descricao", required = false)
@@ -73,12 +82,23 @@ public class ProdutoController implements ControllerGenerico{
     }
 
 
+
     /* Deletar produto por id na URL, .map para seguir práticas Rest */
+    @PreAuthorize(
+            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
+                    "((hasAnyRole('EMPRESARIO','GERENTE','CAIXA')) and " +
+                    "(#empresaId == authentication.principal.empresaId))"
+    )
     @DeleteMapping("/empresa/{empresaId}/{idProduto}")
     public void deletar (@PathVariable("idProduto") Integer idProduto, @PathVariable("empresaId") Integer empresaId) {
         service.deletar(empresaId, idProduto);
     }
 
+    @PreAuthorize(
+            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
+                    "((hasAnyRole('EMPRESARIO','GERENTE','CAIXA')) and " +
+                    "(#empresaId == authentication.principal.empresaId))"
+    )
     /* Atualizar produto por id na URL, mas novos atributos no body da requisicao. */
     @PutMapping("/empresa/{empresaId}/{idProduto}")
     public ResponseEntity<Void> atualizar(

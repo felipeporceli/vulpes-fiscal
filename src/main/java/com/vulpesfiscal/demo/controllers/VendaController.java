@@ -9,6 +9,7 @@ import com.vulpesfiscal.demo.services.VendaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,6 +21,11 @@ public class VendaController {
     private final VendaMapper vendaMapper;
     private final NfceService nfceService;
 
+    @PreAuthorize(
+            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
+                    "((hasAnyRole('EMPRESARIO','GERENTE','CAIXA','VENDEDOR')) and " +
+                    "(#empresaId == authentication.principal.empresaId))"
+    )
     @PostMapping("/empresa/{empresaId}/estabelecimento/{estabelecimentoId}")
     public ResponseEntity<VendaResponseDTO> criarVenda(
             @PathVariable Integer empresaId,

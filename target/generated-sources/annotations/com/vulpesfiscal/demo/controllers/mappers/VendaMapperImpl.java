@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-03-23T06:49:15-0300",
+    date = "2026-03-31T22:14:29-0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.8 (Azul Systems, Inc.)"
 )
 @Component
@@ -34,7 +34,6 @@ public class VendaMapperImpl implements VendaMapper {
         Integer empresaId = null;
         Integer id = null;
         LocalDateTime dataCriacao = null;
-        Integer criadoPor = null;
         LocalDateTime atualizadoEm = null;
         Integer atualizadoPor = null;
         ConsumidorResponseDTO consumidor = null;
@@ -42,11 +41,11 @@ public class VendaMapperImpl implements VendaMapper {
         empresaId = vendaEmpresaId( venda );
         id = venda.getId();
         dataCriacao = venda.getDataCriacao();
-        criadoPor = venda.getCriadoPor();
         atualizadoEm = venda.getAtualizadoEm();
         atualizadoPor = venda.getAtualizadoPor();
         consumidor = consumidorToConsumidorResponseDTO( venda.getConsumidor() );
 
+        Integer criadoPor = null;
         BigDecimal desconto = null;
 
         VendaResponseDTO vendaResponseDTO = new VendaResponseDTO( id, dataCriacao, criadoPor, atualizadoEm, atualizadoPor, desconto, empresaId, consumidor );

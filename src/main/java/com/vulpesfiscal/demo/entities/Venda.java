@@ -64,7 +64,9 @@ public class Venda {
     @Column(name = "criado_em")
     private LocalDateTime dataCriacao;
 
-    private Integer criadoPor;
+    @ManyToOne
+    @JoinColumn(name = "criado_por")
+    private Usuario usuario;
 
     @LastModifiedDate
     @Column(name = "atualizado_em")

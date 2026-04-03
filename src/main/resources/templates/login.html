@@ -1,426 +1,392 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login | VulpesFiscal</title>
-    <style>
-        :root {
-            --azul-principal: #0F2A44;
-            --azul-secundario: #1E4F7A;
-            --laranja-principal: #FF6A1A;
-            --laranja-claro: #FF8A3D;
-            --cinza-texto: #2D2D2D;
-            --cinza-fundo: #F5F7FA;
-            --branco: #FFFFFF;
-            --borda: #DCE3EB;
-        }
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vulpes Fiscal — Acessar Emissor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,700;12..96,800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange:       #E8470A;
+      --orange-light: #FF6B2B;
+      --orange-dim:   rgba(232,71,10,0.15);
+      --navy:         #1A2744;
+      --navy-mid:     #223060;
+      --cream:        #F6F1E8;
+      --white:        #FFFFFF;
+      --text-dark:    #0F1929;
+      --text-muted:   #68738F;
+      --error:        #ef4444;
+      --success:      #16a34a;
+      --font-d:       'Bricolage Grotesque', sans-serif;
+      --font-b:       'Instrument Sans', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body { font-family: var(--font-b); background: var(--navy); overflow-x: hidden; }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
-        }
+    /* LAYOUT */
+    .page {
+      display: flex; min-height: 100vh;
+    }
 
-        body {
-            min-height: 100vh;
-            background: linear-gradient(135deg, #f5f7fa 0%, #eef3f8 100%);
-            color: var(--cinza-texto);
-        }
+    /* LEFT */
+    .left {
+      width: 52%; background: var(--navy);
+      display: flex; flex-direction: column;
+      padding: 0 60px;
+      position: relative; overflow: hidden;
+    }
+    .left-noise { position: absolute; inset: 0; opacity: 0.03; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    .left-grid { position: absolute; inset: 0; pointer-events: none;
+      background-image: linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px), linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);
+      background-size: 48px 48px;
+    }
+    .left-blob1 { position: absolute; bottom: -160px; left: -160px; width: 560px; height: 560px; border-radius: 50%; background: radial-gradient(circle,rgba(232,71,10,0.14) 0%,transparent 65%); pointer-events: none; }
+    .left-blob2 { position: absolute; top: -60px; right: 20px; width: 280px; height: 280px; border-radius: 50%; background: radial-gradient(circle,rgba(46,63,122,0.45) 0%,transparent 70%); pointer-events: none; }
 
-        .header {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            border-bottom: 1px solid var(--borda);
-            padding: 16px 32px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+    /* Brand bar at top */
+    .left-top {
+      position: relative; z-index: 2;
+      padding: 40px 0 0;
+    }
+    .brand-link { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .brand-logo-w {
+      width: 38px; height: 38px; border-radius: 10px; overflow: hidden;
+      background: rgba(232,71,10,0.1); border: 1.5px solid rgba(232,71,10,0.45);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .brand-logo-w img { width: 58px; transform: translate(5px, 7px); }
+    .brand-wm { font-family: var(--font-d); font-weight: 800; font-size: 1.1rem; color: var(--white); letter-spacing: -0.01em; }
+    .brand-wm span { color: var(--orange); }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
+    /* Center content */
+    .left-center {
+      position: relative; z-index: 2;
+      flex: 1; display: flex; flex-direction: column;
+      justify-content: center; gap: 36px;
+      padding: 40px 0;
+    }
 
-        .brand img {
-            width: 52px;
-            height: 52px;
-            object-fit: contain;
-        }
+    .left-fox-row { display: flex; align-items: flex-end; gap: 24px; }
+    .left-fox-img {
+      width: 150px; min-width: 150px;
+      filter: drop-shadow(0 16px 52px rgba(232,71,10,0.45));
+      animation: ff 4.5s ease-in-out infinite;
+    }
+    @keyframes ff { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-12px);} }
 
-        .brand-title {
-            font-size: 20px;
-            font-weight: bold;
-            color: var(--azul-principal);
-        }
+    .left-head {
+      font-family: var(--font-d);
+      font-size: clamp(1.8rem, 2.8vw, 2.5rem);
+      font-weight: 800; line-height: 1.1; letter-spacing: -0.02em;
+      color: var(--white);
+    }
+    .left-head em { font-style: normal; color: var(--orange); }
 
-        .brand-subtitle {
-            font-size: 13px;
-            color: #6b7280;
-            margin-top: 2px;
-        }
+    .left-sub { font-size: 0.93rem; line-height: 1.75; color: rgba(255,255,255,0.48); max-width: 380px; }
 
-        .license {
-            text-align: right;
-        }
+    .features { display: flex; flex-direction: column; gap: 14px; }
+    .feat { display: flex; align-items: center; gap: 14px; }
+    .feat-ico {
+      width: 36px; height: 36px; min-width: 36px;
+      background: rgba(232,71,10,0.12); border: 1px solid rgba(232,71,10,0.22);
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    }
+    .feat-ico svg { width: 15px; height: 15px; }
+    .feat-txt { font-size: 0.88rem; color: rgba(255,255,255,0.6); }
+    .feat-txt strong { color: var(--white); font-weight: 600; }
 
-        .license-label {
-            font-size: 12px;
-            color: #6b7280;
-        }
+    /* Bottom */
+    .left-bottom { position: relative; z-index: 2; padding: 0 0 36px; font-size: 0.76rem; color: rgba(255,255,255,0.22); }
 
-        .license-name {
-            font-size: 15px;
-            font-weight: bold;
-            color: var(--azul-principal);
-            margin-top: 4px;
-        }
+    /* RIGHT */
+    .right {
+      width: 48%; background: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      padding: 48px 60px;
+      position: relative;
+    }
+    .right::before {
+      content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 1px;
+      background: linear-gradient(to bottom,transparent,rgba(232,71,10,0.28) 30%,rgba(232,71,10,0.28) 70%,transparent);
+    }
 
-        .page {
-            min-height: calc(100vh - 85px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-            position: relative;
-            overflow: hidden;
-        }
+    .login-box { width: 100%; max-width: 420px; }
 
-        .page::before,
-        .page::after {
-            content: "";
-            position: absolute;
-            border-radius: 50%;
-            z-index: 0;
-            filter: blur(10px);
-        }
+    .login-top { margin-bottom: 36px; }
+    .login-tag { display: inline-block; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--orange); margin-bottom: 10px; }
+    .login-title { font-family: var(--font-d); font-weight: 800; font-size: 1.85rem; line-height: 1.12; letter-spacing: -0.02em; color: var(--text-dark); margin-bottom: 8px; }
+    .login-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
 
-        .page::before {
-            width: 320px;
-            height: 320px;
-            background: rgba(255, 106, 26, 0.10);
-            top: 40px;
-            left: -80px;
-        }
+    /* Thymeleaf alerts */
+    .alert { display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px; border-radius: 10px; font-size: 0.875rem; margin-bottom: 20px; line-height: 1.5; }
+    .alert-err { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25); color: var(--error); }
+    .alert-ok  { background: rgba(22,163,74,0.08);  border: 1px solid rgba(22,163,74,0.25);  color: var(--success); }
+    .alert svg { width: 16px; height: 16px; min-width: 16px; margin-top: 1px; }
 
-        .page::after {
-            width: 380px;
-            height: 380px;
-            background: rgba(30, 79, 122, 0.10);
-            bottom: -120px;
-            right: -100px;
-        }
+    /* Form */
+    .lform { display: flex; flex-direction: column; gap: 20px; }
+    .fg { display: flex; flex-direction: column; gap: 5px; }
+    .fg label { font-size: 0.75rem; font-weight: 600; color: var(--navy); letter-spacing: 0.05em; text-transform: uppercase; }
+    .iw { position: relative; display: flex; align-items: center; }
+    .iw .ico { position: absolute; left: 14px; width: 17px; height: 17px; color: var(--text-muted); pointer-events: none; transition: color 0.2s; }
+    .iw input {
+      width: 100%; padding: 13px 16px 13px 44px;
+      border: 1.5px solid rgba(26,39,68,0.13); border-radius: 10px;
+      font-family: var(--font-b); font-size: 0.95rem; color: var(--text-dark);
+      background: var(--white); outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .iw input:focus { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(232,71,10,0.1); }
+    .iw:focus-within .ico { color: var(--orange); }
+    .iw.err input { border-color: var(--error); box-shadow: 0 0 0 3px rgba(239,68,68,0.1); }
+    .ferr { font-size: 0.77rem; color: var(--error); margin-top: 2px; display: none; }
+    .tog {
+      position: absolute; right: 13px; background: none; border: none; cursor: pointer; padding: 4px;
+      color: var(--text-muted); transition: color 0.2s;
+    }
+    .tog:hover { color: var(--orange); }
+    .tog svg { width: 17px; height: 17px; display: block; }
+    .iw input[type="password"] { padding-right: 44px; }
 
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
-            gap: 40px;
-            align-items: center;
-            position: relative;
-            z-index: 1;
-        }
+    .fmeta { display: flex; justify-content: space-between; align-items: center; margin-top: -6px; }
+    .rem-label { display: flex; align-items: center; gap: 8px; font-size: 0.84rem; color: var(--text-muted); cursor: pointer; }
+    .rem-label input[type="checkbox"] { display: none; }
+    .cb-box { width: 18px; height: 18px; border-radius: 5px; border: 1.5px solid rgba(26,39,68,0.2); background: var(--white); display: flex; align-items: center; justify-content: center; transition: background 0.2s, border-color 0.2s; }
+    .rem-label input:checked ~ .cb-box { background: var(--orange); border-color: var(--orange); }
+    .cb-box svg { display: none; width: 10px; height: 10px; }
+    .rem-label input:checked ~ .cb-box svg { display: block; }
+    .forgot { font-size: 0.84rem; color: var(--orange); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+    .forgot:hover { color: var(--orange-light); text-decoration: underline; }
 
-        .hero {
-            padding: 20px;
-        }
+    .btn-login {
+      width: 100%; padding: 14px; background: var(--orange); color: var(--white);
+      font-family: var(--font-d); font-weight: 700; font-size: 1rem;
+      border: none; border-radius: 10px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      box-shadow: 0 6px 24px rgba(232,71,10,0.32);
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      margin-top: 4px; position: relative; overflow: hidden;
+    }
+    .btn-login::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent); transform: translateX(-100%); transition: transform 0.5s; }
+    .btn-login:hover::before { transform: translateX(100%); }
+    .btn-login:hover { background: var(--orange-light); transform: translateY(-1px); box-shadow: 0 10px 32px rgba(232,71,10,0.42); }
+    .btn-login svg { transition: transform 0.2s; }
+    .btn-login:hover svg { transform: translateX(4px); }
+    .btn-login.ld { pointer-events: none; opacity: 0.8; }
+    .spin { display: none; width: 17px; height: 17px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: sp 0.6s linear infinite; }
+    .btn-login.ld .spin { display: block; }
+    .btn-login.ld .btxt { display: none; }
+    @keyframes sp { to{transform:rotate(360deg);} }
 
-        .tag {
-            display: inline-block;
-            background: var(--branco);
-            color: var(--laranja-principal);
-            border: 1px solid rgba(255, 106, 26, 0.18);
-            padding: 10px 16px;
-            border-radius: 999px;
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 22px;
-        }
+    .divider { display: flex; align-items: center; gap: 12px; color: var(--text-muted); font-size: 0.8rem; margin-top: 24px; }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: rgba(26,39,68,0.1); }
 
-        .hero h1 {
-            font-size: 46px;
-            line-height: 1.1;
-            color: var(--azul-principal);
-            margin-bottom: 18px;
-        }
+    .back { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 16px; font-size: 0.875rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .back:hover { color: var(--orange); }
+    .back svg { width: 13px; height: 13px; }
 
-        .hero p {
-            font-size: 18px;
-            line-height: 1.7;
-            color: #5f6b7a;
-            max-width: 620px;
-            margin-bottom: 28px;
-        }
+    .sec-badge { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(26,39,68,0.07); font-size: 0.77rem; color: var(--text-muted); }
+    .sec-badge svg { width: 13px; height: 13px; color: var(--success); }
 
-        .cards {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-
-        .info-card {
-            background: var(--branco);
-            border: 1px solid var(--borda);
-            border-radius: 18px;
-            padding: 18px;
-            width: 180px;
-            box-shadow: 0 8px 24px rgba(15, 42, 68, 0.05);
-        }
-
-        .info-card strong {
-            display: block;
-            color: var(--azul-principal);
-            margin-bottom: 8px;
-            font-size: 15px;
-        }
-
-        .info-card span {
-            font-size: 14px;
-            color: #6b7280;
-            line-height: 1.5;
-        }
-
-        .login-card {
-            background: var(--branco);
-            border-radius: 28px;
-            padding: 36px 32px;
-            border: 1px solid var(--borda);
-            box-shadow: 0 20px 60px rgba(15, 42, 68, 0.12);
-            max-width: 440px;
-            width: 100%;
-            margin-left: auto;
-        }
-
-        .logo-box {
-            width: 110px;
-            height: 110px;
-            background: var(--cinza-fundo);
-            border: 1px solid var(--borda);
-            border-radius: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 22px;
-            overflow: hidden;
-        }
-
-        .logo-box img {
-            width: 82px;
-            height: 82px;
-            object-fit: contain;
-        }
-
-        .login-title {
-            text-align: center;
-            color: var(--azul-principal);
-            font-size: 28px;
-            margin-bottom: 8px;
-        }
-
-        .login-subtitle {
-            text-align: center;
-            color: #6b7280;
-            font-size: 14px;
-            margin-bottom: 28px;
-        }
-
-        .form-group {
-            margin-bottom: 18px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            font-weight: bold;
-            color: var(--azul-principal);
-        }
-
-        .input {
-            width: 100%;
-            height: 50px;
-            border: 1px solid var(--borda);
-            border-radius: 16px;
-            padding: 0 16px;
-            background: #f8fafc;
-            font-size: 15px;
-            outline: none;
-            transition: 0.2s ease;
-        }
-
-        .input:focus {
-            border-color: var(--azul-secundario);
-            box-shadow: 0 0 0 4px rgba(30, 79, 122, 0.12);
-            background: var(--branco);
-        }
-
-        .row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .link {
-            font-size: 13px;
-            color: var(--laranja-principal);
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .link:hover {
-            color: var(--laranja-claro);
-        }
-
-        .btn {
-            width: 100%;
-            height: 52px;
-            border: none;
-            border-radius: 16px;
-            background: linear-gradient(135deg, var(--laranja-principal), var(--laranja-claro));
-            color: var(--branco);
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            margin-top: 10px;
-            box-shadow: 0 14px 30px rgba(255, 106, 26, 0.25);
-        }
-
-        .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 18px 34px rgba(255, 106, 26, 0.30);
-        }
-
-        .footer-text {
-            text-align: center;
-            font-size: 12px;
-            color: #7b8794;
-            margin-top: 18px;
-            line-height: 1.6;
-        }
-
-        @media (max-width: 980px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-
-            .hero {
-                display: none;
-            }
-
-            .login-card {
-                margin: 0 auto;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .header {
-                padding: 14px 16px;
-                flex-direction: column;
-                gap: 12px;
-                align-items: flex-start;
-            }
-
-            .license {
-                text-align: left;
-            }
-
-            .login-card {
-                padding: 28px 20px;
-                border-radius: 22px;
-            }
-        }
-    </style>
+    /* RESPONSIVE */
+    @media(max-width:860px){
+      .page { flex-direction: column; }
+      .left {
+        width: 100%;
+        padding: 0 6vw;
+      }
+      .left-top { padding-top: 32px; }
+      .left-center { padding: 32px 0; gap: 24px; }
+      .left-fox-img { width: 100px; min-width: 100px; }
+      .left-head { font-size: 1.65rem; }
+      .left-bottom { padding-bottom: 28px; }
+      .right { width: 100%; padding: 40px 6vw 52px; }
+      .right::before { display: none; }
+    }
+    @media(max-width:420px){
+      .right { padding: 36px 5vw 48px; }
+    }
+  </style>
 </head>
 <body>
-<header class="header">
-    <div class="brand">
-        <div>
-            <div class="brand-title">VulpesFiscal</div>
-            <div class="brand-subtitle">Sistema emissor fiscal</div>
+<div class="page">
+
+  <!-- LEFT PANEL -->
+  <div class="left">
+    <div class="left-noise"></div>
+    <div class="left-grid"></div>
+    <div class="left-blob1"></div>
+    <div class="left-blob2"></div>
+
+    <div class="left-top">
+      <a href="index.html" th:href="@{/}" class="brand-link">
+        <div class="brand-logo-w"><img src="logo_head.png" alt=""/></div>
+        <span class="brand-wm">Vulpes <span>Fiscal</span></span>
+      </a>
+    </div>
+
+    <div class="left-center">
+      <div class="left-fox-row">
+        <img th:src="@{logo_nobg.png}" alt="Fox" class="left-fox-img"/>
+        <h2 class="left-head">
+          O emissor<br>de NFC-e mais<br><em>ágil</em> do Brasil
+        </h2>
+      </div>
+
+      <p class="left-sub">Emita, gerencie e acompanhe suas notas fiscais de consumidor com segurança total e conformidade com a SEFAZ.</p>
+
+      <div class="features">
+        <div class="feat">
+          <div class="feat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#E8470A" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div class="feat-txt"><strong>Seguro</strong> — Criptografia e certificado digital A1/A3</div>
         </div>
+        <div class="feat">
+          <div class="feat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#E8470A" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div class="feat-txt"><strong>Eficiente</strong> — Autorização em menos de 2 segundos</div>
+        </div>
+        <div class="feat">
+          <div class="feat-ico"><svg viewBox="0 0 24 24" fill="none" stroke="#E8470A" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+          <div class="feat-txt"><strong>Fácil de usar</strong> — Qualquer operador aprende em minutos</div>
+        </div>
+      </div>
     </div>
 
-    <div class="license">
-        <div class="license-label">Licença pertencente a</div>
-        <div class="license-name">VulpesFiscal</div>
-    </div>
-</header>
+    <div class="left-bottom">© 2025 Vulpes Fiscal · CNPJ 00.000.000/0001-00</div>
+  </div>
 
-<main class="page">
-    <div class="container">
-        <section class="hero">
-            <div class="tag">Plataforma fiscal moderna</div>
-            <h1>Controle fiscal com uma experiência simples, segura e profissional.</h1>
-            <p>
-                Acesse seu ambiente VulpesFiscal para emitir documentos, gerenciar operações e acompanhar seus processos com rapidez e confiança.
-            </p>
+  <!-- RIGHT PANEL -->
+  <div class="right">
+    <div class="login-box">
 
-            <div class="cards">
-                <div class="info-card">
-                    <strong>Segurança</strong>
-                    <span>Acesso protegido e confiável para sua operação.</span>
-                </div>
+      <div class="login-top">
+        <div class="login-tag">Bem-vindo de volta</div>
+        <h1 class="login-title">Acesse o<br>Emissor</h1>
+        <p class="login-desc">Informe suas credenciais para entrar no painel de emissão de NFC-e.</p>
+      </div>
 
-                <div class="info-card">
-                    <strong>Performance</strong>
-                    <span>Fluxo rápido para atender a rotina do seu negócio.</span>
-                </div>
+      <!-- Thymeleaf: login error -->
+      <div th:if="${loginError}" class="alert alert-err">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span th:text="${loginError}">E-mail ou senha incorretos. Verifique e tente novamente.</span>
+      </div>
 
-                <div class="info-card">
-                    <strong>Controle</strong>
-                    <span>Gestão fiscal centralizada em um só lugar.</span>
-                </div>
+      <!-- Thymeleaf: logout success -->
+      <div th:if="${logoutSuccess}" class="alert alert-ok">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        <span>Você saiu com sucesso. Até logo!</span>
+      </div>
+
+      <!-- FORM -->
+      <form class="lform"
+            th:action="@{/login}"
+            method="post"
+            id="loginForm"
+            novalidate>
+
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <!-- Email -->
+        <div class="fg">
+          <label for="username">E-mail</label>
+          <div class="iw" id="ew">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <input type="email" id="username" name="username" placeholder="seuemail@empresa.com" autocomplete="email" required th:value="${lastEmail}"/>
+          </div>
+          <span class="ferr" id="ee">Informe um e-mail válido.</span>
+        </div>
+
+        <!-- Password -->
+        <div class="fg">
+          <label for="password">Senha</label>
+          <div class="iw" id="pw">
+            <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input type="password" id="password" name="password" placeholder="Sua senha" autocomplete="current-password" required/>
+            <button type="button" class="tog" id="tpass" aria-label="Mostrar senha">
+              <svg id="eyeSvg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <span class="ferr" id="pe">Informe sua senha.</span>
+        </div>
+
+        <!-- Remember + Forgot -->
+        <div class="fmeta">
+          <label class="rem-label">
+            <input type="checkbox" name="remember-me" id="remMe"/>
+            <div class="cb-box">
+              <svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2.5"><polyline points="1.5 6 4.5 9 10.5 3"/></svg>
             </div>
-        </section>
+            Lembrar de mim
+          </label>
+          <a href="/esqueci-minha-senha" th:href="@{/esqueci-minha-senha}" class="forgot">Esqueci minha senha</a>
+        </div>
 
-        <section class="login-card">
+        <!-- Submit -->
+        <button type="submit" class="btn-login" id="btnL">
+          <span class="btxt" style="display:flex;align-items:center;gap:10px">
+            Entrar no Emissor
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" width="17" height="17"><path d="M4 10h12M11 5l5 5-5 5"/></svg>
+          </span>
+          <div class="spin"></div>
+        </button>
 
-            <h2 class="login-title">Entrar na plataforma</h2>
-            <p class="login-subtitle">Informe suas credenciais para acessar sua conta.</p>
+      </form>
 
-            <form id="loginForm" method="post" th:action="@{/login}">
-                <div class="form-group">
-                    <label for="usuario">Usuário</label>
-                    <input class="input" type="text" id="usuario" name="username" placeholder="Digite seu usuário" />
-                </div>
+      <div class="divider">ou</div>
+      <a href="index.html" th:href="@{/}" class="back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Voltar ao site principal
+      </a>
 
-                <div class="form-group">
-                    <div class="row">
-                        <label for="senha">Senha</label>
-                        <a class="link" href="#">Esqueci minha senha</a>
-                    </div>
-                    <input class="input" type="password" id="senha" name="password" placeholder="Digite sua senha" />
-                </div>
+      <div class="sec-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Conexão segura com criptografia TLS 1.3
+      </div>
 
-                <button class="btn" type="submit">Entrar</button>
-            </form>
-
-            <div class="footer-text">
-                © 2026 VulpesFiscal. Todos os direitos reservados.<br />
-                Solução moderna para emissão e gestão fiscal.
-            </div>
-        </section>
     </div>
-</main>
+  </div>
+
+</div>
 
 <script>
-    const loginForm = document.getElementById('loginForm');
+  // Eye toggle
+  const pi = document.getElementById('password');
+  const tpass = document.getElementById('tpass');
+  const eyeSvg = document.getElementById('eyeSvg');
+  const eyeOff = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19M1 1l22 22"/><circle cx="12" cy="12" r="3" opacity="0.4"/>`;
+  const eyeOn  = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+  tpass.addEventListener('click', () => {
+    const show = pi.type === 'password';
+    pi.type = show ? 'text' : 'password';
+    eyeSvg.innerHTML = show ? eyeOff : eyeOn;
+  });
 
-    loginForm.addEventListener('submit', function (event) {
-        const usuario = document.getElementById('username').value.trim();
-        const senha = document.getElementById('password').value.trim();
+  // Validation + loading
+  const form = document.getElementById('loginForm');
+  const btn  = document.getElementById('btnL');
+  form.addEventListener('submit', e => {
+    const ev = document.getElementById('username').value.trim();
+    const pv = pi.value;
+    const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const ew = document.getElementById('ew');
+    const pw = document.getElementById('pw');
+    const ee = document.getElementById('ee');
+    const pe = document.getElementById('pe');
+    let ok = true;
 
-        if (!usuario || !senha) {
-            event.preventDefault();
-            alert('Preencha usuário e senha para continuar.');
-        }
-    });
+    ew.classList.remove('err'); ee.style.display = 'none';
+    pw.classList.remove('err'); pe.style.display = 'none';
+
+    if (!ev || !emailRx.test(ev)) { ew.classList.add('err'); ee.style.display = 'block'; ok = false; }
+    if (!pv) { pw.classList.add('err'); pe.style.display = 'block'; ok = false; }
+
+    if (!ok) { e.preventDefault(); return; }
+    btn.classList.add('ld');
+  });
 </script>
 </body>
 </html>

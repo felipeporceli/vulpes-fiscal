@@ -1,5 +1,7 @@
 package com.vulpesfiscal.demo.services;
 
+import com.vulpesfiscal.demo.controllers.dtos.AtualizacaoEstabelecimentoDTO;
+import com.vulpesfiscal.demo.controllers.dtos.AtualizacaoPagamentoDTO;
 import com.vulpesfiscal.demo.controllers.dtos.CadastroPagamentoDTO;
 import com.vulpesfiscal.demo.controllers.mappers.PagamentoMapper;
 import com.vulpesfiscal.demo.controllers.specs.EstabelecimentoSpecs;
@@ -8,14 +10,17 @@ import com.vulpesfiscal.demo.controllers.specs.ProdutoSpecs;
 import com.vulpesfiscal.demo.entities.Empresa;
 import com.vulpesfiscal.demo.entities.Estabelecimento;
 import com.vulpesfiscal.demo.entities.Pagamento;
+import com.vulpesfiscal.demo.entities.Usuario;
 import com.vulpesfiscal.demo.entities.enums.MetodoPagamento;
 import com.vulpesfiscal.demo.entities.enums.StatusPagamento;
 import com.vulpesfiscal.demo.exceptions.CampoInvalidoException;
+import com.vulpesfiscal.demo.exceptions.PagamentoNaoEncontradoException;
 import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
 import com.vulpesfiscal.demo.exceptions.ValorRecebidoMenorException;
 import com.vulpesfiscal.demo.repositories.EmpresaRepository;
 import com.vulpesfiscal.demo.repositories.EstabelecimentoRepository;
 import com.vulpesfiscal.demo.repositories.PagamentoRepository;
+import com.vulpesfiscal.demo.security.SecurityService;
 import com.vulpesfiscal.demo.validator.PagamentoValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,6 +40,7 @@ public class PagamentoService {
     private final EstabelecimentoRepository estabelecimentoRepository;
     private final PagamentoMapper pagamentoMapper;
     private final PagamentoValidator validator;
+    private final SecurityService securityService;
 
     // Metodo para salvar a nivel de serviço.
     public Pagamento salvar(Integer empresaId,
@@ -51,8 +57,11 @@ public class PagamentoService {
                 ));
 
         Pagamento pagamento = pagamentoMapper.toEntity(dto);
+        Usuario usuario = securityService.obterUsuariologado();
+
         pagamento.setEmpresa(empresa);
         pagamento.setEstabelecimento(estabelecimento);
+        pagamento.setUsuario(usuario);
         return repository.save(pagamento);
     }
 
@@ -142,6 +151,43 @@ public class PagamentoService {
             pagamento.setTroco(BigDecimal.ZERO);
         }
     }
+
+    public void deletarPagamento(Integer pagamentoId,
+                                 Integer empresaId,
+                                 Integer estabelecimentoId) {
+        Pagamento pagamento = repository.findByIdAndEmpresaIdAndEstabelecimentoId(pagamentoId,
+                empresaId,
+                estabelecimentoId)
+                .orElseThrow(() -> new PagamentoNaoEncontradoException(
+                        "Pagamento nao encontrado para empresa fornecida")
+                );
+
+        repository.delete(pagamento);
+    }
+
+    public void atualizarPagamento(Integer pagamentoId,
+                                   Integer empresaId,
+                                   Integer estabelecimentoId,
+                                   AtualizacaoPagamentoDTO dto) {
+        Pagamento pagamento = repository.findByIdAndEmpresaIdAndEstabelecimentoId(pagamentoId,
+                        empresaId,
+                        estabelecimentoId)
+                .orElseThrow(() -> new PagamentoNaoEncontradoException(
+                        "Pagamento nao encontrado para empresa fornecida")
+                );
+
+        Pagamento dadosAtualizados = pagamentoMapper.toEntityUpdate(dto, pagamento);
+
+        Usuario usuario = securityService.obterUsuariologado();
+        pagamento.setAtualizadoPor(usuario);
+
+        pagamento.setStatusPagamento(dadosAtualizados.getStatusPagamento());
+
+        repository.save(pagamento);
+
+    }
+
+
 
 }
 

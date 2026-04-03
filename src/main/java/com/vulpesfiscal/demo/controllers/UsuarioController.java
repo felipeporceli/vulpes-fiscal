@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -27,6 +28,7 @@ public class UsuarioController implements ControllerGenerico {
     private final UsuarioValidator validator;
 
     // Salvar novo Usuario. Finalizando gerando a URL da nova entidade e entregando-a no header da response.
+    @PreAuthorize("(hasAnyRole('ADMINISTRADOR','SUPORTE')")
     @PostMapping("/empresa/{empresaId}/estabelecimento/{estabelecimentoId}")
     public ResponseEntity<Void> salvar (
             @RequestBody @Valid CadastroUsuarioDTO dto,
@@ -40,6 +42,7 @@ public class UsuarioController implements ControllerGenerico {
 
     /* Obter detalhes por ID obtendo filtros opcionais pela URL, busca produtos paginados no banco e devolve o
     resultado convertido para DTO. */
+    @PreAuthorize("(hasAnyRole('ADMINISTRADOR','SUPORTE')")
     @GetMapping("/empresa/{empresaId}/estabelecimento/{estabelecimentoId}")
     public ResponseEntity<Page<ResultadoPesquisaUsuarioDTO>> pesquisa (
             @RequestParam (value = "id", required = false)
@@ -72,6 +75,7 @@ public class UsuarioController implements ControllerGenerico {
         return ResponseEntity.ok(resultado);
     }
 
+    @PreAuthorize("(hasAnyRole('ADMINISTRADOR','SUPORTE')")
     @PutMapping("/empresa/{empresaId}/estabelecimento/{estabelecimentoId}/{id}")
     public ResponseEntity<Void> atualizar(
             @PathVariable Integer id,
@@ -96,6 +100,7 @@ public class UsuarioController implements ControllerGenerico {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("(hasAnyRole('ADMINISTRADOR','SUPORTE')")
     @DeleteMapping("/empresa/{empresaId}/estabelecimento/{estabelecimentoId}/{id}")
     public void deletar (
             @PathVariable Integer id,

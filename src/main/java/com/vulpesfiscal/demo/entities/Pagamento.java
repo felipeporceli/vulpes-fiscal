@@ -70,11 +70,15 @@ public class Pagamento {
     @Column(name = "criado_em")
     private LocalDateTime dataCriacao;
 
-    private Integer criadoPor;
+    @ManyToOne
+    @JoinColumn(name = "criado_por")
+    private Usuario usuario;
 
     @LastModifiedDate
     @Column(name = "atualizado_em")
     private LocalDateTime atualizadoEm;
 
-    private Integer atualizadoPor;
+    @ManyToOne
+    @JoinColumn(name = "atualizado_por")
+    private Usuario atualizadoPor;
 }

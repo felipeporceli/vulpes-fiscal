@@ -35,7 +35,12 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         if (senhasIguais) {
             CustomUserDetails userDetails = new CustomUserDetails(usuarioEncontrado);
-            return new CustomAuthentication(userDetails);
+            // 👇 troca CustomAuthentication por UsernamePasswordAuthenticationToken
+            return new UsernamePasswordAuthenticationToken(
+                    userDetails,
+                    null, // credentials null após autenticado
+                    userDetails.getAuthorities()
+            );
         }
 
         throw getErroUsuarioNaoEncontrado();
