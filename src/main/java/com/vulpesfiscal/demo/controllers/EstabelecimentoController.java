@@ -51,9 +51,8 @@ public class EstabelecimentoController implements ControllerGenerico{
     /* Obter detalhes por ID obtendo filtros opcionais pela URL, busca Estabelecimentos paginadas no banco e devolve o
     resultado convertido para DTO. */
     @PreAuthorize(
-            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
-                    "((hasAnyRole('EMPRESARIO','GERENTE','CAIXA','VENDEDOR')) and " +
-                    "(#empresaId == authentication.principal.empresaId))"
+            "hasAnyRole('ADMINISTRADOR','SUPORTE') or " +
+                    "(hasRole('EMPRESARIO') and #empresaId.toString() == authentication.principal.claims['empresaId'].toString())"
     )
     @GetMapping("/empresa/{empresaId}")
     public ResponseEntity<Page<ResultadoPesquisaEstabelecimentoDTO>> pesquisa (

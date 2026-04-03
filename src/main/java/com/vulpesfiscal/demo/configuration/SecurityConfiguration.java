@@ -63,8 +63,8 @@ public class SecurityConfiguration {
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        authoritiesConverter.setAuthoritiesClaimName("roles");
-        authoritiesConverter.setAuthorityPrefix(""); // evita duplicar ROLE_ROLE_ADMIN
+        authoritiesConverter.setAuthoritiesClaimName("roles"); // 👈 lê do claim "roles"
+        authoritiesConverter.setAuthorityPrefix("");           // 👈 evita duplicar ROLE_
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
         converter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
         return converter;
