@@ -8,4 +8,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer>, JpaS
 
     Usuario findUsuarioById(Integer id);
     Usuario findByEmail(String email);
+
+    // Verificar se existe por email para validar se o Usuário já tem cadastro no sistema
+    boolean existsByEmail(String email);
 }

@@ -60,9 +60,9 @@ public class AuthorizationServerConfiguration {
                 .requireProofKey(false)            // PKCE (deixa false por enquanto)
                 .build();
     }
-
+/*
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring().requestMatchers("/favicon.ico", "/error");
-    }
+    }*/
 }

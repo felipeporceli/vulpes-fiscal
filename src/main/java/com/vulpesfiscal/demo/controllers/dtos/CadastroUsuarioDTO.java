@@ -31,6 +31,12 @@ public record CadastroUsuarioDTO(
         @NotNull(message = "Campo obrigatório")
         Boolean ativo,
 
+        @NotNull(message = "Campo obrigatorio")
+        String cpf,
+
+        @NotNull(message = "Campo obrigatorio")
+        String telefone,
+
         @NotNull(message = "Campo obrigatório")
         List<String> roles
 

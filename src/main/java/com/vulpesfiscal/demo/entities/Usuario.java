@@ -53,6 +53,14 @@ public class Usuario {
     @Column(name = "roles", columnDefinition = "varchar[]")
     private List<String> roles;
 
+    @Column(name = "cpf")
+    private String cpf;
+
+    @Column(name = "telefone")
+    private String telefone;
+
+
+    // Campos de Auditoria
     @CreatedDate
     @Column(name = "criado_em")
     private LocalDateTime criadoEm;

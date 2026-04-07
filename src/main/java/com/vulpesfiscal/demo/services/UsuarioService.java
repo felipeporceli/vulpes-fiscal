@@ -37,9 +37,7 @@ public class UsuarioService {
     private final PasswordEncoder encoder;
 
     // Metodo para salvar a nivel de serviço.
-    public Usuario salvar(Integer empresaId,
-                          Integer estabelecimentoId,
-                          CadastroUsuarioDTO dto) {
+    public Usuario salvar(Integer empresaId, Integer estabelecimentoId, Usuario usuario) {
 
         Empresa empresa = empresaRepository.findById(empresaId)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Empresa não encontrada"));
@@ -50,11 +48,11 @@ public class UsuarioService {
                         "Estabelecimento não pertence à empresa informada"
                 ));
 
-        Usuario usuario = usuarioMapper.toEntity(dto);
-        var senha = usuario.getSenha();
-        usuario.setSenha(encoder.encode(senha));
+        validator.validarSalvar(usuario);
         usuario.setEmpresa(empresa);
         usuario.setEstabelecimento(estabelecimento);
+        var senha = usuario.getSenha();
+        usuario.setSenha(encoder.encode(senha));
         return repository.save(usuario);
     }
 

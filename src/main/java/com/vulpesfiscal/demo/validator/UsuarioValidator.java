@@ -5,11 +5,13 @@ import com.vulpesfiscal.demo.entities.Empresa;
 import com.vulpesfiscal.demo.entities.Estabelecimento;
 import com.vulpesfiscal.demo.entities.Usuario;
 import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
+import com.vulpesfiscal.demo.exceptions.UsuarioCadastradoException;
 import com.vulpesfiscal.demo.exceptions.UsuarioNaoEncontradoException;
 import com.vulpesfiscal.demo.repositories.EmpresaRepository;
 import com.vulpesfiscal.demo.repositories.EstabelecimentoRepository;
 import com.vulpesfiscal.demo.repositories.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -41,5 +43,14 @@ public class UsuarioValidator {
                 .orElseThrow(() ->
                         new UsuarioNaoEncontradoException("Usuario nao encontrado para o id informado")
                 );
+    }
+
+    public void validarSalvar(Usuario usuario) {
+        boolean existe = usuarioRepository
+                .existsByEmail(usuario.getEmail());
+
+        if (existe) {
+            throw new UsuarioCadastradoException("Já existe um usuário com esse e-mail cadastrado.");
+        }
     }
 }

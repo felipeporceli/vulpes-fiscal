@@ -222,6 +222,18 @@ public class GlobalExceptionHandler {
     }
 
 
+    // Usuário já cadastrado no sistema.
+    @ExceptionHandler(UsuarioCadastradoException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErroResposta handleUsuarioCadastrado(UsuarioCadastradoException e) {
+        return new ErroResposta(
+                409,
+                "Usuario já cadastrado no sistema.",
+                List.of(new ErroCampo("email", e.getMessage()))
+        );
+    }
+
+
 
 
 }

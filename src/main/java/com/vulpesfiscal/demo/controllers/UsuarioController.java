@@ -9,6 +9,9 @@ import com.vulpesfiscal.demo.entities.enums.MetodoPagamento;
 import com.vulpesfiscal.demo.entities.enums.StatusPagamento;
 import com.vulpesfiscal.demo.services.UsuarioService;
 import com.vulpesfiscal.demo.validator.UsuarioValidator;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -27,22 +30,28 @@ public class UsuarioController implements ControllerGenerico {
     private final UsuarioMapper mapper;
     private final UsuarioValidator validator;
 
-    // Salvar novo Usuario. Finalizando gerando a URL da nova entidade e entregando-a no header da response.
-    @PreAuthorize("(hasAnyRole('ADMINISTRADOR','SUPORTE')")
+
     @PostMapping("/empresa/{empresaId}/estabelecimento/{estabelecimentoId}")
-    public ResponseEntity<Void> salvar (
+    @Operation(summary = "Salvar clients", description = "Cadastrar novo client")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Cadastrado com sucesso."),
+            @ApiResponse(responseCode = "409", description = "Usuário já cadastrado no sistema com esse e-mail.")
+
+    })
+    public ResponseEntity<Void> salvar(
             @RequestBody @Valid CadastroUsuarioDTO dto,
             @PathVariable Integer empresaId,
             @PathVariable Integer estabelecimentoId) {
+
         Usuario usuario = mapper.toEntity(dto);
-        service.salvar(empresaId, estabelecimentoId, dto);
-        var url = gerarHeaderLocation(usuario.getId());
+        Usuario salvo = service.salvar(empresaId, estabelecimentoId, usuario);
+        var url = gerarHeaderLocation(salvo.getId());
         return ResponseEntity.created(url).build();
     }
 
     /* Obter detalhes por ID obtendo filtros opcionais pela URL, busca produtos paginados no banco e devolve o
     resultado convertido para DTO. */
-    @PreAuthorize("(hasAnyRole('ADMINISTRADOR','SUPORTE')")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'SUPORTE')")
     @GetMapping("/empresa/{empresaId}/estabelecimento/{estabelecimentoId}")
     public ResponseEntity<Page<ResultadoPesquisaUsuarioDTO>> pesquisa (
             @RequestParam (value = "id", required = false)
@@ -75,7 +84,7 @@ public class UsuarioController implements ControllerGenerico {
         return ResponseEntity.ok(resultado);
     }
 
-    @PreAuthorize("(hasAnyRole('ADMINISTRADOR','SUPORTE')")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'SUPORTE')")
     @PutMapping("/empresa/{empresaId}/estabelecimento/{estabelecimentoId}/{id}")
     public ResponseEntity<Void> atualizar(
             @PathVariable Integer id,
@@ -100,7 +109,7 @@ public class UsuarioController implements ControllerGenerico {
         return ResponseEntity.noContent().build();
     }
 
-    @PreAuthorize("(hasAnyRole('ADMINISTRADOR','SUPORTE')")
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'SUPORTE')")
     @DeleteMapping("/empresa/{empresaId}/estabelecimento/{estabelecimentoId}/{id}")
     public void deletar (
             @PathVariable Integer id,

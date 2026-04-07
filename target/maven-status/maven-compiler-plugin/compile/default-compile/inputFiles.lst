@@ -1,11 +1,10 @@
 C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\common\CustomAccessDeniedHandler.java
 C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\common\GlobalExceptionHandler.java
 C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\configuration\AuthorizationServerConfiguration.java
-C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\configuration\JwtConfig.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\configuration\OpenApiConfiguration.java
 C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\configuration\RsaKeyProperties.java
 C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\configuration\SecurityConfiguration.java
 C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\configuration\WebConfiguration.java
-C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\AuthController.java
 C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\ClientController.java
 C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\ConsumidorController.java
 C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\controllers\ControllerGenerico.java
@@ -201,6 +200,7 @@ C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfisca
 C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\exceptions\TributacaoNaoEncontradaException.java
 C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\exceptions\TributacaoNaoEncontradaParaUfException.java
 C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\exceptions\TributacaoNaoPertenceAEmpresaException.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\exceptions\UsuarioCadastradoException.java
 C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\exceptions\UsuarioNaoEncontradoException.java
 C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\exceptions\ValorRecebidoMenorException.java
 C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\repositories\ClientRepository.java
@@ -219,7 +219,8 @@ C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfisca
 C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\security\CustomRegisteredClientRepository.java
 C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\security\CustomUserDetails.java
 C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\security\CustomUserDetailsService.java
-C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\security\JwtService.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\security\JwtTokenCustomizer.java
+C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\security\PemUtils.java
 C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\security\SecurityService.java
 C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\ClientService.java
 C:\Users\felip\Desktop\Vulpes Fiscal\vulpes-fiscal\src\main\java\com\vulpesfiscal\demo\services\ConsumidorService.java
