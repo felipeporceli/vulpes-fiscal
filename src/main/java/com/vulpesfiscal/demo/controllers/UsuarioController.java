@@ -120,27 +120,14 @@ public class UsuarioController implements ControllerGenerico {
 
     })
 
-
     public ResponseEntity<Void> atualizar(
             @PathVariable Integer id,
             @RequestBody AtualizacaoUsuarioDTO dto,
             @PathVariable Integer empresaId,
             @PathVariable Integer estabelecimentoId
     ) {
-        Usuario usuario = validator.pesquisarPorId(id);
         validator.validarPesquisar(empresaId, estabelecimentoId);
-        Usuario dadosAtualizados = mapper.toEntityUpdate(dto, usuario);
-
-        usuario.setNome(dadosAtualizados.getNome());
-        usuario.setId(dadosAtualizados.getId());
-        usuario.setEmail(dadosAtualizados.getEmail());
-        usuario.setSenha(dadosAtualizados.getSenha());
-        usuario.setAtivo(dadosAtualizados.getAtivo());
-        usuario.setEstabelecimento(dadosAtualizados.getEstabelecimento());
-        usuario.setEmpresa(dadosAtualizados.getEmpresa());
-        usuario.setPerfilId(dadosAtualizados.getPerfilId());
-
-        service.atualizar(usuario);
+        service.atualizar(id, empresaId, estabelecimentoId, dto);
         return ResponseEntity.noContent().build();
     }
 

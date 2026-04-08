@@ -1,21 +1,21 @@
 package com.vulpesfiscal.demo.services;
 
+import com.vulpesfiscal.demo.controllers.dtos.AtualizacaoUsuarioDTO;
 import com.vulpesfiscal.demo.controllers.dtos.CadastroUsuarioDTO;
 import com.vulpesfiscal.demo.controllers.mappers.UsuarioMapper;
 import com.vulpesfiscal.demo.controllers.specs.PagamentoSpecs;
 import com.vulpesfiscal.demo.controllers.specs.UsuarioSpecs;
-import com.vulpesfiscal.demo.entities.Empresa;
-import com.vulpesfiscal.demo.entities.Estabelecimento;
-import com.vulpesfiscal.demo.entities.Pagamento;
-import com.vulpesfiscal.demo.entities.Usuario;
+import com.vulpesfiscal.demo.entities.*;
 import com.vulpesfiscal.demo.entities.enums.MetodoPagamento;
 import com.vulpesfiscal.demo.entities.enums.StatusPagamento;
 import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
+import com.vulpesfiscal.demo.exceptions.UsuarioNaoEncontradoException;
 import com.vulpesfiscal.demo.repositories.EmpresaRepository;
 import com.vulpesfiscal.demo.repositories.EstabelecimentoRepository;
 import com.vulpesfiscal.demo.repositories.UsuarioRepository;
 import com.vulpesfiscal.demo.security.SecurityService;
 import com.vulpesfiscal.demo.validator.UsuarioValidator;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,6 +36,7 @@ public class UsuarioService {
     private final UsuarioValidator validator;
     private final PasswordEncoder encoder;
     private final SecurityService securityService;
+    private final UsuarioMapper mapper;
 
     // Metodo para salvar a nivel de serviço.
     public Usuario salvar(Integer empresaId, Integer estabelecimentoId, Usuario usuario) {
@@ -49,6 +50,7 @@ public class UsuarioService {
                         "Estabelecimento não pertence à empresa informada"
                 ));
 
+        // Obter usuario logado
         String login = securityService.obterLoginUsuarioLogado();
         Usuario usuarioLogado = repository.findByEmail(login);
 
@@ -132,8 +134,24 @@ public class UsuarioService {
         return repository.findAll(specification, pageRequest);
     }
 
-    public void atualizar(Usuario usuario) {
-        validator.validarPesquisar(usuario.getEmpresa().getId(), usuario.getEstabelecimento().getId());
+    @Transactional
+    public void atualizar(Integer id,
+                          Integer empresaId,
+                          Integer estabelecimentoId,
+                          AtualizacaoUsuarioDTO dto) {
+
+        Usuario usuario = repository.findByIdAndEmpresaId(id, empresaId)
+                .orElseThrow(() -> new UsuarioNaoEncontradoException(
+                        "Usuário não encontrado."
+                ));
+
+        validator.validarPesquisar(empresaId, estabelecimentoId);
+        mapper.toEntityUpdate(dto, usuario);
+
+        if (dto.senha() != null && !dto.senha().isBlank()) {
+            usuario.setSenha(encoder.encode(dto.senha()));
+        }
+
         String login = securityService.obterLoginUsuarioLogado();
         Usuario usuarioLogado = repository.findByEmail(login);
         usuario.setAtualizadoPor(usuarioLogado);

@@ -4,9 +4,7 @@ import com.vulpesfiscal.demo.controllers.dtos.AtualizacaoProdutoDTO;
 import com.vulpesfiscal.demo.controllers.dtos.CadastroProdutoDTO;
 import com.vulpesfiscal.demo.controllers.dtos.ResultadoPesquisaProdutoDTO;
 import com.vulpesfiscal.demo.entities.Produto;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface ProdutoMapper {
@@ -19,5 +17,6 @@ public interface ProdutoMapper {
     @Mapping(source = "orig", target = "orig")
     Produto toEntity(CadastroProdutoDTO dto);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Produto toEntityUpdate(AtualizacaoProdutoDTO dto, @MappingTarget Produto produto);
 }

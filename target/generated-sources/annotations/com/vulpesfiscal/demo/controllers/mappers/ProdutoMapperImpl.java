@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-04-07T21:01:48-0300",
+    date = "2026-04-08T20:03:20-0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.8 (Azul Systems, Inc.)"
 )
 @Component
@@ -84,18 +84,36 @@ public class ProdutoMapperImpl implements ProdutoMapper {
             return produto;
         }
 
-        produto.setDescricao( dto.descricao() );
-        produto.setQtdEstoque( dto.qtdEstoque() );
+        if ( dto.descricao() != null ) {
+            produto.setDescricao( dto.descricao() );
+        }
+        if ( dto.codigoBarras() != null ) {
+            produto.setCodigoBarras( dto.codigoBarras() );
+        }
+        if ( dto.qtdEstoque() != null ) {
+            produto.setQtdEstoque( dto.qtdEstoque() );
+        }
         if ( dto.ncm() != null ) {
-            produto.setNcm( String.valueOf( dto.ncm() ) );
+            produto.setNcm( dto.ncm() );
         }
-        else {
-            produto.setNcm( null );
+        if ( dto.cfop() != null ) {
+            produto.setCfop( dto.cfop() );
         }
-        produto.setCfop( dto.cfop() );
-        produto.setUnidade( dto.unidade() );
-        produto.setPreco( dto.preco() );
-        produto.setAtivo( dto.ativo() );
+        if ( dto.unidade() != null ) {
+            produto.setUnidade( dto.unidade() );
+        }
+        if ( dto.preco() != null ) {
+            produto.setPreco( dto.preco() );
+        }
+        if ( dto.ativo() != null ) {
+            produto.setAtivo( dto.ativo() );
+        }
+        if ( dto.cest() != null ) {
+            produto.setCest( dto.cest() );
+        }
+        if ( dto.orig() != null ) {
+            produto.setOrig( dto.orig() );
+        }
 
         return produto;
     }

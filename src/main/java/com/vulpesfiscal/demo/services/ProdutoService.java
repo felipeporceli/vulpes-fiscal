@@ -7,8 +7,14 @@ import com.vulpesfiscal.demo.controllers.specs.ProdutoSpecs;
 import com.vulpesfiscal.demo.entities.Empresa;
 import com.vulpesfiscal.demo.entities.Estabelecimento;
 import com.vulpesfiscal.demo.entities.Produto;
+import com.vulpesfiscal.demo.entities.Usuario;
+import com.vulpesfiscal.demo.exceptions.ProdutoNaoEncontradoException;
 import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
+import com.vulpesfiscal.demo.repositories.EmpresaRepository;
+import com.vulpesfiscal.demo.repositories.EstabelecimentoRepository;
 import com.vulpesfiscal.demo.repositories.ProdutoRepository;
+import com.vulpesfiscal.demo.repositories.UsuarioRepository;
+import com.vulpesfiscal.demo.security.SecurityService;
 import com.vulpesfiscal.demo.validator.ProdutoValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,18 +32,31 @@ public class ProdutoService {
 
     private final ProdutoRepository repository;
     private final ProdutoValidator validator;
-    private final EmpresaService empresaService;
+    private final EmpresaRepository empresaRepository;
     private final ProdutoMapper mapper;
-    private final EstabelecimentoService estabelecimentoService;
+    private final EstabelecimentoRepository estabelecimentoRepository;
+    private final SecurityService securityService;
+    private final UsuarioRepository usuarioRepository;
 
 
     // Metodo para salvar a nivel de serviço. Utilizando o DTO para salvar apenas com o ID da empresa.
-    public Produto salvar(CadastroProdutoDTO dto,
-                          Integer empresaId,
-                          Integer estabelecimentoid) {
-        Empresa empresa = empresaService.buscarPorId(empresaId);
-        Estabelecimento estabelecimento = estabelecimentoService.buscarPorId(estabelecimentoid);
-        Produto produto = mapper.toEntity(dto);
+    public Produto salvar(Integer empresaId,
+                          Integer estabelecimentoid,
+                          Produto produto) {
+        Empresa empresa = empresaRepository.findById(empresaId)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Empresa não encontrada"));
+
+        Estabelecimento estabelecimento = estabelecimentoRepository
+                .findByIdAndEmpresaId(estabelecimentoid, empresaId)
+                .orElseThrow(() -> new RecursoNaoEncontradoException(
+                        "Estabelecimento não pertence à empresa informada"
+                ));
+
+        // Obter usuario logado
+        String login = securityService.obterLoginUsuarioLogado();
+        Usuario usuarioLogado = usuarioRepository.findByEmail(login);
+        produto.setUsuario(usuarioLogado);
+
         produto.setEmpresa(empresa);
         produto.setEstabelecimento(estabelecimento);
         validator.validar(produto, empresa);
@@ -90,7 +109,7 @@ public class ProdutoService {
     public void deletar(Integer empresaId, Integer idProduto) {
         Produto produto = repository
                 .findByEmpresaIdAndIdProduto(empresaId, idProduto)
-                .orElseThrow(() -> new RecursoNaoEncontradoException(
+                .orElseThrow(() -> new ProdutoNaoEncontradoException(
                         "Produto ou empresa não encontrado."
                 ));
 
@@ -107,6 +126,12 @@ public class ProdutoService {
                 ));
         mapper.toEntityUpdate(dto, produto);
         validator.validarAtualizacao(produto);
+
+        // Obter usuario logado
+        String login = securityService.obterLoginUsuarioLogado();
+        Usuario usuarioLogado = usuarioRepository.findByEmail(login);
+        produto.setAtualizadoPor(usuarioLogado);
+
         repository.save(produto);
     }
 

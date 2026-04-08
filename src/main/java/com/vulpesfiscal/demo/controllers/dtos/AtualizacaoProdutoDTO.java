@@ -8,13 +8,15 @@ import java.math.BigDecimal;
 
 @JsonIgnoreProperties(ignoreUnknown = false)
 public record AtualizacaoProdutoDTO(
-        @NotNull Integer id,
+        String descricao,
+        String codigoBarras,
+        Integer qtdEstoque,
+        String ncm,
         Integer cfop,
-        @NotNull boolean ativo,
-        @NotNull Integer ncm,
-        @NotBlank String descricao,
-        @NotNull BigDecimal preco,
-        @NotNull Integer qtdEstoque,
-        @NotNull String unidade
+        String unidade,
+        BigDecimal preco,
+        Boolean ativo,
+        String cest,
+        Integer orig
 ){
 }

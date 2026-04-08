@@ -64,17 +64,23 @@ public class Produto {
     @Column(name = "orig", nullable = false)
     private Integer orig; // 0..8
 
-    @CreatedDate
-    @Column (name = "criado_em")
-    private LocalDateTime dataCriacao;
 
-    private Integer criadoPor;
+    // Campos de Auditoria
+    @CreatedDate
+    @Column(name = "criado_em")
+    private LocalDateTime criadoEm;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "criado_por")
+    private Usuario usuario;
 
     @LastModifiedDate
-    @Column (name = "atualizado_em")
+    @Column(name = "atualizado_em")
     private LocalDateTime atualizadoEm;
 
-    private Integer atualizadoPor;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "atualizado_por")
+    private Usuario atualizadoPor;
 
 }
 

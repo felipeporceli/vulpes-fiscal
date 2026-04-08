@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-04-07T21:01:48-0300",
+    date = "2026-04-08T20:16:05-0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.8 (Azul Systems, Inc.)"
 )
 @Component
@@ -72,11 +72,27 @@ public class UsuarioMapperImpl implements UsuarioMapper {
             return usuario;
         }
 
-        usuario.setPerfilId( dto.perfilId() );
-        usuario.setNome( dto.nome() );
-        usuario.setEmail( dto.email() );
-        usuario.setSenha( dto.senha() );
-        usuario.setAtivo( dto.ativo() );
+        if ( dto.perfilId() != null ) {
+            usuario.setPerfilId( dto.perfilId() );
+        }
+        if ( dto.nome() != null ) {
+            usuario.setNome( dto.nome() );
+        }
+        if ( dto.email() != null ) {
+            usuario.setEmail( dto.email() );
+        }
+        if ( dto.senha() != null ) {
+            usuario.setSenha( dto.senha() );
+        }
+        if ( dto.username() != null ) {
+            usuario.setUsername( dto.username() );
+        }
+        if ( dto.ativo() != null ) {
+            usuario.setAtivo( dto.ativo() );
+        }
+        if ( dto.telefone() != null ) {
+            usuario.setTelefone( dto.telefone() );
+        }
 
         return usuario;
     }

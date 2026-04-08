@@ -4,9 +4,7 @@ import com.vulpesfiscal.demo.controllers.dtos.*;
 import com.vulpesfiscal.demo.entities.Empresa;
 import com.vulpesfiscal.demo.entities.Pagamento;
 import com.vulpesfiscal.demo.entities.Usuario;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface UsuarioMapper {
@@ -16,6 +14,7 @@ public interface UsuarioMapper {
 
     ResultadoPesquisaUsuarioDTO toDTO(Usuario usuario);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract Usuario toEntityUpdate(AtualizacaoUsuarioDTO dto, @MappingTarget Usuario usuario);
 
 

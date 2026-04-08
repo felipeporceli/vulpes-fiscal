@@ -27,7 +27,9 @@ public class ProdutoValidator {
             );
         }
 
-        if (repository.existsByEmpresaIdAndCodigoBarras(empresa.getId(), produto.getCodigoBarras())) {
+        if (produto.getCodigoBarras() != null &&
+                repository.existsByEmpresaIdAndCodigoBarras(empresa.getId(), produto.getCodigoBarras())) {
+
             throw new CampoInvalidoException(
                     "codigoBarras",
                     "Já existe um produto cadastrado com esse Código de Barras para esta empresa"
