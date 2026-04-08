@@ -57,11 +57,9 @@ public class PagamentoService {
                 ));
 
         Pagamento pagamento = pagamentoMapper.toEntity(dto);
-        Usuario usuario = securityService.obterUsuariologado();
 
         pagamento.setEmpresa(empresa);
         pagamento.setEstabelecimento(estabelecimento);
-        pagamento.setUsuario(usuario);
         return repository.save(pagamento);
     }
 
@@ -178,8 +176,6 @@ public class PagamentoService {
 
         Pagamento dadosAtualizados = pagamentoMapper.toEntityUpdate(dto, pagamento);
 
-        Usuario usuario = securityService.obterUsuariologado();
-        pagamento.setAtualizadoPor(usuario);
 
         pagamento.setStatusPagamento(dadosAtualizados.getStatusPagamento());
 

@@ -38,10 +38,8 @@ public class EstabelecimentoService {
     public Estabelecimento salvar(Integer empresaId, CadastroEstabelecimentoDTO dto) {
         Empresa empresa = empresaService.buscarPorId(empresaId);
         Estabelecimento estabelecimento = mapper.toEntity(dto);
-        Usuario usuario = securityService.obterUsuariologado();
         estabelecimento.setEmpresa(empresa);
         validator.validar(estabelecimento);
-        estabelecimento.setUsuario(usuario);
         return repository.save(estabelecimento);
     }
 
@@ -94,8 +92,6 @@ public class EstabelecimentoService {
 
     public void atualizar(Estabelecimento estabelecimento) {
         validator.pesquisarPorCnpj(estabelecimento.getCnpj());
-        Usuario usuario = securityService.obterUsuariologado();
-        estabelecimento.setAtualizadoPor(usuario);
         repository.save(estabelecimento);
     }
 

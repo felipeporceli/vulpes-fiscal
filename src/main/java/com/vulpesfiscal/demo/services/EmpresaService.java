@@ -29,9 +29,7 @@ public class EmpresaService {
 
     // Metodo para salvar a nivel de serviço.
     public Empresa salvar(Empresa empresa) {
-        Usuario usuario = securityService.obterUsuariologado();
         validator.validar(empresa);
-        empresa.setUsuario(usuario);
         return repository.save(empresa);
     }
 
@@ -83,8 +81,6 @@ public class EmpresaService {
 
     public void atualizar(Empresa empresa) {
         validator.pesquisarPorCnpj(empresa.getCnpj());
-        Usuario usuario = securityService.obterUsuariologado();
-        empresa.setAtualizadoPor(usuario);
         repository.save(empresa);
     }
 

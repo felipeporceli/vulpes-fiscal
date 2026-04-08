@@ -32,7 +32,27 @@ public class UsuarioSpecs {
 
     public static Specification<Usuario> emailLike (String email) {
         return (root, query, cb)
-                -> cb.like(cb.upper(root.get("nome")), "%" + email.toUpperCase() + "%" );
+                -> cb.like(cb.upper(root.get("email")), "%" + email.toUpperCase() + "%" );
+    }
+
+    public static Specification<Usuario> usernameLike (String username) {
+        return (root, query, cb)
+                -> cb.like(cb.upper(root.get("username")), "%" + username.toUpperCase() + "%" );
+    }
+
+    public static Specification<Usuario> cpfLike (String cpf) {
+        return (root, query, cb)
+                -> cb.like(cb.upper(root.get("cpf")), "%" + cpf.toUpperCase() + "%" );
+    }
+
+    public static Specification<Usuario> roleLike (String roles) {
+        return (root, query, cb)
+                -> cb.like(cb.upper(root.get("roles")), "%" + roles.toUpperCase() + "%" );
+    }
+
+    public static Specification<Usuario> telefoneLike (String telefone) {
+        return (root, query, cb)
+                -> cb.like(cb.upper(root.get("telefone")), "%" + telefone.toUpperCase() + "%" );
     }
 
 

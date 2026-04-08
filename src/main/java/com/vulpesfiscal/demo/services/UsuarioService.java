@@ -14,6 +14,7 @@ import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
 import com.vulpesfiscal.demo.repositories.EmpresaRepository;
 import com.vulpesfiscal.demo.repositories.EstabelecimentoRepository;
 import com.vulpesfiscal.demo.repositories.UsuarioRepository;
+import com.vulpesfiscal.demo.security.SecurityService;
 import com.vulpesfiscal.demo.validator.UsuarioValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,9 +33,9 @@ public class UsuarioService {
     private final UsuarioRepository repository;
     private final EmpresaRepository empresaRepository;
     private final EstabelecimentoRepository estabelecimentoRepository;
-    private final UsuarioMapper usuarioMapper;
     private final UsuarioValidator validator;
     private final PasswordEncoder encoder;
+    private final SecurityService securityService;
 
     // Metodo para salvar a nivel de serviço.
     public Usuario salvar(Integer empresaId, Integer estabelecimentoId, Usuario usuario) {
@@ -48,11 +49,17 @@ public class UsuarioService {
                         "Estabelecimento não pertence à empresa informada"
                 ));
 
-        validator.validarSalvar(usuario);
+        String login = securityService.obterLoginUsuarioLogado();
+        Usuario usuarioLogado = repository.findByEmail(login);
+
         usuario.setEmpresa(empresa);
         usuario.setEstabelecimento(estabelecimento);
-        var senha = usuario.getSenha();
-        usuario.setSenha(encoder.encode(senha));
+        usuario.setUsuario(usuarioLogado);
+
+        validator.validarSalvar(usuario);
+
+        usuario.setSenha(encoder.encode(usuario.getSenha()));
+
         return repository.save(usuario);
     }
 
@@ -63,6 +70,10 @@ public class UsuarioService {
                                      Boolean ativo,
                                      Integer empresaId,
                                      Integer estabelecimentoId,
+                                     String username,
+                                     String cpf,
+                                     String roles,
+                                     String telefone,
                                      Integer pagina,
                                      Integer tamanhoPagina) {
 
@@ -100,6 +111,22 @@ public class UsuarioService {
             specification = specification.and(UsuarioSpecs.estabelecimentoIdIgual(estabelecimentoId));
         }
 
+        if (username != null) {
+            specification = specification.and(UsuarioSpecs.usernameLike(username));
+        }
+
+        if (cpf != null) {
+            specification = specification.and(UsuarioSpecs.cpfLike(cpf));
+        }
+
+        if (roles != null) {
+            specification = specification.and(UsuarioSpecs.roleLike(roles));
+        }
+
+        if (telefone != null) {
+            specification = specification.and(UsuarioSpecs.telefoneLike(telefone));
+        }
+
 
         Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina);
         return repository.findAll(specification, pageRequest);
@@ -107,6 +134,9 @@ public class UsuarioService {
 
     public void atualizar(Usuario usuario) {
         validator.validarPesquisar(usuario.getEmpresa().getId(), usuario.getEstabelecimento().getId());
+        String login = securityService.obterLoginUsuarioLogado();
+        Usuario usuarioLogado = repository.findByEmail(login);
+        usuario.setAtualizadoPor(usuarioLogado);
         repository.save(usuario);
     }
 

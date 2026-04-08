@@ -65,13 +65,15 @@ public class Usuario {
     @Column(name = "criado_em")
     private LocalDateTime criadoEm;
 
-    @Column(name = "criado_por")
-    private Integer criadoPor;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "criado_por")
+    private Usuario usuario;
 
     @LastModifiedDate
     @Column(name = "atualizado_em")
     private LocalDateTime atualizadoEm;
 
-    @Column(name = "atualizado_por")
-    private Integer atualizadoPor;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "atualizado_por")
+    private Usuario atualizadoPor;
 }

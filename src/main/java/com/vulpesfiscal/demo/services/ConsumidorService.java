@@ -36,13 +36,11 @@ public class ConsumidorService {
     public Consumidor salvar(CadastroConsumidorDTO dto,
                              Integer empresaId,
                              Integer estabelecimentoId) {
-        Usuario usuario = securityService.obterUsuariologado();
         Empresa empresa = empresaService.buscarPorId(empresaId);
         Estabelecimento estabelecimento = estabelecimentoService.buscarPorId(estabelecimentoId);
         Consumidor consumidor = mapper.toEntity(dto);
         consumidor.setEmpresa(empresa);
         consumidor.setEstabelecimento(estabelecimento);
-        consumidor.setUsuario(usuario);
         validator.validar(consumidor, empresaId, estabelecimentoId);
         return repository.save(consumidor);
     }
@@ -110,9 +108,7 @@ public class ConsumidorService {
 
     @Transactional
     public void atualizar(Consumidor consumidor) {
-        Usuario usuario = securityService.obterUsuariologado();
         validator.pesquisarPorCpfEempresa(consumidor.getCpf(), consumidor.getEmpresa().getId());
-        consumidor.setAtualizadoPor(usuario);
         repository.save(consumidor);
     }
 

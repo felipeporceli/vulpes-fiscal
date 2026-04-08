@@ -13,12 +13,14 @@ import java.time.LocalDate;
 
 @JsonIgnoreProperties(ignoreUnknown = false)
 public record AtualizacaoUsuarioDTO(
-        @NotBlank String nome,
-        @NotBlank String email,
-        @NotBlank String senha,
-        @NotNull Boolean ativo,
-        @NotNull Integer estabelecimentoId,
-        @NotNull Integer perfilId
+        String nome,
+        String email,
+        String senha,
+        String username,
+        String telefone,
+        Boolean ativo,
+        Integer estabelecimentoId,
+        Integer perfilId
 ){
 }
 

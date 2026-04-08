@@ -4,6 +4,7 @@ import com.vulpesfiscal.demo.entities.Empresa;
 import com.vulpesfiscal.demo.entities.Estabelecimento;
 import com.vulpesfiscal.demo.entities.enums.MetodoPagamento;
 import com.vulpesfiscal.demo.entities.enums.StatusPagamento;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.aspectj.bridge.IMessage;
@@ -11,6 +12,7 @@ import org.aspectj.bridge.IMessage;
 import java.math.BigDecimal;
 import java.util.List;
 
+@Schema(name = "Usuario")
 public record CadastroUsuarioDTO(
 
         @NotNull(message = "Campo obrigatório")
