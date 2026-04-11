@@ -13,13 +13,8 @@ import com.vulpesfiscal.demo.entities.Pagamento;
 import com.vulpesfiscal.demo.entities.Usuario;
 import com.vulpesfiscal.demo.entities.enums.MetodoPagamento;
 import com.vulpesfiscal.demo.entities.enums.StatusPagamento;
-import com.vulpesfiscal.demo.exceptions.CampoInvalidoException;
-import com.vulpesfiscal.demo.exceptions.PagamentoNaoEncontradoException;
-import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
-import com.vulpesfiscal.demo.exceptions.ValorRecebidoMenorException;
-import com.vulpesfiscal.demo.repositories.EmpresaRepository;
-import com.vulpesfiscal.demo.repositories.EstabelecimentoRepository;
-import com.vulpesfiscal.demo.repositories.PagamentoRepository;
+import com.vulpesfiscal.demo.exceptions.*;
+import com.vulpesfiscal.demo.repositories.*;
 import com.vulpesfiscal.demo.security.SecurityService;
 import com.vulpesfiscal.demo.validator.PagamentoValidator;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +36,8 @@ public class PagamentoService {
     private final PagamentoMapper pagamentoMapper;
     private final PagamentoValidator validator;
     private final SecurityService securityService;
+    private final UsuarioRepository usuarioRepository;
+    private final ConsumidorRepository consumidorRepository;
 
     // Metodo para salvar a nivel de serviço.
     public Pagamento salvar(Integer empresaId,
@@ -48,16 +45,57 @@ public class PagamentoService {
                             CadastroPagamentoDTO dto) {
 
         Empresa empresa = empresaRepository.findById(empresaId)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Empresa não encontrada"));
+                .orElseThrow(() -> new EmpresaDifereEstabelecimentoException(
+                        "Empresa ou estabelecimento nao encontrado"));
 
         Estabelecimento estabelecimento = estabelecimentoRepository
                 .findByIdAndEmpresaId(estabelecimentoId, empresaId)
-                .orElseThrow(() -> new RecursoNaoEncontradoException(
-                        "Estabelecimento não pertence à empresa informada"
+                .orElseThrow(() -> new EmpresaDifereEstabelecimentoException(
+                        "Empresa ou estabelecimento nao encontrado"
                 ));
 
         Pagamento pagamento = pagamentoMapper.toEntity(dto);
 
+        // Obter usuario logado
+        String login = securityService.obterLoginUsuarioLogado();
+        Usuario usuarioLogado = usuarioRepository.findByEmail(login);
+        pagamento.setUsuario(usuarioLogado);
+
+        pagamento.setMetodoPagamento(dto.metodoPagamento());
+        pagamento.setValor(dto.valor());
+        pagamento.setStatusPagamento(dto.statusPagamento());
+        pagamento.setDesconto(dto.desconto());
+        pagamento.setParcelas(dto.parcelas());
+        pagamento.setConsumidor(consumidorRepository.findByIdAndEmpresaId(dto.consumidorId(), empresaId)
+                .orElseThrow(() -> new ConsumidorNaoEncontradoException(
+                "Consumidor nao encontrado para o id informado.")));
+
+        // Calculo do valor (com troco)
+        BigDecimal valorFinal = dto.valor();
+
+        if (dto.desconto() != null) {
+            valorFinal = valorFinal.subtract(dto.desconto());
+        }
+
+        if (dto.metodoPagamento() == MetodoPagamento.DINHEIRO) {
+            if (dto.valorRecebido() == null) {
+                throw new CampoInvalidoException("valorRecebido", "O campo valorRecebido é obrigatório para pagamento em dinheiro.");
+            }
+
+            if (dto.valorRecebido().compareTo(valorFinal) < 0) {
+                throw new CampoInvalidoException("valorRecebido", "O valor recebido não pode ser menor que o valor final.");
+            }
+
+            BigDecimal troco = dto.valorRecebido().subtract(valorFinal);
+
+            pagamento.setValorRecebido(dto.valorRecebido());
+            pagamento.setTroco(troco);
+        } else {
+            pagamento.setValorRecebido(null);
+            pagamento.setTroco(BigDecimal.ZERO);
+        }
+
+        pagamento.setValorFinal(valorFinal);
         pagamento.setEmpresa(empresa);
         pagamento.setEstabelecimento(estabelecimento);
         return repository.save(pagamento);
@@ -176,6 +214,10 @@ public class PagamentoService {
 
         Pagamento dadosAtualizados = pagamentoMapper.toEntityUpdate(dto, pagamento);
 
+        // Obter usuario logado
+        String login = securityService.obterLoginUsuarioLogado();
+        Usuario usuarioLogado = usuarioRepository.findByEmail(login);
+        pagamento.setAtualizadoPor(usuarioLogado);
 
         pagamento.setStatusPagamento(dadosAtualizados.getStatusPagamento());
 

@@ -56,7 +56,7 @@ public class AuthorizationServerConfiguration {
     @Bean
     public ClientSettings clientSettings() {
         return ClientSettings.builder()
-                .requireAuthorizationConsent(true) // tela de consentimento
+                .requireAuthorizationConsent(false) // tela de consentimento
                 .requireProofKey(false)            // PKCE (deixa false por enquanto)
                 .build();
     }

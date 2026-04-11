@@ -12,6 +12,7 @@ public interface ConsumidorRepository extends JpaRepository<Consumidor, Integer>
         boolean existsByCpfAndEmpresaId(String cpf, Integer empresaId);
 
         Optional<Consumidor> findByCpfAndEmpresaId(String cpf, Integer empresaId);
+        Optional<Consumidor> findByIdAndEmpresaId(Integer id, Integer empresaId);
 
         Optional<Consumidor> findByCpf(String cpf);
         void deleteByCpf(String cpf);

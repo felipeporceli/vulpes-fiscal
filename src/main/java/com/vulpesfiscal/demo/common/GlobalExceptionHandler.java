@@ -233,6 +233,18 @@ public class GlobalExceptionHandler {
         );
     }
 
+    // Empresa ou Estabelecimento nao encontrado
+    @ExceptionHandler(EmpresaOuEstabelecimentoNaoEncontradosException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErroResposta handleEmpresaOuEstabelecimentoNaoEncontrados
+    (EmpresaOuEstabelecimentoNaoEncontradosException e) {
+        return new ErroResposta(
+                404,
+                "Empresa ou Estabelecimento nao encontrados",
+                List.of(new ErroCampo("empresaId", e.getMessage()))
+        );
+    }
+
 
 
 

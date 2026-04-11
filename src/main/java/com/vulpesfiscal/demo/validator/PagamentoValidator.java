@@ -3,6 +3,8 @@ package com.vulpesfiscal.demo.validator;
 
 import com.vulpesfiscal.demo.entities.Estabelecimento;
 import com.vulpesfiscal.demo.exceptions.CampoInvalidoException;
+import com.vulpesfiscal.demo.exceptions.EmpresaDifereEstabelecimentoException;
+import com.vulpesfiscal.demo.exceptions.EmpresaOuEstabelecimentoNaoEncontradosException;
 import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
 import com.vulpesfiscal.demo.repositories.EstabelecimentoRepository;
 import com.vulpesfiscal.demo.repositories.PagamentoRepository;
@@ -22,7 +24,7 @@ public class PagamentoValidator {
         if (empresaId != null && estabelecimentoId != null) {
             Estabelecimento estabelecimento = estabelecimentoRepository
                     .findByIdAndEmpresaId(estabelecimentoId, empresaId)
-                    .orElseThrow(() -> new RecursoNaoEncontradoException(
+                    .orElseThrow(() -> new EmpresaOuEstabelecimentoNaoEncontradosException(
                             "Estabelecimento ou Empresa nao encontrados."
                     ));
         }

@@ -18,7 +18,6 @@ public record CadastroPagamentoDTO(
         @NotNull(message = "Campo obrigatório")
         BigDecimal valor,
 
-        @NotNull(message = "Campo obrigatório")
         BigDecimal valorRecebido,
 
         @NotNull(message = "Campo obrigatório")
@@ -26,6 +25,9 @@ public record CadastroPagamentoDTO(
 
         BigDecimal desconto,
 
+        @NotNull(message = "Campo obrigatorio")
+        Integer consumidorId,
+
         Integer parcelas
-){
+) {
 }

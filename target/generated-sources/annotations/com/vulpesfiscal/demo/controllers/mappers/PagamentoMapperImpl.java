@@ -7,13 +7,13 @@ import com.vulpesfiscal.demo.entities.Pagamento;
 import com.vulpesfiscal.demo.entities.enums.MetodoPagamento;
 import com.vulpesfiscal.demo.entities.enums.StatusPagamento;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-04-07T21:01:48-0300",
+    date = "2026-04-11T17:49:30-0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.8 (Azul Systems, Inc.)"
 )
 @Component
@@ -45,21 +45,32 @@ public class PagamentoMapperImpl implements PagamentoMapper {
 
         MetodoPagamento metodoPagamento = null;
         BigDecimal valor = null;
+        BigDecimal valorRecebido = null;
         BigDecimal troco = null;
+        BigDecimal desconto = null;
+        BigDecimal valorFinal = null;
         Integer parcelas = null;
         StatusPagamento statusPagamento = null;
+        LocalDateTime dataCriacao = null;
+        LocalDateTime atualizadoEm = null;
 
         metodoPagamento = pagamento.getMetodoPagamento();
         valor = pagamento.getValor();
+        valorRecebido = pagamento.getValorRecebido();
         troco = pagamento.getTroco();
+        desconto = pagamento.getDesconto();
+        valorFinal = pagamento.getValorFinal();
         parcelas = pagamento.getParcelas();
         statusPagamento = pagamento.getStatusPagamento();
+        dataCriacao = pagamento.getDataCriacao();
+        atualizadoEm = pagamento.getAtualizadoEm();
 
+        Integer vendaId = null;
         Integer empresaId = null;
         Integer estabelecimentoId = null;
-        Timestamp pagoEm = null;
+        Integer consumidorId = null;
 
-        ResultadoPesquisaPagamentoDTO resultadoPesquisaPagamentoDTO = new ResultadoPesquisaPagamentoDTO( metodoPagamento, valor, troco, parcelas, statusPagamento, empresaId, estabelecimentoId, pagoEm );
+        ResultadoPesquisaPagamentoDTO resultadoPesquisaPagamentoDTO = new ResultadoPesquisaPagamentoDTO( metodoPagamento, valor, valorRecebido, troco, desconto, valorFinal, parcelas, statusPagamento, vendaId, empresaId, estabelecimentoId, consumidorId, dataCriacao, atualizadoEm );
 
         return resultadoPesquisaPagamentoDTO;
     }
