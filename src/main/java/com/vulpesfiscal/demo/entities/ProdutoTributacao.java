@@ -73,11 +73,16 @@ public class ProdutoTributacao {
     @Column (name = "criado_em")
     private LocalDateTime dataCriacao;
 
-    private Integer criadoPor;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "criado_por")
+
+    private Usuario usuario;
 
     @LastModifiedDate
     @Column(name = "atualizado_em")
     private LocalDateTime atualizadoEm;
 
-    private Integer atualizadoPor;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "atualido_por")
+    private Usuario atualizadoPor;
 }

@@ -1,5 +1,6 @@
 package com.vulpesfiscal.demo.services;
 
+import com.vulpesfiscal.demo.controllers.dtos.AtualizacaoConsumidorDTO;
 import com.vulpesfiscal.demo.controllers.dtos.CadastroConsumidorDTO;
 import com.vulpesfiscal.demo.controllers.mappers.ConsumidorMapper;
 import com.vulpesfiscal.demo.controllers.specs.ConsumidorSpecs;
@@ -9,6 +10,7 @@ import com.vulpesfiscal.demo.entities.Estabelecimento;
 import com.vulpesfiscal.demo.entities.Usuario;
 import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
 import com.vulpesfiscal.demo.repositories.ConsumidorRepository;
+import com.vulpesfiscal.demo.repositories.UsuarioRepository;
 import com.vulpesfiscal.demo.security.SecurityService;
 import com.vulpesfiscal.demo.validator.ConsumidorValidator;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +31,9 @@ public class ConsumidorService {
     private final EstabelecimentoService estabelecimentoService;
     private final ConsumidorMapper mapper;
     private final SecurityService securityService;
+    private final UsuarioRepository usuarioRepository;
 
-
-
-    // Metodo para salvar a nivel de serviço.
+    // Método para salvar a nível de serviço.
     public Consumidor salvar(CadastroConsumidorDTO dto,
                              Integer empresaId,
                              Integer estabelecimentoId) {
@@ -41,11 +42,17 @@ public class ConsumidorService {
         Consumidor consumidor = mapper.toEntity(dto);
         consumidor.setEmpresa(empresa);
         consumidor.setEstabelecimento(estabelecimento);
+
+        // Obter usuario logado
+        String login = securityService.obterLoginUsuarioLogado();
+        Usuario usuarioLogado = usuarioRepository.findByEmail(login);
+        consumidor.setUsuario(usuarioLogado);
+
         validator.validar(consumidor, empresaId, estabelecimentoId);
         return repository.save(consumidor);
     }
 
-    // Metodo para pesquisar com filtro a nível de serviço.
+    // Método para pesquisar com filtro a nível de serviço.
     public Page<Consumidor> pesquisar(Integer empresaId,
                                       Integer id,
                                       String cpf,
@@ -66,31 +73,24 @@ public class ConsumidorService {
         if (id != null) {
             specification = specification.and(ConsumidorSpecs.idIgual(id));
         }
-
         if (cpf != null) {
             specification = specification.and(ConsumidorSpecs.cpfLike(cpf));
         }
-
         if (nome != null) {
             specification = specification.and(ConsumidorSpecs.nomeLike(nome));
         }
-
         if (email != null) {
             specification = specification.and(ConsumidorSpecs.emailLike(email));
         }
-
         if (cep != null) {
             specification = specification.and(ConsumidorSpecs.cepIgual(cep));
         }
-
         if (uf != null) {
             specification = specification.and(ConsumidorSpecs.ufLike(uf));
         }
-
         if (municipio != null) {
             specification = specification.and(ConsumidorSpecs.municipioLike(municipio));
         }
-
         if (telefone != null) {
             specification = specification.and(ConsumidorSpecs.telefoneLike(telefone));
         }
@@ -99,17 +99,43 @@ public class ConsumidorService {
         return repository.findAll(specification, pageRequest);
     }
 
+    // Método para deletar a nível de serviço.
     @Transactional
-    public void deletar(String cpf) {
-        validator.validarDeletar(cpf);
-        repository.deleteByCpf(cpf);
+    public void deletar(Integer consumidorId, Integer empresaId) {
+        Consumidor consumidor = repository.findById(consumidorId)
+                .orElseThrow(() -> new RecursoNaoEncontradoException(
+                        "Consumidor não encontrado."
+                ));
+
+        if (!consumidor.getEmpresa().getId().equals(empresaId)) {
+            throw new RecursoNaoEncontradoException(
+                    "Consumidor não pertence à empresa informada."
+            );
+        }
+
+        repository.delete(consumidor);
     }
 
-
+    // Método para atualizar a nível de serviço.
     @Transactional
-    public void atualizar(Consumidor consumidor) {
-        validator.pesquisarPorCpfEempresa(consumidor.getCpf(), consumidor.getEmpresa().getId());
+    public void atualizar(Integer consumidorId, Integer empresaId, AtualizacaoConsumidorDTO dto) {
+        Consumidor consumidor = repository.findById(consumidorId)
+                .orElseThrow(() -> new RecursoNaoEncontradoException(
+                        "Consumidor não encontrado."
+                ));
+
+        if (!consumidor.getEmpresa().getId().equals(empresaId)) {
+            throw new RecursoNaoEncontradoException(
+                    "Consumidor não pertence à empresa informada."
+            );
+        }
+
+        // Obter usuario logado
+        String login = securityService.obterLoginUsuarioLogado();
+        Usuario usuarioLogado = usuarioRepository.findByEmail(login);
+        consumidor.setAtualizadoPor(usuarioLogado);
+
+        mapper.toEntityUpdate(dto, consumidor);
         repository.save(consumidor);
     }
-
 }

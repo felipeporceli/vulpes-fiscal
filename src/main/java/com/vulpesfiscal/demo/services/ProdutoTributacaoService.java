@@ -4,10 +4,13 @@ import com.vulpesfiscal.demo.controllers.dtos.CadastroProdutoTributacaoDTO;
 import com.vulpesfiscal.demo.entities.Empresa;
 import com.vulpesfiscal.demo.entities.Produto;
 import com.vulpesfiscal.demo.entities.ProdutoTributacao;
+import com.vulpesfiscal.demo.entities.Usuario;
 import com.vulpesfiscal.demo.exceptions.*;
 import com.vulpesfiscal.demo.repositories.EmpresaRepository;
 import com.vulpesfiscal.demo.repositories.ProdutoRepository;
 import com.vulpesfiscal.demo.repositories.ProdutoTributacaoRepository;
+import com.vulpesfiscal.demo.repositories.UsuarioRepository;
+import com.vulpesfiscal.demo.security.SecurityService;
 import com.vulpesfiscal.demo.validator.ProdutoTributacaoValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,8 @@ public class ProdutoTributacaoService {
     private final ProdutoTributacaoRepository produtoTributacaoRepository;
     private final EmpresaRepository empresaRepository;
     private final ProdutoTributacaoValidator validator;
+    private final SecurityService securityService;
+    private final UsuarioRepository usuarioRepository;
 
     // Metodo para salvar a nível de serviço.
     public ProdutoTributacao salvar(CadastroProdutoTributacaoDTO dto, Integer empresaId) {
@@ -52,6 +57,12 @@ public class ProdutoTributacaoService {
         ProdutoTributacao tributacao = new ProdutoTributacao();
         tributacao.setEmpresa(empresa);
         tributacao.setProduto(produto);
+
+        String login = securityService.obterLoginUsuarioLogado();
+        Usuario usuarioLogado = usuarioRepository.findByEmail(login);
+        tributacao.setUsuario(usuarioLogado);
+
+
         preencherCampos(tributacao, dto);
 
         return produtoTributacaoRepository.save(tributacao);
@@ -88,6 +99,10 @@ public class ProdutoTributacaoService {
                     "Já existe outra tributação para este produto nesta UF."
             );
         }
+
+        String login = securityService.obterLoginUsuarioLogado();
+        Usuario usuarioLogado = usuarioRepository.findByEmail(login);
+        tributacao.setAtualizadoPor(usuarioLogado);
 
         tributacao.setProduto(produto);
         preencherCampos(tributacao, dto);
