@@ -5,6 +5,7 @@ import com.vulpesfiscal.demo.entities.enums.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.PositiveOrZero;
 
 import java.lang.reflect.Member;
 import java.math.BigDecimal;
@@ -12,22 +13,14 @@ import java.time.LocalDate;
 
 public record CadastroPagamentoDTO(
 
-        @NotNull(message = "Campo obrigatório")
         MetodoPagamento metodoPagamento,
-
-        @NotNull(message = "Campo obrigatório")
         BigDecimal valor,
-
+        @PositiveOrZero(message = "Valor recebido não pode ser negativo")
         BigDecimal valorRecebido,
-
-        @NotNull(message = "Campo obrigatório")
         StatusPagamento statusPagamento,
-
+        @PositiveOrZero(message = "Desconto não pode ser negativo")
         BigDecimal desconto,
-
-        @NotNull(message = "Campo obrigatorio")
         Integer consumidorId,
-
+        @PositiveOrZero(message = "Parcelas não pode ser negativo")
         Integer parcelas
-) {
-}
+) {}

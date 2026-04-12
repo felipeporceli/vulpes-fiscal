@@ -9,6 +9,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -67,6 +68,15 @@ public class Pagamento {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "consumidor_id", nullable = false)
     private Consumidor consumidor;
+
+    @Column(name = "data_vencimento")
+    private LocalDate dataVencimento;
+
+    @Column(name = "parcela_atual")
+    private String parcelaAtual;
+
+    @Column(name = "valor_parcela")
+    private BigDecimal valorParcela;
 
     // -------- AUDITORIA --------
 

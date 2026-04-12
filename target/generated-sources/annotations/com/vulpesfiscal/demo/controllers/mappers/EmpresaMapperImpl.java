@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-04-12T10:53:34-0300",
+    date = "2026-04-12T14:03:38-0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.8 (Azul Systems, Inc.)"
 )
 @Component
@@ -104,6 +104,12 @@ public class EmpresaMapperImpl implements EmpresaMapper {
         }
         if ( dto.status() != null ) {
             empresa.setStatus( dto.status() );
+        }
+        if ( dto.cnae() != null ) {
+            empresa.setCnae( dto.cnae() );
+        }
+        if ( dto.uf() != null ) {
+            empresa.setUf( dto.uf() );
         }
         if ( dto.dataAbertura() != null ) {
             empresa.setDataAbertura( dto.dataAbertura() );
