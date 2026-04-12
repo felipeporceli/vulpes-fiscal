@@ -2,84 +2,116 @@ package com.vulpesfiscal.demo.controllers;
 
 import com.vulpesfiscal.demo.controllers.dtos.CadastroProdutoTributacaoDTO;
 import com.vulpesfiscal.demo.controllers.dtos.ResultadoPesquisaProdutoTributacaoDTO;
+import com.vulpesfiscal.demo.controllers.mappers.ProdutoTributacaoMapper;
 import com.vulpesfiscal.demo.entities.ProdutoTributacao;
 import com.vulpesfiscal.demo.services.ProdutoTributacaoService;
-import org.springframework.http.HttpStatus;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/empresa/{empresaId}/produto-tributacao")
-public class ProdutoTributacaoController {
+@RequiredArgsConstructor
+@Tag(name = "Produtos Tributacao")
+public class ProdutoTributacaoController implements ControllerGenerico {
 
-    private final ProdutoTributacaoService produtoTributacaoService;
+    private final ProdutoTributacaoService service;
+    private final ProdutoTributacaoMapper mapper;
 
-    public ProdutoTributacaoController(ProdutoTributacaoService produtoTributacaoService) {
-        this.produtoTributacaoService = produtoTributacaoService;
-    }
 
+    // Salvar nova tributação. Finalizando gerando a URL da nova entidade e entregando-a no header da response.
+    @PreAuthorize(
+            "hasAnyRole('ADMINISTRADOR','SUPORTE') or " +
+                    "(hasAnyRole('EMPRESARIO','GERENTE','CAIXA') and " +
+                    "#empresaId.toString() == principal.claims['empresaId'].toString())"
+    )
+    @Operation(summary = "Cadastrar novo Produto Tributacao no sistema.",
+            description = "Cadastrar novo Produto Tributacao no sistema.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Produto Tributacao cadastrado com sucesso."),
+            @ApiResponse(responseCode = "409", description = "Ja existe tributacao cadastrada para o produto na UF."),
+            @ApiResponse(responseCode = "404", description = "Empresa nao encontrada."),
+            @ApiResponse(responseCode = "422", description = "Campo invalido ou obrigatorio."),
+            @ApiResponse(responseCode = "403", description = "Usuario nao possui permissao para esse recurso."),
+    })
     @PostMapping
-    @PreAuthorize(
-            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
-                    "((hasAnyRole('EMPRESARIO','GERENTE')) and " +
-                    "(#empresaId == authentication.principal.empresaId))"
-    )
-    public ResponseEntity<Void> cadastrar(
+    public ResponseEntity<Void> salvar(
             @PathVariable Integer empresaId,
-            @RequestBody CadastroProdutoTributacaoDTO dto
+            @RequestBody @Valid CadastroProdutoTributacaoDTO dto
     ) {
-        ProdutoTributacao tributacao = produtoTributacaoService.cadastrar(dto, empresaId);
-        return ResponseEntity.ok().build();
+        ProdutoTributacao tributacao = service.salvar(dto, empresaId);
+        var url = gerarHeaderLocation(tributacao.getId());
+        return ResponseEntity.created(url).build();
     }
 
-    @PutMapping("/{id}")
+    /* Obter detalhes da tributação por produto e UF. */
     @PreAuthorize(
-            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
-                    "((hasAnyRole('EMPRESARIO','GERENTE')) and " +
-                    "(#empresaId == authentication.principal.empresaId))"
+            "hasAnyRole('ADMINISTRADOR','SUPORTE') or " +
+                    "(hasAnyRole('EMPRESARIO','GERENTE','CAIXA') and " +
+                    "#empresaId.toString() == principal.claims['empresaId'].toString())"
     )
-    public ResponseEntity<Void> atualizar(
-            @PathVariable Integer empresaId,
-            @PathVariable Long id,
-            @RequestBody CadastroProdutoTributacaoDTO dto
-    ) {
-        ProdutoTributacao tributacao = produtoTributacaoService.atualizar(id, dto, empresaId);
-        return ResponseEntity.ok().build();
-    }
-
-    @PreAuthorize(
-            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
-                    "((hasAnyRole('EMPRESARIO','GERENTE')) and " +
-                    "(#empresaId == authentication.principal.empresaId))"
-    )
+    @Operation(summary = "Obter tributacao do Produto.", description = "Obter tributacao do Produto por UF.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Tributacao nao encontrada."),
+            @ApiResponse(responseCode = "403", description = "Usuario nao possui permissao para esse recurso."),
+    })
     @GetMapping("/produto/{idProduto}/uf/{uf}")
     public ResponseEntity<ResultadoPesquisaProdutoTributacaoDTO> buscar(
             @PathVariable Integer empresaId,
             @PathVariable Integer idProduto,
             @PathVariable String uf
     ) {
-        ProdutoTributacao tributacao = produtoTributacaoService.buscarPorProdutoEUf(
-                empresaId,
-                idProduto,
-                uf
-        );
-
+        ProdutoTributacao tributacao = service.buscarPorProdutoEUf(empresaId, idProduto, uf);
         return ResponseEntity.ok(ResultadoPesquisaProdutoTributacaoDTO.fromEntity(tributacao));
     }
 
+    /* Deletar tributação por id na URL. */
     @PreAuthorize(
-            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
-                    "((hasAnyRole('EMPRESARIO','GERENTE')) and " +
-                    "(#empresaId == authentication.principal.empresaId))"
+            "hasAnyRole('ADMINISTRADOR','SUPORTE') or " +
+                    "(hasAnyRole('EMPRESARIO','GERENTE') and " +
+                    "#empresaId.toString() == principal.claims['empresaId'].toString())"
     )
+    @Operation(summary = "Deletar Produto Tributacao do sistema.", description = "Deletar Produto Tributacao do sistema.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Tributacao deletada com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Tributacao nao encontrada."),
+            @ApiResponse(responseCode = "403", description = "Usuario nao possui permissao para esse recurso."),
+    })
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(
             @PathVariable Integer empresaId,
-            @PathVariable Long id
+            @PathVariable Integer id
     ) {
-        produtoTributacaoService.deletar(id, empresaId);
+        service.deletar(id, empresaId);
     }
 
+    /* Atualizar tributação por id na URL, com novos atributos no body da requisição. */
+    @PreAuthorize(
+            "hasAnyRole('ADMINISTRADOR','SUPORTE') or " +
+                    "(hasAnyRole('EMPRESARIO','GERENTE') and " +
+                    "#empresaId.toString() == principal.claims['empresaId'].toString())"
+    )
+    @Operation(summary = "Atualizar Produto Tributacao no sistema.", description = "Atualizar Produto Tributacao do sistema.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Tributacao atualizada com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Tributacao nao encontrada."),
+            @ApiResponse(responseCode = "422", description = "Campo invalido ou obrigatorio."),
+            @ApiResponse(responseCode = "403", description = "Usuario nao possui permissao para esse recurso."),
+    })
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> atualizar(
+            @PathVariable Integer empresaId,
+            @PathVariable Integer id,
+            @RequestBody @Valid CadastroProdutoTributacaoDTO dto
+    ) {
+        service.atualizar(id, dto, empresaId);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 public record ResultadoPesquisaProdutoTributacaoDTO(
 
-        Long id,
+        Integer id,
         Integer empresaId,
         Integer idProduto,
         String descricaoProduto,

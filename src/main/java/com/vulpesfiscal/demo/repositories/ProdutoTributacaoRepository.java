@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProdutoTributacaoRepository extends JpaRepository<ProdutoTributacao, Long> {
+public interface ProdutoTributacaoRepository extends JpaRepository<ProdutoTributacao, Integer> {
 
     Optional<ProdutoTributacao> findByEmpresaIdAndProdutoIdTecnicoAndUf(
             Integer empresaId,

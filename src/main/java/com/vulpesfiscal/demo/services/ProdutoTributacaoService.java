@@ -1,8 +1,5 @@
 package com.vulpesfiscal.demo.services;
 
-import java.util.List;
-import java.util.Objects;
-
 import com.vulpesfiscal.demo.controllers.dtos.CadastroProdutoTributacaoDTO;
 import com.vulpesfiscal.demo.entities.Empresa;
 import com.vulpesfiscal.demo.entities.Produto;
@@ -16,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -26,12 +25,15 @@ public class ProdutoTributacaoService {
     private final EmpresaRepository empresaRepository;
     private final ProdutoTributacaoValidator validator;
 
-    public ProdutoTributacao cadastrar(CadastroProdutoTributacaoDTO dto, Integer empresaId) {
+    // Metodo para salvar a nível de serviço.
+    public ProdutoTributacao salvar(CadastroProdutoTributacaoDTO dto, Integer empresaId) {
         Objects.requireNonNull(dto, "DTO de tributação não pode ser nulo");
         validator.validarCamposObrigatorios(dto);
 
         Empresa empresa = empresaRepository.findById(empresaId)
-                .orElseThrow(() -> new RuntimeException("Empresa não encontrada: " + empresaId));
+                .orElseThrow(() -> new EmpresaOuEstabelecimentoNaoEncontradosException(
+                        "Empresa não encontrada."
+                ));
 
         Produto produto = buscarProdutoPorReferencia(empresaId, dto.getIdProduto());
 
@@ -50,13 +52,13 @@ public class ProdutoTributacaoService {
         ProdutoTributacao tributacao = new ProdutoTributacao();
         tributacao.setEmpresa(empresa);
         tributacao.setProduto(produto);
-
         preencherCampos(tributacao, dto);
 
         return produtoTributacaoRepository.save(tributacao);
     }
 
-    public ProdutoTributacao atualizar(Long id, CadastroProdutoTributacaoDTO dto, Integer empresaId) {
+    // Metodo para atualizar a nível de serviço.
+    public ProdutoTributacao atualizar(Integer id, CadastroProdutoTributacaoDTO dto, Integer empresaId) {
         Objects.requireNonNull(id, "Id da tributação não pode ser nulo");
         Objects.requireNonNull(dto, "DTO de tributação não pode ser nulo");
         validator.validarCamposObrigatorios(dto);
@@ -82,7 +84,7 @@ public class ProdutoTributacaoService {
                 ).orElse(null);
 
         if (tributacaoExistenteMesmaUf != null && !tributacaoExistenteMesmaUf.getId().equals(id)) {
-            throw new RegistroDuplicadoException (
+            throw new RegistroDuplicadoException(
                     "Já existe outra tributação para este produto nesta UF."
             );
         }
@@ -93,17 +95,43 @@ public class ProdutoTributacaoService {
         return produtoTributacaoRepository.save(tributacao);
     }
 
-    public void deletar(Long id, Integer empresaId) {
-
+    // Método para deletar a nível de serviço.
+    public void deletar(Integer id, Integer empresaId) {
         ProdutoTributacao tributacao = produtoTributacaoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tributação não encontrada."));
+                .orElseThrow(() -> new TributacaoNaoEncontradaException(
+                        "Tributação não encontrada."
+                ));
 
         if (!tributacao.getEmpresa().getId().equals(empresaId)) {
-            throw new RuntimeException("Tributação não pertence à empresa informada.");
+            throw new TributacaoNaoPertenceAEmpresaException(
+                    "Tributação não pertence à empresa informada."
+            );
         }
 
         produtoTributacaoRepository.delete(tributacao);
     }
+
+    // Metodo para buscar por produto e UF a nível de serviço.
+    @Transactional(readOnly = true)
+    public ProdutoTributacao buscarPorProdutoEUf(Integer empresaId, Integer idProduto, String uf) {
+        Produto produto = produtoRepository
+                .findByEmpresaIdAndIdProduto(empresaId, idProduto)
+                .orElseThrow(() -> new ProdutoNaoEncontradoException(
+                        "Produto não encontrado para a referência informada."
+                ));
+
+        return produtoTributacaoRepository
+                .findByEmpresaIdAndProdutoIdTecnicoAndUf(
+                        empresaId,
+                        produto.getIdTecnico(),
+                        normalizarUf(uf)
+                )
+                .orElseThrow(() -> new TributacaoNaoEncontradaException(
+                        "Tributação não encontrada para o produto e UF informados."
+                ));
+    }
+
+    // -------- MÉTODOS PRIVADOS --------
 
     private Produto buscarProdutoPorReferencia(Integer empresaId, Integer idProdutoReferencia) {
         if (idProdutoReferencia == null) {
@@ -117,8 +145,7 @@ public class ProdutoTributacaoService {
                 ));
     }
 
-    private void preencherCampos(ProdutoTributacao tributacao,
-                                 CadastroProdutoTributacaoDTO dto) {
+    private void preencherCampos(ProdutoTributacao tributacao, CadastroProdutoTributacaoDTO dto) {
         tributacao.setUf(normalizarUf(dto.getUf()));
         tributacao.setCfop(dto.getCfop());
         tributacao.setCstIcms(dto.getCstIcms());
@@ -132,22 +159,6 @@ public class ProdutoTributacaoService {
         tributacao.setCstCofins(dto.getCstCofins());
         tributacao.setAliquotaCofins(dto.getAliquotaCofins());
         tributacao.setRegimeTributarioEmpresa(dto.getRegimeTributarioEmpresa());
-    }
-
-    @Transactional(readOnly = true)
-    public ProdutoTributacao buscarPorProdutoEUf(Integer empresaId, Integer idProduto, String uf) {
-
-        Produto produto = produtoRepository
-                .findByEmpresaIdAndIdProduto(empresaId, idProduto)
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado para a referência informada."));
-
-        return produtoTributacaoRepository
-                .findByEmpresaIdAndProdutoIdTecnicoAndUf(
-                        empresaId,
-                        produto.getIdTecnico(),
-                        uf.toUpperCase()
-                )
-                .orElseThrow(() -> new RuntimeException("Tributação não encontrada para o produto e UF."));
     }
 
     private String normalizarUf(String uf) {
