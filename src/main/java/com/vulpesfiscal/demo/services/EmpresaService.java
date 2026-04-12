@@ -1,5 +1,7 @@
 package com.vulpesfiscal.demo.services;
 
+import com.vulpesfiscal.demo.controllers.dtos.AtualizacaoEmpresaDTO;
+import com.vulpesfiscal.demo.controllers.mappers.EmpresaMapper;
 import com.vulpesfiscal.demo.controllers.specs.ConsumidorSpecs;
 import com.vulpesfiscal.demo.controllers.specs.EmpresaSpecs;
 import com.vulpesfiscal.demo.entities.Empresa;
@@ -10,6 +12,7 @@ import com.vulpesfiscal.demo.entities.enums.StatusEmpresa;
 import com.vulpesfiscal.demo.exceptions.EmpresaOuEstabelecimentoNaoEncontradosException;
 import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
 import com.vulpesfiscal.demo.repositories.EmpresaRepository;
+import com.vulpesfiscal.demo.repositories.UsuarioRepository;
 import com.vulpesfiscal.demo.security.SecurityService;
 import com.vulpesfiscal.demo.validator.EmpresaValidator;
 import lombok.RequiredArgsConstructor;
@@ -26,11 +29,19 @@ public class EmpresaService {
     private final EmpresaRepository repository;
     private final EmpresaValidator validator;
     private final SecurityService securityService;
+    private final UsuarioRepository usuarioRepository;
+    private final EmpresaMapper mapper;
 
 
     // Metodo para salvar a nivel de serviço.
     public Empresa salvar(Empresa empresa) {
         validator.validar(empresa);
+
+        // Obter usuario logado
+        String login = securityService.obterLoginUsuarioLogado();
+        Usuario usuarioLogado = usuarioRepository.findByEmail(login);
+        empresa.setUsuario(usuarioLogado);
+
         return repository.save(empresa);
     }
 
@@ -80,8 +91,20 @@ public class EmpresaService {
     }
 
 
-    public void atualizar(Empresa empresa) {
-        validator.pesquisarPorCnpj(empresa.getCnpj());
+    public void atualizar(Integer empresaId,
+                          AtualizacaoEmpresaDTO dto) {
+        Empresa empresa = repository
+                .findById(empresaId)
+                .orElseThrow(() -> new EmpresaOuEstabelecimentoNaoEncontradosException(
+                        "Empresa nao encontrada."
+                ));
+
+        mapper.toEntityUpdate(dto, empresa);
+
+        String login = securityService.obterLoginUsuarioLogado();
+        Usuario usuarioLogado = usuarioRepository.findByEmail(login);
+        empresa.setAtualizadoPor(usuarioLogado);
+
         repository.save(empresa);
     }
 

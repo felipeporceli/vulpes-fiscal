@@ -1,9 +1,8 @@
 package com.vulpesfiscal.demo.validator;
 
 import com.vulpesfiscal.demo.entities.Empresa;
-import com.vulpesfiscal.demo.exceptions.CampoInvalidoException;
-import com.vulpesfiscal.demo.exceptions.EmpresaComEstabelecimentoException;
-import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
+import com.vulpesfiscal.demo.entities.Estabelecimento;
+import com.vulpesfiscal.demo.exceptions.*;
 import com.vulpesfiscal.demo.repositories.EmpresaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -52,5 +51,17 @@ public class EmpresaValidator {
     }
 
 
+    public void validarPesquisar(Integer empresaId) {
+
+        if (empresaId != null) {
+            Empresa empresa = repository
+                    .findById(empresaId)
+                    .orElseThrow(() -> new EmpresaOuEstabelecimentoNaoEncontradosException(
+                            "Empresa nao encontrada."
+                    ));
+        }
+
+
+    }
 }
 

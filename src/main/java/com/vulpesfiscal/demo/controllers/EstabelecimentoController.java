@@ -26,7 +26,7 @@ import java.net.URI;
 @RestController
 @RequestMapping("/estabelecimentos")
 @RequiredArgsConstructor
-@Tag(name = "Estabelecimento")
+@Tag(name = "Estabelecimentos")
 public class EstabelecimentoController implements ControllerGenerico{
 
     private final EstabelecimentoService service;

@@ -12,6 +12,10 @@ import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
 import com.vulpesfiscal.demo.repositories.EmpresaRepository;
 import com.vulpesfiscal.demo.services.EmpresaService;
 import com.vulpesfiscal.demo.validator.EmpresaValidator;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/empresas")
 @RequiredArgsConstructor
+@Tag(name = "Empresas")
 public class EmpresaController implements ControllerGenerico{
 
     private final EmpresaService service;
@@ -32,11 +37,18 @@ public class EmpresaController implements ControllerGenerico{
 
     // Salvar nova empresa. Finalizando gerando a URL da nova entidade e entregando-a no header da response.
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'SUPORTE')")
+
+    @Operation(summary = "Cadastrar nova Empresa no sistema.", description = "Cadastrar nova Empresa no sistema.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Empresa cadastrada com sucesso."),
+            @ApiResponse(responseCode = "422", description = "Empresa já cadastrado com o CNPJ."),
+            @ApiResponse(responseCode = "422", description = "Campo invalido ou obrigatorio"),
+            @ApiResponse(responseCode = "403", description = "Usuario nao possui permissao para esse recurso."),
+    })
+
     @PostMapping
     public ResponseEntity<Void> salvar (@RequestBody @Valid CadastroEmpresaDTO dto) {
         Empresa empresa = mapper.toEntity(dto);
-        System.out.println(dto.ambienteSefaz());
-        System.out.println(empresa.getAmbienteSefaz());
         service.salvar(empresa);
         var url = gerarHeaderLocation(empresa.getId());
         return ResponseEntity.created(url).build();
@@ -45,10 +57,18 @@ public class EmpresaController implements ControllerGenerico{
     /* Obter detalhes por ID obtendo filtros opcionais pela URL, busca empresas paginadas no banco e devolve o
     resultado convertido para DTO. */
     @PreAuthorize(
-            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
-                    "((hasAnyRole('EMPRESARIO','GERENTE','CAIXA','VENDEDOR')) and " +
-                    "(#empresaId == authentication.principal.empresaId))"
+            "hasAnyRole('ADMINISTRADOR','SUPORTE') or " +
+                    "(hasAnyRole('EMPRESARIO','GERENTE','CAIXA','VENDEDOR') and " +
+                    "#empresaId.toString() == principal.claims['empresaId'].toString())"
     )
+
+    @Operation(summary = "Obter informacoes da Empresa.", description = "Obter informacoes da Empresa por filtros.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Busca realizada com sucesso."),
+            @ApiResponse(responseCode = "422", description = "Empresa já cadastrado com o CNPJ."),
+            @ApiResponse(responseCode = "403", description = "Usuario nao possui permissao para esse recurso."),
+    })
+
     @GetMapping("/{empresaId}")
     public ResponseEntity<Page<ResultadoPesquisaEmpresaDTO>> pesquisa (
             @RequestParam (value = "cnpj", required = false)
@@ -87,6 +107,14 @@ public class EmpresaController implements ControllerGenerico{
 
     /* Deletar empresa por id na URL, .map para seguir práticas Rest */
     @PreAuthorize("hasAnyRole('ADMINISTRADOR','SUPORTE')")
+
+    @Operation(summary = "Deletar Empresa do sistema.", description = "Deletar Empresa do sistema.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Empresa deletada com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Empresa nao encontrada."),
+            @ApiResponse(responseCode = "403", description = "Usuario nao possui permissao para esse recurso."),
+    })
+
     @DeleteMapping("/{empresaId}")
     public void deletar (@PathVariable("empresaId") Integer empresaId) {
         service.deletar(empresaId);
@@ -95,30 +123,26 @@ public class EmpresaController implements ControllerGenerico{
     /* Atualizar empresa por id na URL, mas novos atributos no body da requisicao. */
 
     @PutMapping("/{empresaId}")
+
+    @Operation(summary = "Atualizar Empresa no sistema.", description = "Atualizar Empresa do sistema.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Empresa atualizada com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Empresa nao encontrada."),
+            @ApiResponse(responseCode = "422", description = "Campo invalido ou obrigatorio."),
+            @ApiResponse(responseCode = "403", description = "Usuario nao possui permissao para esse recurso."),
+    })
+
     @PreAuthorize(
-            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
-                    "((hasAnyRole('EMPRESARIO')) and " +
-                    "(#empresaId == authentication.principal.empresaId))"
+            "hasAnyRole('ADMINISTRADOR','SUPORTE') or " +
+                    "(hasAnyRole('EMPRESARIO') and " +
+                    "#empresaId.toString() == principal.claims['empresaId'].toString())"
     )
     public ResponseEntity<Void> atualizar(
             @PathVariable Integer empresaId,
-            @RequestBody AtualizacaoEmpresaDTO dto
+            @RequestBody @Valid AtualizacaoEmpresaDTO dto
     ) {
-        Empresa empresa = repository.findById(empresaId)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Empresa não encontrada"));
-
-        Empresa dadosAtualizados = mapper.toEntityUpdate(dto, empresa);
-
-        empresa.setStatus(dadosAtualizados.getStatus());
-        empresa.setRazaoSocial(dadosAtualizados.getRazaoSocial());
-        empresa.setRegimeTributario(dadosAtualizados.getRegimeTributario());
-        empresa.setInscricaoEstadual(dadosAtualizados.getInscricaoEstadual());
-        empresa.setDataAbertura(dadosAtualizados.getDataAbertura());
-        empresa.setNomeFantasia(dadosAtualizados.getNomeFantasia());
-        empresa.setPorte(dadosAtualizados.getPorte());
-
-        service.atualizar(empresa);
-
+        validator.validarPesquisar(empresaId);
+        service.atualizar(empresaId, dto);
         return ResponseEntity.noContent().build();
     }
 

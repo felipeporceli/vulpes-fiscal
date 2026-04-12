@@ -3,21 +3,18 @@ package com.vulpesfiscal.demo.controllers.mappers;
 import com.vulpesfiscal.demo.controllers.dtos.AtualizacaoEmpresaDTO;
 import com.vulpesfiscal.demo.controllers.dtos.CadastroEmpresaDTO;
 import com.vulpesfiscal.demo.controllers.dtos.ResultadoPesquisaEmpresaDTO;
-import com.vulpesfiscal.demo.controllers.dtos.ResultadoPesquisaEstabelecimentoDTO;
 import com.vulpesfiscal.demo.entities.Empresa;
-import com.vulpesfiscal.demo.entities.Estabelecimento;
+import com.vulpesfiscal.demo.entities.enums.AmbienteSefazEmpresa;
 import com.vulpesfiscal.demo.entities.enums.PorteEmpresa;
 import com.vulpesfiscal.demo.entities.enums.RegimeTributarioEmpresa;
 import com.vulpesfiscal.demo.entities.enums.StatusEmpresa;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-04-11T20:38:17-0300",
+    date = "2026-04-12T10:53:34-0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.8 (Azul Systems, Inc.)"
 )
 @Component
@@ -29,23 +26,31 @@ public class EmpresaMapperImpl implements EmpresaMapper {
             return null;
         }
 
-        String cnpj = null;
         String razaoSocial = null;
+        String nomeFantasia = null;
+        String cnpj = null;
         String inscricaoEstadual = null;
         RegimeTributarioEmpresa regimeTributario = null;
-        StatusEmpresa status = null;
         PorteEmpresa porte = null;
-        List<ResultadoPesquisaEstabelecimentoDTO> estabelecimentos = null;
+        AmbienteSefazEmpresa ambienteSefaz = null;
+        StatusEmpresa status = null;
+        String cnae = null;
+        String uf = null;
+        LocalDate dataAbertura = null;
 
-        cnpj = empresa.getCnpj();
         razaoSocial = empresa.getRazaoSocial();
+        nomeFantasia = empresa.getNomeFantasia();
+        cnpj = empresa.getCnpj();
         inscricaoEstadual = empresa.getInscricaoEstadual();
         regimeTributario = empresa.getRegimeTributario();
-        status = empresa.getStatus();
         porte = empresa.getPorte();
-        estabelecimentos = estabelecimentoListToResultadoPesquisaEstabelecimentoDTOList( empresa.getEstabelecimentos() );
+        ambienteSefaz = empresa.getAmbienteSefaz();
+        status = empresa.getStatus();
+        cnae = empresa.getCnae();
+        uf = empresa.getUf();
+        dataAbertura = empresa.getDataAbertura();
 
-        ResultadoPesquisaEmpresaDTO resultadoPesquisaEmpresaDTO = new ResultadoPesquisaEmpresaDTO( cnpj, razaoSocial, inscricaoEstadual, regimeTributario, status, porte, estabelecimentos );
+        ResultadoPesquisaEmpresaDTO resultadoPesquisaEmpresaDTO = new ResultadoPesquisaEmpresaDTO( razaoSocial, nomeFantasia, cnpj, inscricaoEstadual, regimeTributario, porte, ambienteSefaz, status, cnae, uf, dataAbertura );
 
         return resultadoPesquisaEmpresaDTO;
     }
@@ -105,72 +110,5 @@ public class EmpresaMapperImpl implements EmpresaMapper {
         }
 
         return empresa;
-    }
-
-    protected ResultadoPesquisaEstabelecimentoDTO estabelecimentoToResultadoPesquisaEstabelecimentoDTO(Estabelecimento estabelecimento) {
-        if ( estabelecimento == null ) {
-            return null;
-        }
-
-        String nomeFantasia = null;
-        String cnpj = null;
-        String telefone = null;
-        String email = null;
-        String inscricaoEstadual = null;
-        String inscricaoMunicipal = null;
-        String logradouro = null;
-        String numero = null;
-        String complemento = null;
-        String bairro = null;
-        String cidade = null;
-        String estado = null;
-        String cep = null;
-        String municipioId = null;
-        String paisId = null;
-        String pais = null;
-        String codUf = null;
-        StatusEmpresa status = null;
-        boolean matriz = false;
-        LocalDate dataAbertura = null;
-        LocalDate dataFechamento = null;
-
-        nomeFantasia = estabelecimento.getNomeFantasia();
-        cnpj = estabelecimento.getCnpj();
-        telefone = estabelecimento.getTelefone();
-        email = estabelecimento.getEmail();
-        inscricaoEstadual = estabelecimento.getInscricaoEstadual();
-        inscricaoMunicipal = estabelecimento.getInscricaoMunicipal();
-        logradouro = estabelecimento.getLogradouro();
-        numero = estabelecimento.getNumero();
-        complemento = estabelecimento.getComplemento();
-        bairro = estabelecimento.getBairro();
-        cidade = estabelecimento.getCidade();
-        estado = estabelecimento.getEstado();
-        cep = estabelecimento.getCep();
-        municipioId = estabelecimento.getMunicipioId();
-        paisId = estabelecimento.getPaisId();
-        pais = estabelecimento.getPais();
-        codUf = estabelecimento.getCodUf();
-        status = estabelecimento.getStatus();
-        matriz = estabelecimento.isMatriz();
-        dataAbertura = estabelecimento.getDataAbertura();
-        dataFechamento = estabelecimento.getDataFechamento();
-
-        ResultadoPesquisaEstabelecimentoDTO resultadoPesquisaEstabelecimentoDTO = new ResultadoPesquisaEstabelecimentoDTO( nomeFantasia, cnpj, telefone, email, inscricaoEstadual, inscricaoMunicipal, logradouro, numero, complemento, bairro, cidade, estado, cep, municipioId, paisId, pais, codUf, status, matriz, dataAbertura, dataFechamento );
-
-        return resultadoPesquisaEstabelecimentoDTO;
-    }
-
-    protected List<ResultadoPesquisaEstabelecimentoDTO> estabelecimentoListToResultadoPesquisaEstabelecimentoDTOList(List<Estabelecimento> list) {
-        if ( list == null ) {
-            return null;
-        }
-
-        List<ResultadoPesquisaEstabelecimentoDTO> list1 = new ArrayList<ResultadoPesquisaEstabelecimentoDTO>( list.size() );
-        for ( Estabelecimento estabelecimento : list ) {
-            list1.add( estabelecimentoToResultadoPesquisaEstabelecimentoDTO( estabelecimento ) );
-        }
-
-        return list1;
     }
 }

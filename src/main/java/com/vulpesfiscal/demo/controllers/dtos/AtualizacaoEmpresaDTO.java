@@ -8,6 +8,7 @@ import com.vulpesfiscal.demo.entities.enums.RegimeTributarioEmpresa;
 import com.vulpesfiscal.demo.entities.enums.StatusEmpresa;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 
 import java.time.LocalDate;
 
@@ -20,8 +21,12 @@ public record AtualizacaoEmpresaDTO(
         PorteEmpresa porte,
         AmbienteSefazEmpresa ambienteSefaz,
         StatusEmpresa status,
+        @PastOrPresent(message = "Data de abertura não pode ser uma data futura")
         @JsonFormat(pattern = "dd/MM/yyyy")
-        LocalDate dataAbertura
+        LocalDate dataAbertura,
+        @JsonFormat(pattern = "dd/MM/yyyy")
+        String cnae,
+        String uf
 ){
 }
 

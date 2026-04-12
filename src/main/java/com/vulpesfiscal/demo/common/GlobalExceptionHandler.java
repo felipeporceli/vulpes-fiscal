@@ -235,7 +235,7 @@ public class GlobalExceptionHandler {
 
     // Empresa ou Estabelecimento nao encontrado
     @ExceptionHandler(EmpresaOuEstabelecimentoNaoEncontradosException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErroResposta handleEmpresaOuEstabelecimentoNaoEncontrados
     (EmpresaOuEstabelecimentoNaoEncontradosException e) {
         return new ErroResposta(
