@@ -7,6 +7,7 @@ import com.vulpesfiscal.demo.entities.Usuario;
 import com.vulpesfiscal.demo.entities.enums.PorteEmpresa;
 import com.vulpesfiscal.demo.entities.enums.RegimeTributarioEmpresa;
 import com.vulpesfiscal.demo.entities.enums.StatusEmpresa;
+import com.vulpesfiscal.demo.exceptions.EmpresaOuEstabelecimentoNaoEncontradosException;
 import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
 import com.vulpesfiscal.demo.repositories.EmpresaRepository;
 import com.vulpesfiscal.demo.security.SecurityService;
@@ -87,7 +88,7 @@ public class EmpresaService {
     public Empresa buscarPorId(Integer id) {
         return repository.findById(id)
                 .orElseThrow(() ->
-                            new RecursoNaoEncontradoException(
+                            new EmpresaOuEstabelecimentoNaoEncontradosException(
                                 "Empresa não encontrada para o ID informado"
                         )
                 );

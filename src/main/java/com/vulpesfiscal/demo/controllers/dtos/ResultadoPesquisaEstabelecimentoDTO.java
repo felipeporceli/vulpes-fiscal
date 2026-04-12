@@ -2,10 +2,28 @@ package com.vulpesfiscal.demo.controllers.dtos;
 
 import com.vulpesfiscal.demo.entities.enums.StatusEmpresa;
 
-public record ResultadoPesquisaEstabelecimentoDTO(String cnpj,
-                                                  String nomeFantasia,
-                                                  String cidade,
-                                                  String estado,
-                                                  StatusEmpresa status,
-                                                  Boolean matriz) {
-}
+import java.time.LocalDate;
+
+public record ResultadoPesquisaEstabelecimentoDTO(
+        String nomeFantasia,
+        String cnpj,
+        String telefone,
+        String email,
+        String inscricaoEstadual,
+        String inscricaoMunicipal,
+        String logradouro,
+        String numero,
+        String complemento,
+        String bairro,
+        String cidade,
+        String estado,
+        String cep,
+        String municipioId,
+        String paisId,
+        String pais,
+        String codUf,
+        StatusEmpresa status,
+        boolean matriz,
+        LocalDate dataAbertura,
+        LocalDate dataFechamento
+) {}

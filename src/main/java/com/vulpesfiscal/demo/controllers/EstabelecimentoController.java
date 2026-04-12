@@ -10,6 +10,10 @@ import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
 import com.vulpesfiscal.demo.repositories.EstabelecimentoRepository;
 import com.vulpesfiscal.demo.services.EstabelecimentoService;
 import com.vulpesfiscal.demo.validator.EstabelecimentoValidator;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,6 +26,7 @@ import java.net.URI;
 @RestController
 @RequestMapping("/estabelecimentos")
 @RequiredArgsConstructor
+@Tag(name = "Estabelecimento")
 public class EstabelecimentoController implements ControllerGenerico{
 
     private final EstabelecimentoService service;
@@ -34,10 +39,22 @@ public class EstabelecimentoController implements ControllerGenerico{
     O ID da empresa é informado na URL e os dados do estabelecimento são enviados no corpo da requisição.
     Em caso de sucesso, retorna HTTP 201 com a URL do novo recurso no header Location. */
     @PreAuthorize(
-            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
-                    "((hasAnyRole('EMPRESARIO')) and " +
-                    "(#empresaId == authentication.principal.empresaId))"
+            "hasAnyRole('ADMINISTRADOR','SUPORTE') or " +
+                    "(hasAnyRole('EMPRESARIO') and " +
+                    "#empresaId.toString() == principal.claims['empresaId'].toString())"
     )
+
+    @Operation(summary = "Cadastrar novo Estabelecimento no sistema", description = "Cadastrar novo estabelecimento vinculado à empresa no sistema.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Estabelecimento cadastrado com sucesso."),
+            @ApiResponse(responseCode = "422", description = "Estabelecimento já cadastrado com o CNPJ."),
+            @ApiResponse(responseCode = "422", description = "CNPJ invalido."),
+            @ApiResponse(responseCode = "422", description = "Campo obrigatorio nao informado"),
+            @ApiResponse(responseCode = "403", description = "Usuario nao possui permissao para esse recurso."),
+            @ApiResponse(responseCode = "404", description = "Empresa nao encontrada para o id informado."),
+
+    })
+
     @PostMapping("/empresa/{empresaId}")
     public ResponseEntity<Void> salvar(
             @PathVariable Integer empresaId,
@@ -52,8 +69,18 @@ public class EstabelecimentoController implements ControllerGenerico{
     resultado convertido para DTO. */
     @PreAuthorize(
             "hasAnyRole('ADMINISTRADOR','SUPORTE') or " +
-                    "(hasRole('EMPRESARIO') and #empresaId.toString() == authentication.principal.claims['empresaId'].toString())"
+                    "(hasAnyRole('EMPRESARIO','GERENTE','CAIXA','VENDEDOR') and " +
+                    "#empresaId.toString() == principal.claims['empresaId'].toString())"
     )
+
+    @Operation(summary = "Obter informacoes do Estabelecimento.", description = "Obter informacoes do Estabelecimento por filtros")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso."),
+            @ApiResponse(responseCode = "422", description = "Estabelecimento já cadastrado com o CNPJ."),
+            @ApiResponse(responseCode = "403", description = "Usuario nao possui permissao para esse recurso."),
+
+    })
+
     @GetMapping("/empresa/{empresaId}")
     public ResponseEntity<Page<ResultadoPesquisaEstabelecimentoDTO>> pesquisa (
             @RequestParam (value = "cnpj", required = false)
@@ -90,7 +117,8 @@ public class EstabelecimentoController implements ControllerGenerico{
                 status,
                 matriz,
                 pagina,
-                tamanhoPagina);
+                tamanhoPagina,
+                empresaId);
         Page<ResultadoPesquisaEstabelecimentoDTO> resultado = paginaResultado.map(mapper::toDTO);
         return ResponseEntity.ok(resultado);
     }
@@ -98,14 +126,24 @@ public class EstabelecimentoController implements ControllerGenerico{
 
     /* Deletar Estabelecimento por id na URL, .map para seguir práticas Rest */
     @PreAuthorize(
-            "(hasAnyRole('ADMINISTRADOR','SUPORTE')) or " +
-                    "((hasAnyRole('EMPRESARIO')) and " +
-                    "(#empresaId == authentication.principal.empresaId))"
+            "hasAnyRole('ADMINISTRADOR','SUPORTE') or " +
+                    "(hasAnyRole('EMPRESARIO') and " +
+                    "#empresaId.toString() == principal.claims['empresaId'].toString())"
     )
+
+    @Operation(summary = "Deletar Estabelecimento do sistema.", description = "Deletar Estabelecimento do sistema.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Estabelecimento deletado com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Estabelecimento ou Empresa nao encontrados."),
+            @ApiResponse(responseCode = "403", description = "Usuario nao possui permissao para esse recurso."),
+
+    })
+
+
     @DeleteMapping("/empresa/{empresaId}/{id}")
-    public void deletar (@PathVariable("id") String cnpj,
+    public void deletar (@PathVariable("id") Integer id,
                          @PathVariable("empresaId") Integer empresaId) {
-        service.deletar(cnpj);
+        service.deletar(id);
     }
 
     /* Atualizar Estabelecimento por id na URL, mas novos atributos no body da requisicao. */
@@ -114,38 +152,23 @@ public class EstabelecimentoController implements ControllerGenerico{
                     "((hasAnyRole('EMPRESARIO')) and " +
                     "(#empresaId == authentication.principal.empresaId))"
     )
-    @PutMapping("/empresa/{empresaId}/{id}")
+
+    @Operation(summary = "Atualizar Estabelecimento.", description = "Atualizar Estabelecimento do sistema.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Estabelecimento atualizado com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Estabelecimento ou Empresa nao encontrados."),
+            @ApiResponse(responseCode = "403", description = "Usuario nao possui permissao para esse recurso."),
+
+    })
+
+    @PutMapping("/empresa/{empresaId}/{estabelecimentoId}")
     public ResponseEntity<Void> atualizar(
             @PathVariable Integer empresaId,
-            @PathVariable Integer id,
+            @PathVariable Integer estabelecimentoId,
             @RequestBody @Valid AtualizacaoEstabelecimentoDTO dto
     ) {
-        Estabelecimento estabelecimento = estabelecimentoRepository.findByIdAndEmpresaId(id, empresaId)
-                .orElseThrow(() -> new RecursoNaoEncontradoException("Estabelecimento nao encontrado para o id informado"));
-
-        Estabelecimento dadosAtualizados = mapper.toEntityUpdate(dto, estabelecimento);
-
-        estabelecimento.setNomeFantasia(dadosAtualizados.getNomeFantasia());
-        estabelecimento.setTelefone(dadosAtualizados.getTelefone());
-        estabelecimento.setEmail(dadosAtualizados.getEmail());
-        estabelecimento.setEstado(dadosAtualizados.getEstado());
-        estabelecimento.setStatus(dadosAtualizados.getStatus());
-        estabelecimento.setInscricaoEstadual(dadosAtualizados.getInscricaoEstadual());
-        estabelecimento.setMatriz(dadosAtualizados.isMatriz());
-        estabelecimento.setDataAbertura(dadosAtualizados.getDataAbertura());
-        estabelecimento.setCidade(dadosAtualizados.getCidade());
-        estabelecimento.setEstado(dadosAtualizados.getEstado());
-        estabelecimento.setNumero(dadosAtualizados.getNumero());
-        estabelecimento.setComplemento(dadosAtualizados.getComplemento());
-        estabelecimento.setBairro(dadosAtualizados.getMunicipioId());
-        estabelecimento.setCep(dadosAtualizados.getCep());
-        estabelecimento.setPaisId(dadosAtualizados.getPaisId());
-        estabelecimento.setPais(dadosAtualizados.getPais());
-        estabelecimento.setCodUf(dadosAtualizados.getCodUf());
-        estabelecimento.setDataFechamento(dadosAtualizados.getDataFechamento());
-
-        service.atualizar(estabelecimento);
-
+        validator.validarPesquisar(empresaId, estabelecimentoId);
+        service.atualizar(empresaId, estabelecimentoId, dto);
         return ResponseEntity.noContent().build();
     }
 

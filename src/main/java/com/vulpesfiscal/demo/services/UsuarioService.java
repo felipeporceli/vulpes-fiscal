@@ -145,7 +145,6 @@ public class UsuarioService {
                         "Usuário não encontrado."
                 ));
 
-        validator.validarPesquisar(empresaId, estabelecimentoId);
         mapper.toEntityUpdate(dto, usuario);
 
         if (dto.senha() != null && !dto.senha().isBlank()) {

@@ -2,6 +2,7 @@ package com.vulpesfiscal.demo.validator;
 
 import com.vulpesfiscal.demo.entities.Estabelecimento;
 import com.vulpesfiscal.demo.exceptions.CampoInvalidoException;
+import com.vulpesfiscal.demo.exceptions.EstabelecimentoNaoEncontrado;
 import com.vulpesfiscal.demo.exceptions.RecursoNaoEncontradoException;
 import com.vulpesfiscal.demo.repositories.EstabelecimentoRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,11 +27,18 @@ public class EstabelecimentoValidator {
         }
     }
 
-    public Estabelecimento pesquisarPorCnpj(String cnpj) {
-        return repository.findByCnpj(cnpj)
-                .orElseThrow(() ->
-                        new RecursoNaoEncontradoException("Estabelecimento não encontrado para o CNPJ informado")
-                );
+    public void validarPesquisar(Integer empresaId,
+                                 Integer estabelecimentoId) {
+
+        if (empresaId != null && estabelecimentoId != null) {
+            Estabelecimento estabelecimento = repository
+                    .findByIdAndEmpresaId(estabelecimentoId, empresaId)
+                    .orElseThrow(() -> new EstabelecimentoNaoEncontrado(
+                            "Estabelecimento ou Empresa nao encontrados."
+                    ));
+        }
+
+
     }
 }
 

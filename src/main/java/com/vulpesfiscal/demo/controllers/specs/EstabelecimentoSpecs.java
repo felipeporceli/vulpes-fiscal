@@ -1,5 +1,6 @@
 package com.vulpesfiscal.demo.controllers.specs;
 
+import com.vulpesfiscal.demo.entities.Consumidor;
 import com.vulpesfiscal.demo.entities.Estabelecimento;
 import com.vulpesfiscal.demo.entities.enums.StatusEmpresa;
 import org.springframework.data.jpa.domain.Specification;
@@ -36,6 +37,11 @@ public class EstabelecimentoSpecs {
     // SELECT * FROM estabelecimento WHERE status = :status
     public static Specification<Estabelecimento> statusIgual (StatusEmpresa status) {
         return (root, query, cb) -> cb.equal(root.get("status"), status);
+    }
+
+    public static Specification<Estabelecimento> empresaIdIgual(Integer empresaId) {
+        return (root, query, cb) ->
+                cb.equal(root.get("empresa").get("id"), empresaId);
     }
 
 }

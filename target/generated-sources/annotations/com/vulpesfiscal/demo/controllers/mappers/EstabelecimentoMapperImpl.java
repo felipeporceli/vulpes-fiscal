@@ -5,12 +5,13 @@ import com.vulpesfiscal.demo.controllers.dtos.CadastroEstabelecimentoDTO;
 import com.vulpesfiscal.demo.controllers.dtos.ResultadoPesquisaEstabelecimentoDTO;
 import com.vulpesfiscal.demo.entities.Estabelecimento;
 import com.vulpesfiscal.demo.entities.enums.StatusEmpresa;
+import java.time.LocalDate;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-04-11T17:49:30-0300",
+    date = "2026-04-11T20:38:17-0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.8 (Azul Systems, Inc.)"
 )
 @Component
@@ -22,21 +23,51 @@ public class EstabelecimentoMapperImpl implements EstabelecimentoMapper {
             return null;
         }
 
-        String cnpj = null;
         String nomeFantasia = null;
+        String cnpj = null;
+        String telefone = null;
+        String email = null;
+        String inscricaoEstadual = null;
+        String inscricaoMunicipal = null;
+        String logradouro = null;
+        String numero = null;
+        String complemento = null;
+        String bairro = null;
         String cidade = null;
         String estado = null;
+        String cep = null;
+        String municipioId = null;
+        String paisId = null;
+        String pais = null;
+        String codUf = null;
         StatusEmpresa status = null;
-        Boolean matriz = null;
+        boolean matriz = false;
+        LocalDate dataAbertura = null;
+        LocalDate dataFechamento = null;
 
-        cnpj = estabelecimento.getCnpj();
         nomeFantasia = estabelecimento.getNomeFantasia();
+        cnpj = estabelecimento.getCnpj();
+        telefone = estabelecimento.getTelefone();
+        email = estabelecimento.getEmail();
+        inscricaoEstadual = estabelecimento.getInscricaoEstadual();
+        inscricaoMunicipal = estabelecimento.getInscricaoMunicipal();
+        logradouro = estabelecimento.getLogradouro();
+        numero = estabelecimento.getNumero();
+        complemento = estabelecimento.getComplemento();
+        bairro = estabelecimento.getBairro();
         cidade = estabelecimento.getCidade();
         estado = estabelecimento.getEstado();
+        cep = estabelecimento.getCep();
+        municipioId = estabelecimento.getMunicipioId();
+        paisId = estabelecimento.getPaisId();
+        pais = estabelecimento.getPais();
+        codUf = estabelecimento.getCodUf();
         status = estabelecimento.getStatus();
         matriz = estabelecimento.isMatriz();
+        dataAbertura = estabelecimento.getDataAbertura();
+        dataFechamento = estabelecimento.getDataFechamento();
 
-        ResultadoPesquisaEstabelecimentoDTO resultadoPesquisaEstabelecimentoDTO = new ResultadoPesquisaEstabelecimentoDTO( cnpj, nomeFantasia, cidade, estado, status, matriz );
+        ResultadoPesquisaEstabelecimentoDTO resultadoPesquisaEstabelecimentoDTO = new ResultadoPesquisaEstabelecimentoDTO( nomeFantasia, cnpj, telefone, email, inscricaoEstadual, inscricaoMunicipal, logradouro, numero, complemento, bairro, cidade, estado, cep, municipioId, paisId, pais, codUf, status, matriz, dataAbertura, dataFechamento );
 
         return resultadoPesquisaEstabelecimentoDTO;
     }
