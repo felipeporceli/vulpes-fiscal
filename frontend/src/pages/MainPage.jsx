@@ -21,6 +21,7 @@ import { useAuth } from '../context/AuthContext';
 import EmpresasPage from './EmpresasPage';
 import ConsumidoresPage from './ConsumidoresPage';
 import EstabelecimentosPage from './EstabelecimentosPage';
+import ProdutosPage from './ProdutosPage';
 
 // ─── Itens de navegação base ──────────────────────────────────────────────────
 const BASE_NAV = [
@@ -243,7 +244,7 @@ export default function MainPage() {
       case 'empresas':         return <EmpresasPage />;
       case 'vendas':           return <ComingSoon label="Vendas" />;
       case 'nfce':             return <ComingSoon label="NFC-e" />;
-      case 'produtos':         return <ComingSoon label="Produtos" />;
+      case 'produtos':         return <ProdutosPage />;
       case 'consumidores':     return <ConsumidoresPage />;
       case 'estabelecimentos': return <EstabelecimentosPage />;
       case 'configuracoes':    return <ComingSoon label="Configurações" />;

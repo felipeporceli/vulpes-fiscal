@@ -51,6 +51,34 @@ public class ProdutoController implements ControllerGenerico{
         return ResponseEntity.created(url).build();
     }
 
+    /* Pesquisa global de produtos — exclusiva para ADMINISTRADOR e SUPORTE. */
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR','SUPORTE')")
+    @Operation(summary = "Pesquisa global de Produtos.", description = "Pesquisa produtos sem restrição de empresa (ADMINISTRADOR/SUPORTE).")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso."),
+            @ApiResponse(responseCode = "403", description = "Usuario nao possui permissao para esse recurso."),
+    })
+    @GetMapping
+    public ResponseEntity<Page<ResultadoPesquisaProdutoDTO>> pesquisaGlobal(
+            @RequestParam(value = "empresa-id",      required = false) Integer empresaId,
+            @RequestParam(value = "descricao",        required = false) String descricao,
+            @RequestParam(value = "codigo-de-barras", required = false) String codigoBarras,
+            @RequestParam(value = "ncm",              required = false) Integer ncm,
+            @RequestParam(value = "id-produto",       required = false) Integer idProduto,
+            @RequestParam(value = "preco-min",        required = false) BigDecimal precoMin,
+            @RequestParam(value = "preco-max",        required = false) BigDecimal precoMax,
+            @RequestParam(value = "ativo",            required = false) Boolean ativo,
+            @RequestParam(value = "pagina",           defaultValue = "0")  Integer pagina,
+            @RequestParam(value = "tamanho-pagina",   defaultValue = "10") Integer tamanhoPagina,
+            @RequestParam(value = "ordenar-por",      required = false) String ordenarPor,
+            @RequestParam(value = "direcao",          required = false, defaultValue = "asc") String direcao
+    ) {
+        Page<Produto> paginaResultado = service.pesquisar(
+                empresaId, idProduto, descricao, codigoBarras, ncm, precoMin, precoMax,
+                ativo, pagina, tamanhoPagina, ordenarPor, direcao);
+        return ResponseEntity.ok(paginaResultado.map(mapper::toDTO));
+    }
+
     /* Obter detalhes por ID obtendo filtros opcionais pela URL, busca produtos paginados no banco e devolve o
     resultado convertido para DTO. */
     @PreAuthorize(
@@ -66,39 +94,24 @@ public class ProdutoController implements ControllerGenerico{
             @ApiResponse(responseCode = "422", description = "Campo obrigatorio nao informado."),
     })
     @GetMapping("/empresa/{empresaId}")
-    public ResponseEntity<Page<ResultadoPesquisaProdutoDTO>> pesquisa (
-            @RequestParam (value = "descricao", required = false)
-            String descricao,
-
-            @RequestParam (value = "codigo-de-barras", required = false)
-            String codigoBarras,
-
-            @RequestParam (value = "ncm", required = false)
-            Integer ncm,
-
-            @RequestParam (value = "id-produto", required = false)
-            Integer idProduto,
-
-            @RequestParam (value = "preco-min", required = false)
-            BigDecimal precoMin,
-
-            @RequestParam (value = "preco-max", required = false)
-            BigDecimal precoMax,
-
-            @RequestParam (value = "ativo", required = false, defaultValue = "true")
-            boolean ativo,
-
-            @RequestParam (value = "pagina", defaultValue = "0")
-            Integer pagina,
-
-            @RequestParam (value = "tamanho-pagina", defaultValue = "10")
-            Integer tamanhoPagina,
-
+    public ResponseEntity<Page<ResultadoPesquisaProdutoDTO>> pesquisa(
+            @RequestParam(value = "descricao",        required = false) String descricao,
+            @RequestParam(value = "codigo-de-barras", required = false) String codigoBarras,
+            @RequestParam(value = "ncm",              required = false) Integer ncm,
+            @RequestParam(value = "id-produto",       required = false) Integer idProduto,
+            @RequestParam(value = "preco-min",        required = false) BigDecimal precoMin,
+            @RequestParam(value = "preco-max",        required = false) BigDecimal precoMax,
+            @RequestParam(value = "ativo",            required = false) Boolean ativo,
+            @RequestParam(value = "pagina",           defaultValue = "0")  Integer pagina,
+            @RequestParam(value = "tamanho-pagina",   defaultValue = "10") Integer tamanhoPagina,
+            @RequestParam(value = "ordenar-por",      required = false) String ordenarPor,
+            @RequestParam(value = "direcao",          required = false, defaultValue = "asc") String direcao,
             @PathVariable Integer empresaId
     ) {
-        Page<Produto> paginaResultado = service.pesquisar(empresaId,idProduto, descricao, codigoBarras, ncm, precoMin, precoMax, ativo, pagina, tamanhoPagina);
-        Page<ResultadoPesquisaProdutoDTO> resultado = paginaResultado.map(mapper::toDTO);
-        return ResponseEntity.ok(resultado);
+        Page<Produto> paginaResultado = service.pesquisar(
+                empresaId, idProduto, descricao, codigoBarras, ncm, precoMin, precoMax,
+                ativo, pagina, tamanhoPagina, ordenarPor, direcao);
+        return ResponseEntity.ok(paginaResultado.map(mapper::toDTO));
     }
 
 

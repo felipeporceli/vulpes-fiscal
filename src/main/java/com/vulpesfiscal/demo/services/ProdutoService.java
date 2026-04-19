@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -73,10 +74,14 @@ public class ProdutoService {
                                    BigDecimal precoMax,
                                    Boolean ativo,
                                    Integer pagina,
-                                   Integer tamanhoPagina) {
-        // SELECT * FROM Produto WHERE 0 = 0
-        Specification<Produto> specification =
-                Specification.where(ProdutoSpecs.empresaIdIgual(empresaId));
+                                   Integer tamanhoPagina,
+                                   String ordenarPor,
+                                   String direcao) {
+        Specification<Produto> specification = (root, query, cb) -> cb.conjunction();
+
+        if (empresaId != null) {
+            specification = specification.and(ProdutoSpecs.empresaIdIgual(empresaId));
+        }
 
         if (idProduto != null) {
             specification = specification.and(ProdutoSpecs.idProdutoIgual(idProduto));
@@ -102,8 +107,15 @@ public class ProdutoService {
             specification = specification.and(ProdutoSpecs.ativoIgual(ativo));
         }
 
-        validator.validarPesquisa(empresaId);
-        Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina);
+        if (empresaId != null) {
+            validator.validarPesquisa(empresaId);
+        }
+
+        int tamanho = Math.min(tamanhoPagina, 100);
+        Sort sort = (ordenarPor != null && !ordenarPor.isBlank())
+                ? ("desc".equalsIgnoreCase(direcao) ? Sort.by(ordenarPor).descending() : Sort.by(ordenarPor).ascending())
+                : Sort.unsorted();
+        Pageable pageRequest = PageRequest.of(pagina, tamanho, sort);
         return repository.findAll(specification, pageRequest);
     }
     public void deletar(Integer empresaId, Integer idProduto) {

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-04-19T00:22:49-0300",
+    date = "2026-04-19T01:27:32-0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
 )
 @Component
@@ -23,19 +23,21 @@ public class ProdutoTributacaoMapperImpl implements ProdutoTributacaoMapper {
             return null;
         }
 
+        Integer idProduto = null;
         String descricao = null;
         String codigoBarras = null;
-        Integer idProduto = null;
         Integer ncm = null;
         Integer cfop = null;
         String unidade = null;
         BigDecimal preco = null;
         boolean ativo = false;
         Integer qtdEstoque = null;
+        String cest = null;
+        Integer orig = null;
 
+        idProduto = produto.getIdProduto();
         descricao = produto.getDescricao();
         codigoBarras = produto.getCodigoBarras();
-        idProduto = produto.getIdProduto();
         if ( produto.getNcm() != null ) {
             ncm = Integer.parseInt( produto.getNcm() );
         }
@@ -44,8 +46,12 @@ public class ProdutoTributacaoMapperImpl implements ProdutoTributacaoMapper {
         preco = produto.getPreco();
         ativo = produto.isAtivo();
         qtdEstoque = produto.getQtdEstoque();
+        cest = produto.getCest();
+        orig = produto.getOrig();
 
-        ResultadoPesquisaProdutoDTO resultadoPesquisaProdutoDTO = new ResultadoPesquisaProdutoDTO( descricao, codigoBarras, idProduto, ncm, cfop, unidade, preco, ativo, qtdEstoque );
+        Integer empresaId = null;
+
+        ResultadoPesquisaProdutoDTO resultadoPesquisaProdutoDTO = new ResultadoPesquisaProdutoDTO( empresaId, idProduto, descricao, codigoBarras, ncm, cfop, unidade, preco, ativo, qtdEstoque, cest, orig );
 
         return resultadoPesquisaProdutoDTO;
     }
