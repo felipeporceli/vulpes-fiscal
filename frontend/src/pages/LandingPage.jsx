@@ -56,7 +56,7 @@ function Navbar() {
       <div className="container-max flex items-center justify-between py-3 px-6 md:px-12 lg:px-24">
         {/* Logo */}
         <a href="#" className="flex items-center gap-3 group">
-          <img src="/vulpeslogo.png" alt="Vulpes Fiscal" className="h-10 w-auto" />
+          <img src="/vulpeslogo.png" alt="Vulpes Fiscal" className="h-14 w-auto" />
           <span className="text-white font-bold text-lg tracking-tight">
             Vulpes<span className="text-vulpes-orange">Fiscal</span>
           </span>
@@ -490,7 +490,7 @@ function Footer() {
     <footer className="bg-vulpes-dark border-t border-white/5 py-10 px-6 md:px-12 lg:px-24">
       <div className="container-max flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="flex items-center gap-3">
-          <img src="/vulpeslogo.png" alt="Vulpes Fiscal" className="h-8 w-auto" />
+          <img src="/vulpeslogo.png" alt="Vulpes Fiscal" className="h-12 w-auto" />
           <span className="text-white font-bold">
             Vulpes<span className="text-vulpes-orange">Fiscal</span>
           </span>

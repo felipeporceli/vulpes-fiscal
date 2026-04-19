@@ -5,13 +5,14 @@ import com.vulpesfiscal.demo.controllers.dtos.CadastroConsumidorDTO;
 import com.vulpesfiscal.demo.controllers.dtos.ConsumidorResponseDTO;
 import com.vulpesfiscal.demo.controllers.dtos.ResultadoPesquisaConsumidorDTO;
 import com.vulpesfiscal.demo.entities.Consumidor;
+import com.vulpesfiscal.demo.entities.Empresa;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-04-12T14:03:38-0300",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.8 (Azul Systems, Inc.)"
+    date = "2026-04-19T00:22:50-0300",
+    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
 )
 @Component
 public class ConsumidorMapperImpl implements ConsumidorMapper {
@@ -22,6 +23,7 @@ public class ConsumidorMapperImpl implements ConsumidorMapper {
             return null;
         }
 
+        Integer empresaId = null;
         Integer id = null;
         String nome = null;
         String cpf = null;
@@ -44,6 +46,7 @@ public class ConsumidorMapperImpl implements ConsumidorMapper {
         String pais = null;
         String telefone = null;
 
+        empresaId = consumidorEmpresaId( consumidor );
         id = consumidor.getId();
         nome = consumidor.getNome();
         cpf = consumidor.getCpf();
@@ -66,7 +69,7 @@ public class ConsumidorMapperImpl implements ConsumidorMapper {
         pais = consumidor.getPais();
         telefone = consumidor.getTelefone();
 
-        ResultadoPesquisaConsumidorDTO resultadoPesquisaConsumidorDTO = new ResultadoPesquisaConsumidorDTO( id, nome, cpf, email, cnpj, estrangeiroId, inscricaoEstadual, indicadorInscricao, inscricaoSuframa, inscricaoMunicipal, logradouro, numero, complemento, bairro, municipioId, municipio, uf, cep, paisId, pais, telefone );
+        ResultadoPesquisaConsumidorDTO resultadoPesquisaConsumidorDTO = new ResultadoPesquisaConsumidorDTO( id, empresaId, nome, cpf, email, cnpj, estrangeiroId, inscricaoEstadual, indicadorInscricao, inscricaoSuframa, inscricaoMunicipal, logradouro, numero, complemento, bairro, municipioId, municipio, uf, cep, paisId, pais, telefone );
 
         return resultadoPesquisaConsumidorDTO;
     }
@@ -189,5 +192,13 @@ public class ConsumidorMapperImpl implements ConsumidorMapper {
         ConsumidorResponseDTO consumidorResponseDTO = new ConsumidorResponseDTO( id, nome, cpf, email );
 
         return consumidorResponseDTO;
+    }
+
+    private Integer consumidorEmpresaId(Consumidor consumidor) {
+        Empresa empresa = consumidor.getEmpresa();
+        if ( empresa == null ) {
+            return null;
+        }
+        return empresa.getId();
     }
 }

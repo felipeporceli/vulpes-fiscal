@@ -49,6 +49,36 @@ public class ConsumidorController implements ControllerGenerico {
         return ResponseEntity.created(url).build();
     }
 
+    /* Pesquisa global de consumidores — exclusiva para ADMINISTRADOR e SUPORTE.
+       O filtro empresa-id é opcional: se omitido, retorna consumidores de todas as empresas. */
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR','SUPORTE')")
+    @Operation(summary = "Pesquisa global de Consumidores.", description = "Pesquisa consumidores sem restrição de empresa (ADMINISTRADOR/SUPORTE).")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso."),
+            @ApiResponse(responseCode = "403", description = "Usuario nao possui permissao para esse recurso."),
+    })
+    @GetMapping
+    public ResponseEntity<Page<ResultadoPesquisaConsumidorDTO>> pesquisaGlobal(
+            @RequestParam(value = "empresa-id",  required = false)                     Integer empresaId,
+            @RequestParam(value = "id",           required = false)                     Integer id,
+            @RequestParam(value = "cpf",          required = false)                     String cpf,
+            @RequestParam(value = "nome",         required = false)                     String nome,
+            @RequestParam(value = "email",        required = false)                     String email,
+            @RequestParam(value = "cep",          required = false)                     String cep,
+            @RequestParam(value = "uf",           required = false)                     String uf,
+            @RequestParam(value = "municipio",    required = false)                     String municipio,
+            @RequestParam(value = "telefone",     required = false)                     String telefone,
+            @RequestParam(value = "pagina",       defaultValue = "0")                   Integer pagina,
+            @RequestParam(value = "tamanho-pagina", defaultValue = "10")               Integer tamanhoPagina,
+            @RequestParam(value = "ordenar-por",  required = false)                     String ordenarPor,
+            @RequestParam(value = "direcao",      required = false, defaultValue = "asc") String direcao
+    ) {
+        Page<Consumidor> paginaResultado = service.pesquisar(
+                empresaId, id, cpf, nome, email, pagina, uf, municipio, cep, telefone, tamanhoPagina, ordenarPor, direcao
+        );
+        return ResponseEntity.ok(paginaResultado.map(mapper::toDTO));
+    }
+
     /* Obter detalhes por ID obtendo filtros opcionais pela URL, busca Consumidores paginados no banco e devolve o
     resultado convertido para DTO. */
     @PreAuthorize(
@@ -74,10 +104,12 @@ public class ConsumidorController implements ControllerGenerico {
             @RequestParam(value = "telefone", required = false) String telefone,
             @RequestParam(value = "pagina", defaultValue = "0") Integer pagina,
             @RequestParam(value = "tamanho-pagina", defaultValue = "10") Integer tamanhoPagina,
+            @RequestParam(value = "ordenar-por", required = false) String ordenarPor,
+            @RequestParam(value = "direcao", required = false, defaultValue = "asc") String direcao,
             @PathVariable Integer empresaId
     ) {
         Page<Consumidor> paginaResultado = service.pesquisar(
-                empresaId, id, cpf, nome, email, pagina, uf, municipio, cep, telefone, tamanhoPagina
+                empresaId, id, cpf, nome, email, pagina, uf, municipio, cep, telefone, tamanhoPagina, ordenarPor, direcao
         );
         Page<ResultadoPesquisaConsumidorDTO> resultado = paginaResultado.map(mapper::toDTO);
         return ResponseEntity.ok(resultado);

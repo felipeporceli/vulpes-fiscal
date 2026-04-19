@@ -5,6 +5,7 @@ import com.vulpesfiscal.demo.entities.enums.StatusEmpresa;
 import java.time.LocalDate;
 
 public record ResultadoPesquisaEstabelecimentoDTO(
+        Integer id,
         String nomeFantasia,
         String cnpj,
         String telefone,

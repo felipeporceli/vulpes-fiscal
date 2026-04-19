@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-04-12T14:03:38-0300",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.8 (Azul Systems, Inc.)"
+    date = "2026-04-19T00:22:50-0300",
+    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
 )
 @Component
 public class EmpresaMapperImpl implements EmpresaMapper {
@@ -26,6 +26,7 @@ public class EmpresaMapperImpl implements EmpresaMapper {
             return null;
         }
 
+        Integer id = null;
         String razaoSocial = null;
         String nomeFantasia = null;
         String cnpj = null;
@@ -38,6 +39,7 @@ public class EmpresaMapperImpl implements EmpresaMapper {
         String uf = null;
         LocalDate dataAbertura = null;
 
+        id = empresa.getId();
         razaoSocial = empresa.getRazaoSocial();
         nomeFantasia = empresa.getNomeFantasia();
         cnpj = empresa.getCnpj();
@@ -50,7 +52,7 @@ public class EmpresaMapperImpl implements EmpresaMapper {
         uf = empresa.getUf();
         dataAbertura = empresa.getDataAbertura();
 
-        ResultadoPesquisaEmpresaDTO resultadoPesquisaEmpresaDTO = new ResultadoPesquisaEmpresaDTO( razaoSocial, nomeFantasia, cnpj, inscricaoEstadual, regimeTributario, porte, ambienteSefaz, status, cnae, uf, dataAbertura );
+        ResultadoPesquisaEmpresaDTO resultadoPesquisaEmpresaDTO = new ResultadoPesquisaEmpresaDTO( id, razaoSocial, nomeFantasia, cnpj, inscricaoEstadual, regimeTributario, porte, ambienteSefaz, status, cnae, uf, dataAbertura );
 
         return resultadoPesquisaEmpresaDTO;
     }

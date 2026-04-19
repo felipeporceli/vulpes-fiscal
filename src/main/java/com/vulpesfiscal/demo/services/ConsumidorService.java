@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,12 +64,20 @@ public class ConsumidorService {
                                       String municipio,
                                       String cep,
                                       String telefone,
-                                      Integer tamanhoPagina) {
+                                      Integer tamanhoPagina,
+                                      String ordenarPor,
+                                      String direcao) {
+
+        // Proteção contra requests abusivos: limite máximo de 100 registros por página.
+        tamanhoPagina = Math.min(tamanhoPagina, 100);
+
         // SELECT * FROM consumidor WHERE 0 = 0
         Specification<Consumidor> specification = Specification.where
                 ((root, query, cb) -> cb.conjunction());
 
-        specification = specification.and(ConsumidorSpecs.empresaIdIgual(empresaId));
+        if (empresaId != null) {
+            specification = specification.and(ConsumidorSpecs.empresaIdIgual(empresaId));
+        }
 
         if (id != null) {
             specification = specification.and(ConsumidorSpecs.idIgual(id));
@@ -95,7 +104,14 @@ public class ConsumidorService {
             specification = specification.and(ConsumidorSpecs.telefoneLike(telefone));
         }
 
-        Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina);
+        Sort sort = Sort.unsorted();
+        if (ordenarPor != null && !ordenarPor.isBlank()) {
+            sort = "desc".equalsIgnoreCase(direcao)
+                    ? Sort.by(ordenarPor).descending()
+                    : Sort.by(ordenarPor).ascending();
+        }
+
+        Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina, sort);
         return repository.findAll(specification, pageRequest);
     }
 
