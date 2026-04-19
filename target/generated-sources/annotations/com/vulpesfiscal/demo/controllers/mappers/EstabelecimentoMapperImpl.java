@@ -3,6 +3,7 @@ package com.vulpesfiscal.demo.controllers.mappers;
 import com.vulpesfiscal.demo.controllers.dtos.AtualizacaoEstabelecimentoDTO;
 import com.vulpesfiscal.demo.controllers.dtos.CadastroEstabelecimentoDTO;
 import com.vulpesfiscal.demo.controllers.dtos.ResultadoPesquisaEstabelecimentoDTO;
+import com.vulpesfiscal.demo.entities.Empresa;
 import com.vulpesfiscal.demo.entities.Estabelecimento;
 import com.vulpesfiscal.demo.entities.enums.StatusEmpresa;
 import java.time.LocalDate;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-04-19T00:22:50-0300",
+    date = "2026-04-19T00:43:31-0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
 )
 @Component
@@ -23,6 +24,7 @@ public class EstabelecimentoMapperImpl implements EstabelecimentoMapper {
             return null;
         }
 
+        Integer empresaId = null;
         Integer id = null;
         String nomeFantasia = null;
         String cnpj = null;
@@ -46,6 +48,7 @@ public class EstabelecimentoMapperImpl implements EstabelecimentoMapper {
         LocalDate dataAbertura = null;
         LocalDate dataFechamento = null;
 
+        empresaId = estabelecimentoEmpresaId( estabelecimento );
         id = estabelecimento.getId();
         nomeFantasia = estabelecimento.getNomeFantasia();
         cnpj = estabelecimento.getCnpj();
@@ -69,7 +72,7 @@ public class EstabelecimentoMapperImpl implements EstabelecimentoMapper {
         dataAbertura = estabelecimento.getDataAbertura();
         dataFechamento = estabelecimento.getDataFechamento();
 
-        ResultadoPesquisaEstabelecimentoDTO resultadoPesquisaEstabelecimentoDTO = new ResultadoPesquisaEstabelecimentoDTO( id, nomeFantasia, cnpj, telefone, email, inscricaoEstadual, inscricaoMunicipal, logradouro, numero, complemento, bairro, cidade, estado, cep, municipioId, paisId, pais, codUf, status, matriz, dataAbertura, dataFechamento );
+        ResultadoPesquisaEstabelecimentoDTO resultadoPesquisaEstabelecimentoDTO = new ResultadoPesquisaEstabelecimentoDTO( id, empresaId, nomeFantasia, cnpj, telefone, email, inscricaoEstadual, inscricaoMunicipal, logradouro, numero, complemento, bairro, cidade, estado, cep, municipioId, paisId, pais, codUf, status, matriz, dataAbertura, dataFechamento );
 
         return resultadoPesquisaEstabelecimentoDTO;
     }
@@ -174,5 +177,13 @@ public class EstabelecimentoMapperImpl implements EstabelecimentoMapper {
         }
 
         return estabelecimento;
+    }
+
+    private Integer estabelecimentoEmpresaId(Estabelecimento estabelecimento) {
+        Empresa empresa = estabelecimento.getEmpresa();
+        if ( empresa == null ) {
+            return null;
+        }
+        return empresa.getId();
     }
 }
