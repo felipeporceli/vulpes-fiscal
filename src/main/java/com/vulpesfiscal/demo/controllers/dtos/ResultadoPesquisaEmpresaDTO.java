@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public record ResultadoPesquisaEmpresaDTO(
+        Integer id,
         String razaoSocial,
         String nomeFantasia,
         String cnpj,

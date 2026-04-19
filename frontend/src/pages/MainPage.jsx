@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import EmpresasPage from './EmpresasPage';
+import ConsumidoresPage from './ConsumidoresPage';
 
 // ─── Itens de navegação base ──────────────────────────────────────────────────
 const BASE_NAV = [
@@ -37,7 +38,7 @@ function Sidebar({ collapsed, activePage, onNavigate }) {
 
   const navItems = [
     ...BASE_NAV,
-    ...(user?.hasRole('ADMINISTRADOR', 'SUPORTE')
+    ...(user?.hasRole('ADMINISTRADOR', 'SUPORTE', 'EMPRESARIO', 'GERENTE')
       ? [{ id: 'empresas', icon: Landmark, label: 'Empresas' }]
       : []),
   ];
@@ -48,10 +49,10 @@ function Sidebar({ collapsed, activePage, onNavigate }) {
       style={{ background: 'linear-gradient(180deg, #021E33 0%, #032A47 50%, #08315B 100%)' }}
     >
       {/* Logo */}
-      <div className="flex items-center gap-3 px-4 py-4 border-b border-white/10">
-        <img src="/vulpeslogo.png" alt="Vulpes Fiscal" className="h-9 w-auto flex-shrink-0" />
+      <div className="flex items-center gap-3 px-4 py-5 border-b border-white/10">
+        <img src="/vulpeslogo.png" alt="Vulpes Fiscal" className="h-14 w-auto flex-shrink-0" />
         {!collapsed && (
-          <span className="text-white font-bold text-base whitespace-nowrap overflow-hidden">
+          <span className="text-white font-bold text-lg whitespace-nowrap overflow-hidden">
             Vulpes<span className="text-vulpes-orange">Fiscal</span>
           </span>
         )}
@@ -242,7 +243,7 @@ export default function MainPage() {
       case 'vendas':           return <ComingSoon label="Vendas" />;
       case 'nfce':             return <ComingSoon label="NFC-e" />;
       case 'produtos':         return <ComingSoon label="Produtos" />;
-      case 'consumidores':     return <ComingSoon label="Consumidores" />;
+      case 'consumidores':     return <ConsumidoresPage />;
       case 'estabelecimentos': return <ComingSoon label="Estabelecimentos" />;
       case 'configuracoes':    return <ComingSoon label="Configurações" />;
       default:                 return <DashboardContent />;

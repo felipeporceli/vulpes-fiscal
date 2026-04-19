@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-04-12T14:03:38-0300",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.8 (Azul Systems, Inc.)"
+    date = "2026-04-19T00:22:50-0300",
+    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
 )
 @Component
 public class EstabelecimentoMapperImpl implements EstabelecimentoMapper {
@@ -23,6 +23,7 @@ public class EstabelecimentoMapperImpl implements EstabelecimentoMapper {
             return null;
         }
 
+        Integer id = null;
         String nomeFantasia = null;
         String cnpj = null;
         String telefone = null;
@@ -45,6 +46,7 @@ public class EstabelecimentoMapperImpl implements EstabelecimentoMapper {
         LocalDate dataAbertura = null;
         LocalDate dataFechamento = null;
 
+        id = estabelecimento.getId();
         nomeFantasia = estabelecimento.getNomeFantasia();
         cnpj = estabelecimento.getCnpj();
         telefone = estabelecimento.getTelefone();
@@ -67,7 +69,7 @@ public class EstabelecimentoMapperImpl implements EstabelecimentoMapper {
         dataAbertura = estabelecimento.getDataAbertura();
         dataFechamento = estabelecimento.getDataFechamento();
 
-        ResultadoPesquisaEstabelecimentoDTO resultadoPesquisaEstabelecimentoDTO = new ResultadoPesquisaEstabelecimentoDTO( nomeFantasia, cnpj, telefone, email, inscricaoEstadual, inscricaoMunicipal, logradouro, numero, complemento, bairro, cidade, estado, cep, municipioId, paisId, pais, codUf, status, matriz, dataAbertura, dataFechamento );
+        ResultadoPesquisaEstabelecimentoDTO resultadoPesquisaEstabelecimentoDTO = new ResultadoPesquisaEstabelecimentoDTO( id, nomeFantasia, cnpj, telefone, email, inscricaoEstadual, inscricaoMunicipal, logradouro, numero, complemento, bairro, cidade, estado, cep, municipioId, paisId, pais, codUf, status, matriz, dataAbertura, dataFechamento );
 
         return resultadoPesquisaEstabelecimentoDTO;
     }

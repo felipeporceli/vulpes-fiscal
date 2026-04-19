@@ -54,22 +54,17 @@ public class EmpresaController implements ControllerGenerico{
         return ResponseEntity.created(url).build();
     }
 
-    /* Obter detalhes por ID obtendo filtros opcionais pela URL, busca empresas paginadas no banco e devolve o
-    resultado convertido para DTO. */
-    @PreAuthorize(
-            "hasAnyRole('ADMINISTRADOR','SUPORTE') or " +
-                    "(hasAnyRole('EMPRESARIO','GERENTE','CAIXA','VENDEDOR') and " +
-                    "#empresaId.toString() == principal.claims['empresaId'].toString())"
-    )
+    /* Pesquisa empresas com filtros opcionais. Para ADMINISTRADOR/SUPORTE: qualquer empresa.
+       Para EMPRESARIO/GERENTE: apenas a empresa vinculada ao seu cadastro (empresaId do JWT). */
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR','SUPORTE','EMPRESARIO','GERENTE')")
 
     @Operation(summary = "Obter informacoes da Empresa.", description = "Obter informacoes da Empresa por filtros.")
     @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Busca realizada com sucesso."),
-            @ApiResponse(responseCode = "422", description = "Empresa já cadastrado com o CNPJ."),
+            @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso."),
             @ApiResponse(responseCode = "403", description = "Usuario nao possui permissao para esse recurso."),
     })
 
-    @GetMapping("/{empresaId}")
+    @GetMapping
     public ResponseEntity<Page<ResultadoPesquisaEmpresaDTO>> pesquisa (
             @RequestParam (value = "cnpj", required = false)
             String cnpj,
@@ -95,10 +90,16 @@ public class EmpresaController implements ControllerGenerico{
             @RequestParam (value = "tamanho-pagina", defaultValue = "10")
             Integer tamanhoPagina,
 
-            @PathVariable
-            Integer empresaId
+            @RequestParam (value = "empresa-id", required = false)
+            Integer empresaId,
+
+            @RequestParam (value = "ordenar-por", required = false)
+            String ordenarPor,
+
+            @RequestParam (value = "direcao", required = false, defaultValue = "asc")
+            String direcao
     ) {
-        Page<Empresa> paginaResultado = service.pesquisar(cnpj, razaoSocial, inscricaoEstadual, regimeTributario, status, porte, empresaId, pagina, tamanhoPagina);
+        Page<Empresa> paginaResultado = service.pesquisar(cnpj, razaoSocial, inscricaoEstadual, regimeTributario, status, porte, empresaId, pagina, tamanhoPagina, ordenarPor, direcao);
         Page<ResultadoPesquisaEmpresaDTO> resultado = paginaResultado.map(mapper::toDTO);
         return ResponseEntity.ok(resultado);
     }
@@ -134,7 +135,7 @@ public class EmpresaController implements ControllerGenerico{
 
     @PreAuthorize(
             "hasAnyRole('ADMINISTRADOR','SUPORTE') or " +
-                    "(hasAnyRole('EMPRESARIO') and " +
+                    "(hasAnyRole('EMPRESARIO','GERENTE') and " +
                     "#empresaId.toString() == principal.claims['empresaId'].toString())"
     )
     public ResponseEntity<Void> atualizar(

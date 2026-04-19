@@ -1,16 +1,19 @@
 package com.vulpesfiscal.demo.configuration;
 
+import com.vulpesfiscal.demo.security.oauth2.OAuth2ResourceOwnerPasswordAuthenticationConverter;
+import com.vulpesfiscal.demo.security.oauth2.OAuth2ResourceOwnerPasswordAuthenticationProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.oauth2.server.authorization.OAuth2AuthorizationServerConfigurer;
+import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
+import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenGenerator;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
@@ -22,13 +25,26 @@ public class AuthorizationServerConfiguration {
 
     @Bean
     @Order(1)
-    public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain authorizationServerSecurityFilterChain(
+            HttpSecurity http,
+            AuthenticationManager authenticationManager) throws Exception {
+
         http
                 .oauth2AuthorizationServer(authorizationServer -> {
-                    var matcher = authorizationServer.getEndpointsMatcher();
-                    System.out.println(">>> ENDPOINTS MATCHER: " + matcher); // 👈 log temporário
-                    http.securityMatcher(matcher);
+                    http.securityMatcher(authorizationServer.getEndpointsMatcher());
                     authorizationServer.oidc(Customizer.withDefaults());
+                    authorizationServer.tokenEndpoint(tokenEndpoint -> tokenEndpoint
+                            .accessTokenRequestConverter(
+                                    new OAuth2ResourceOwnerPasswordAuthenticationConverter())
+                            .authenticationProviders(providers -> {
+                                OAuth2AuthorizationService authorizationService =
+                                        http.getSharedObject(OAuth2AuthorizationService.class);
+                                OAuth2TokenGenerator<?> tokenGenerator =
+                                        http.getSharedObject(OAuth2TokenGenerator.class);
+                                providers.add(0, new OAuth2ResourceOwnerPasswordAuthenticationProvider(
+                                        authenticationManager, authorizationService, tokenGenerator));
+                            })
+                    );
                 })
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize

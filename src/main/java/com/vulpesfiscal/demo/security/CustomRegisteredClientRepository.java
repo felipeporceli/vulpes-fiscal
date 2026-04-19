@@ -3,6 +3,7 @@ package com.vulpesfiscal.demo.security;
 import com.vulpesfiscal.demo.entities.Client;
 import com.vulpesfiscal.demo.services.ClientService;
 import lombok.RequiredArgsConstructor;
+import com.vulpesfiscal.demo.security.oauth2.OAuth2ResourceOwnerPasswordAuthenticationToken;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
@@ -51,6 +52,7 @@ public class CustomRegisteredClientRepository implements RegisteredClientReposit
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+                .authorizationGrantType(OAuth2ResourceOwnerPasswordAuthenticationToken.PASSWORD)
                 .tokenSettings(tokenSettings)
                 .clientSettings(clientSettings)
                 .build();

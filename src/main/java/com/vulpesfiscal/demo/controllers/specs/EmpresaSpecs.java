@@ -50,4 +50,8 @@ public class EmpresaSpecs {
                 cb.equal(root.get("id"), empresaId);
     }
 
+    public static Specification<Empresa> porteLike(PorteEmpresa porte) {
+        return (root, query, cb) -> cb.equal(root.get("porte"), porte);
+    }
+
 }

@@ -19,7 +19,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -54,13 +57,32 @@ public class EmpresaService {
                                    PorteEmpresa porte,
                                    Integer empresaId,
                                    Integer pagina,
-                                   Integer tamanhoPagina) {
+                                   Integer tamanhoPagina,
+                                   String ordenarPor,
+                                   String direcao) {
+
+        // Proteção contra requests abusivos: limite máximo de 100 registros por página.
+        // Impede que qualquer cliente — mesmo autenticado — faça dump em uma única chamada.
+        tamanhoPagina = Math.min(tamanhoPagina, 100);
+
+        // Isolamento multi-tenant: EMPRESARIO e GERENTE só consultam a própria empresa.
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAdminOuSuporte = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMINISTRADOR")
+                            || a.getAuthority().equals("ROLE_SUPORTE"));
+
+        if (!isAdminOuSuporte) {
+            empresaId = securityService.obterEmpresaId();
+        }
+
         // SELECT * FROM empresa WHERE 0 = 0
         Specification<Empresa> specification = Specification.where
                 ((root, query, cb) -> cb.conjunction());
 
 
-        specification = specification.and(EmpresaSpecs.empresaIdIgual(empresaId));
+        if (empresaId != null) {
+            specification = specification.and(EmpresaSpecs.empresaIdIgual(empresaId));
+        }
 
         if (cnpj != null) {
             specification = specification.and(EmpresaSpecs.cnpjIgual(cnpj));
@@ -82,7 +104,13 @@ public class EmpresaService {
             specification = specification.and(EmpresaSpecs.statusIgual(statusEmpresa));
         }
 
-        Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina);
+        Sort sort = Sort.unsorted();
+        if (ordenarPor != null && !ordenarPor.isBlank()) {
+            sort = "desc".equalsIgnoreCase(direcao)
+                    ? Sort.by(ordenarPor).descending()
+                    : Sort.by(ordenarPor).ascending();
+        }
+        Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina, sort);
         return repository.findAll(specification, pageRequest);
     }
     public void deletar(Integer empresaId) {

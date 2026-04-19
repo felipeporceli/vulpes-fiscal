@@ -2,6 +2,7 @@ package com.vulpesfiscal.demo.controllers.dtos;
 public record ResultadoPesquisaConsumidorDTO(
 
         Integer id,
+        Integer empresaId,
         String nome,
         String cpf,
         String email,

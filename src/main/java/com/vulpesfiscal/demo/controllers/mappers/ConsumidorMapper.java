@@ -8,6 +8,7 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface ConsumidorMapper {
 
+    @Mapping(source = "empresa.id", target = "empresaId")
     ResultadoPesquisaConsumidorDTO toDTO(Consumidor consumidor);
 
     Consumidor toEntity(CadastroConsumidorDTO dto);
