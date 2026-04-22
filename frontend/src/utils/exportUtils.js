@@ -372,6 +372,54 @@ function toRowProduto(p) {
   ];
 }
 
+// ─── Colunas de Venda ─────────────────────────────────────────────────────────
+export const VENDA_EXPORT_COLUMNS = [
+  { header: 'ID Venda',          key: 'id'              },
+  { header: 'Consumidor',        key: 'consumidorNome'  },
+  { header: 'Valor Total',       key: 'valorTotal'      },
+  { header: 'Desconto',          key: 'desconto'        },
+  { header: 'Valor Final',       key: 'valorFinal'      },
+  { header: 'Parcelas',          key: 'parcelas'        },
+  { header: 'Método Pagamento',  key: 'metodoPagamento' },
+  { header: 'Status Pagamento',  key: 'statusPagamento' },
+  { header: 'Data Criação',      key: 'dataCriacao'     },
+];
+
+/** Mapeia venda → array de strings sanitizadas na ordem de VENDA_EXPORT_COLUMNS. */
+function toRowVenda(v) {
+  return [
+    sanitize(v.id),
+    sanitize(v.consumidorNome),
+    sanitize(v.valorTotal != null ? Number(v.valorTotal).toFixed(2) : ''),
+    sanitize(v.desconto    != null ? Number(v.desconto).toFixed(2)   : '0,00'),
+    sanitize(v.valorFinal  != null ? Number(v.valorFinal).toFixed(2) : ''),
+    sanitize(v.parcelas),
+    sanitize(v.metodoPagamento),
+    sanitize(v.statusPagamento),
+    sanitize(v.dataCriacao ? new Date(v.dataCriacao).toLocaleString('pt-BR') : ''),
+  ];
+}
+
+/** Exporta array de vendas como CSV. */
+export function exportCsvVenda(data, baseName = 'vendas') {
+  exportCsvInternal(data, VENDA_EXPORT_COLUMNS, toRowVenda, baseName);
+}
+
+/** Exporta array de vendas como XLSX. */
+export function exportXlsxVenda(data, baseName = 'vendas') {
+  exportXlsxInternal(data, VENDA_EXPORT_COLUMNS, toRowVenda, [
+    { wch: 10 }, // ID Venda
+    { wch: 32 }, // Consumidor
+    { wch: 14 }, // Valor Total
+    { wch: 12 }, // Desconto
+    { wch: 14 }, // Valor Final
+    { wch: 10 }, // Parcelas
+    { wch: 22 }, // Método Pagamento
+    { wch: 18 }, // Status Pagamento
+    { wch: 20 }, // Data Criação
+  ], 'Vendas', baseName);
+}
+
 /** Exporta array de produtos como CSV. */
 export function exportCsvProduto(data, baseName = 'produtos') {
   exportCsvInternal(data, PRODUTO_EXPORT_COLUMNS, toRowProduto, baseName);

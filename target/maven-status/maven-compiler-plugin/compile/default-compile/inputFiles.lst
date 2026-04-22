@@ -44,6 +44,7 @@
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/ResultadoPesquisaProdutoDTO.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/ResultadoPesquisaProdutoTributacaoDTO.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/ResultadoPesquisaUsuarioDTO.java
+/home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/ResultadoPesquisaVendaDTO.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/VendaResponseDTO.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/nfce/AutXMLDTO.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/nfce/AvulsaDTO.java
@@ -168,6 +169,7 @@
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/specs/PagamentoSpecs.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/specs/ProdutoSpecs.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/specs/UsuarioSpecs.java
+/home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/specs/VendaSpecs.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/entities/Client.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/entities/Consumidor.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/entities/Empresa.java

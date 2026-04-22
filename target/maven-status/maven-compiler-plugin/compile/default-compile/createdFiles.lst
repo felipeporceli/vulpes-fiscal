@@ -143,6 +143,7 @@ com/vulpesfiscal/demo/VulpesFiscalApplication.class
 com/vulpesfiscal/demo/services/ProdutoTributacaoService.class
 com/vulpesfiscal/demo/validator/UsuarioValidator.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/AutXMLDTO.class
+com/vulpesfiscal/demo/controllers/dtos/ResultadoPesquisaVendaDTO.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/AvulsaDTO.class
 com/vulpesfiscal/demo/controllers/mappers/EmpresaResponseMapperImpl.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/ibscbs/gcredpresoper/gcbscredpres/GCBSCredPresDTO.class
@@ -172,6 +173,7 @@ com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/ibscbs/GCredPresIBSZFMDT
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/issqn/ISSQNDTO.class
 com/vulpesfiscal/demo/entities/enums/AmbienteSefazEmpresa.class
 com/vulpesfiscal/demo/services/EstabelecimentoService.class
+com/vulpesfiscal/demo/controllers/specs/VendaSpecs.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/obsitem/obscont/ObsContDTO.class
 com/vulpesfiscal/demo/exceptions/TributacaoNaoEncontradaParaUfException.class
 com/vulpesfiscal/demo/exceptions/TributacaoNaoPertenceAEmpresaException.class

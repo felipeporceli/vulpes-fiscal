@@ -13,30 +13,40 @@ import {
   TrendingUp,
   TrendingDown,
   ChevronRight,
+  ChevronDown,
   Menu,
   X,
   Landmark,
+  Receipt,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import EmpresasPage from './EmpresasPage';
 import ConsumidoresPage from './ConsumidoresPage';
 import EstabelecimentosPage from './EstabelecimentosPage';
 import ProdutosPage from './ProdutosPage';
+import VendasPage from './VendasPage';
+import TributacaoPage from './TributacaoPage';
 
 // ─── Itens de navegação base ──────────────────────────────────────────────────
 const BASE_NAV = [
   { id: 'dashboard',       icon: LayoutDashboard, label: 'Dashboard'        },
   { id: 'vendas',          icon: ShoppingCart,    label: 'Vendas'           },
   { id: 'nfce',            icon: FileText,        label: 'NFC-e'            },
-  { id: 'produtos',        icon: Package,         label: 'Produtos'         },
   { id: 'consumidores',    icon: Users,           label: 'Consumidores'     },
   { id: 'estabelecimentos',icon: Building2,       label: 'Estabelecimentos' },
   { id: 'configuracoes',   icon: Settings,        label: 'Configurações'    },
 ];
 
+const PRODUTOS_SUBNAV = [
+  { id: 'produtos',    icon: Package,  label: 'Produtos'    },
+  { id: 'tributacao',  icon: Receipt,  label: 'Tributação'  },
+];
+
 // ─── Sidebar ──────────────────────────────────────────────────────────────────
 function Sidebar({ collapsed, activePage, onNavigate }) {
   const { logout, user } = useAuth();
+  const produtosActive = activePage === 'produtos' || activePage === 'tributacao';
+  const [produtosOpen, setProdutosOpen] = useState(produtosActive);
 
   const navItems = [
     ...BASE_NAV,
@@ -44,6 +54,14 @@ function Sidebar({ collapsed, activePage, onNavigate }) {
       ? [{ id: 'empresas', icon: Landmark, label: 'Empresas' }]
       : []),
   ];
+
+  function handleProdutosClick() {
+    if (collapsed) {
+      onNavigate('produtos');
+    } else {
+      setProdutosOpen((v) => !v);
+    }
+  }
 
   return (
     <aside
@@ -87,6 +105,65 @@ function Sidebar({ collapsed, activePage, onNavigate }) {
             </button>
           );
         })}
+
+        {/* Produtos com submenu */}
+        <div>
+          <button
+            onClick={handleProdutosClick}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group ${
+              produtosActive
+                ? 'bg-vulpes-orange/15 text-white'
+                : 'text-slate-400 hover:text-white hover:bg-white/10'
+            }`}
+          >
+            <Package
+              size={19}
+              className={`flex-shrink-0 ${
+                produtosActive ? 'text-vulpes-orange' : 'group-hover:text-vulpes-orange transition-colors'
+              }`}
+            />
+            {!collapsed && <span className="truncate flex-1 text-left">Produtos</span>}
+            {!collapsed && (
+              <ChevronDown
+                size={14}
+                className={`flex-shrink-0 transition-transform duration-200 ${produtosOpen ? 'rotate-180' : ''}`}
+              />
+            )}
+          </button>
+
+          {!collapsed && (
+            <div
+              className="overflow-hidden transition-all duration-250 ease-in-out"
+              style={{ maxHeight: produtosOpen ? '120px' : '0px', opacity: produtosOpen ? 1 : 0 }}
+            >
+            <div className="ml-4 mt-0.5 space-y-0.5 border-l border-white/10 pl-3">
+              {PRODUTOS_SUBNAV.map((sub) => {
+                const active = activePage === sub.id;
+                return (
+                  <button
+                    key={sub.id}
+                    onClick={() => onNavigate(sub.id)}
+                    className={`w-full flex items-center gap-2.5 px-2 py-2 rounded-lg text-xs font-medium transition-all duration-200 group ${
+                      active
+                        ? 'bg-vulpes-orange/15 text-white'
+                        : 'text-slate-400 hover:text-white hover:bg-white/10'
+                    }`}
+                  >
+                    <sub.icon
+                      size={15}
+                      className={`flex-shrink-0 ${
+                        active ? 'text-vulpes-orange' : 'group-hover:text-vulpes-orange transition-colors'
+                      }`}
+                    />
+                    <span className="truncate">{sub.label}</span>
+                    {active && <span className="ml-auto w-1.5 h-1.5 rounded-full bg-vulpes-orange" />}
+                  </button>
+                );
+              })}
+            </div>
+            </div>
+          )}
+        </div>
       </nav>
 
       {/* Logout */}
@@ -242,9 +319,10 @@ export default function MainPage() {
     switch (activePage) {
       case 'dashboard':        return <DashboardContent />;
       case 'empresas':         return <EmpresasPage />;
-      case 'vendas':           return <ComingSoon label="Vendas" />;
+      case 'vendas':           return <VendasPage />;
       case 'nfce':             return <ComingSoon label="NFC-e" />;
       case 'produtos':         return <ProdutosPage />;
+      case 'tributacao':       return <TributacaoPage />;
       case 'consumidores':     return <ConsumidoresPage />;
       case 'estabelecimentos': return <EstabelecimentosPage />;
       case 'configuracoes':    return <ComingSoon label="Configurações" />;

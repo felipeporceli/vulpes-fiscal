@@ -4,12 +4,16 @@ import com.vulpesfiscal.demo.controllers.dtos.CadastroItemVendaDTO;
 import com.vulpesfiscal.demo.controllers.dtos.CadastroPagamentoDTO;
 import com.vulpesfiscal.demo.controllers.dtos.CadastroVendaDTO;
 import com.vulpesfiscal.demo.controllers.dtos.ConsumidorResponseDTO;
+import com.vulpesfiscal.demo.controllers.dtos.ResultadoPesquisaVendaDTO;
 import com.vulpesfiscal.demo.controllers.dtos.VendaResponseDTO;
 import com.vulpesfiscal.demo.entities.Consumidor;
 import com.vulpesfiscal.demo.entities.Empresa;
+import com.vulpesfiscal.demo.entities.Estabelecimento;
 import com.vulpesfiscal.demo.entities.ItemVenda;
 import com.vulpesfiscal.demo.entities.Pagamento;
 import com.vulpesfiscal.demo.entities.Venda;
+import com.vulpesfiscal.demo.entities.enums.MetodoPagamento;
+import com.vulpesfiscal.demo.entities.enums.StatusPagamento;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,7 +23,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-04-19T01:27:32-0300",
+    date = "2026-04-21T18:45:17-0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
 )
 @Component
@@ -51,6 +55,48 @@ public class VendaMapperImpl implements VendaMapper {
         VendaResponseDTO vendaResponseDTO = new VendaResponseDTO( id, dataCriacao, criadoPor, atualizadoEm, atualizadoPor, desconto, empresaId, consumidor );
 
         return vendaResponseDTO;
+    }
+
+    @Override
+    public ResultadoPesquisaVendaDTO toDTO(Venda venda) {
+        if ( venda == null ) {
+            return null;
+        }
+
+        Integer empresaId = null;
+        Integer estabelecimentoId = null;
+        Integer consumidorId = null;
+        String consumidorNome = null;
+        MetodoPagamento metodoPagamento = null;
+        StatusPagamento statusPagamento = null;
+        BigDecimal valorFinal = null;
+        BigDecimal desconto = null;
+        Integer id = null;
+        BigDecimal valorTotal = null;
+        Integer parcelas = null;
+        LocalDateTime dataCriacao = null;
+
+        empresaId = vendaEmpresaId( venda );
+        estabelecimentoId = vendaEstabelecimentoId( venda );
+        consumidorId = vendaConsumidorId( venda );
+        consumidorNome = vendaConsumidorNome( venda );
+        metodoPagamento = vendaPagamentoMetodoPagamento( venda );
+        statusPagamento = vendaPagamentoStatusPagamento( venda );
+        valorFinal = vendaPagamentoValorFinal( venda );
+        desconto = vendaPagamentoDesconto( venda );
+        id = venda.getId();
+        valorTotal = venda.getValorTotal();
+        parcelas = venda.getParcelas();
+        dataCriacao = venda.getDataCriacao();
+
+        Integer vendedorId = null;
+        String vendedorNome = null;
+        BigDecimal valorRecebido = null;
+        String usuarioNome = null;
+
+        ResultadoPesquisaVendaDTO resultadoPesquisaVendaDTO = new ResultadoPesquisaVendaDTO( id, empresaId, estabelecimentoId, valorTotal, parcelas, dataCriacao, consumidorId, consumidorNome, metodoPagamento, statusPagamento, valorFinal, desconto, vendedorId, vendedorNome, valorRecebido, usuarioNome );
+
+        return resultadoPesquisaVendaDTO;
     }
 
     @Override
@@ -94,6 +140,62 @@ public class VendaMapperImpl implements VendaMapper {
         ConsumidorResponseDTO consumidorResponseDTO = new ConsumidorResponseDTO( id, nome, cpf, email );
 
         return consumidorResponseDTO;
+    }
+
+    private Integer vendaEstabelecimentoId(Venda venda) {
+        Estabelecimento estabelecimento = venda.getEstabelecimento();
+        if ( estabelecimento == null ) {
+            return null;
+        }
+        return estabelecimento.getId();
+    }
+
+    private Integer vendaConsumidorId(Venda venda) {
+        Consumidor consumidor = venda.getConsumidor();
+        if ( consumidor == null ) {
+            return null;
+        }
+        return consumidor.getId();
+    }
+
+    private String vendaConsumidorNome(Venda venda) {
+        Consumidor consumidor = venda.getConsumidor();
+        if ( consumidor == null ) {
+            return null;
+        }
+        return consumidor.getNome();
+    }
+
+    private MetodoPagamento vendaPagamentoMetodoPagamento(Venda venda) {
+        Pagamento pagamento = venda.getPagamento();
+        if ( pagamento == null ) {
+            return null;
+        }
+        return pagamento.getMetodoPagamento();
+    }
+
+    private StatusPagamento vendaPagamentoStatusPagamento(Venda venda) {
+        Pagamento pagamento = venda.getPagamento();
+        if ( pagamento == null ) {
+            return null;
+        }
+        return pagamento.getStatusPagamento();
+    }
+
+    private BigDecimal vendaPagamentoValorFinal(Venda venda) {
+        Pagamento pagamento = venda.getPagamento();
+        if ( pagamento == null ) {
+            return null;
+        }
+        return pagamento.getValorFinal();
+    }
+
+    private BigDecimal vendaPagamentoDesconto(Venda venda) {
+        Pagamento pagamento = venda.getPagamento();
+        if ( pagamento == null ) {
+            return null;
+        }
+        return pagamento.getDesconto();
     }
 
     protected Pagamento cadastroPagamentoDTOToPagamento(CadastroPagamentoDTO cadastroPagamentoDTO) {

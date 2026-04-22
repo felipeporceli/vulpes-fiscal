@@ -25,6 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -155,6 +156,10 @@ public class UsuarioService {
         Usuario usuarioLogado = repository.findByEmail(login);
         usuario.setAtualizadoPor(usuarioLogado);
         repository.save(usuario);
+    }
+
+    public List<Usuario> listarVendedores(Integer empresaId) {
+        return repository.findVendedoresByEmpresaId(empresaId);
     }
 
     public void deletar(Integer id, Integer empresaId, Integer estabelecimentoId) {

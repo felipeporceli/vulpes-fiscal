@@ -9,6 +9,7 @@ import java.util.List;
 
 public record CadastroVendaDTO(
         Integer consumidorId,
+        Integer vendedorId,
         @Valid
         List<CadastroItemVendaDTO> itens,
         @Valid

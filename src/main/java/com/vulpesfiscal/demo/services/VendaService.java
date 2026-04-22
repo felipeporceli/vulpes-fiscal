@@ -2,30 +2,45 @@ package com.vulpesfiscal.demo.services;
 
 import com.vulpesfiscal.demo.controllers.dtos.CadastroItemVendaDTO;
 import com.vulpesfiscal.demo.controllers.dtos.CadastroVendaDTO;
+import com.vulpesfiscal.demo.controllers.dtos.ResultadoPesquisaVendaDTO;
 import com.vulpesfiscal.demo.controllers.dtos.nfce.InfNFe;
 import com.vulpesfiscal.demo.controllers.mappers.NfceMapper;
 import com.vulpesfiscal.demo.entities.*;
+import com.vulpesfiscal.demo.entities.enums.MetodoPagamento;
+import com.vulpesfiscal.demo.entities.enums.StatusPagamento;
 import com.vulpesfiscal.demo.entities.enums.MetodoPagamento;
 import com.vulpesfiscal.demo.entities.enums.StatusPagamento;
 import com.vulpesfiscal.demo.exceptions.*;
 import com.vulpesfiscal.demo.repositories.*;
 import com.vulpesfiscal.demo.security.SecurityService;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.criteria.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
 public class VendaService {
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     private final VendaRepository vendaRepository;
     private final ProdutoRepository produtoRepository;
@@ -123,7 +138,7 @@ public class VendaService {
             item.setVenda(venda);
             item.setProduto(produto);
             item.setQuantidade(BigDecimal.valueOf(itemDTO.quantidade()));
-            item.setCfop(itemDTO.cfop());
+            item.setCfop(itemDTO.cfop() != null ? itemDTO.cfop() : produto.getCfop());
             item.setValorUnitario(produto.getPreco());
 
             BigDecimal totalItem = produto.getPreco()
@@ -186,8 +201,93 @@ public class VendaService {
         Usuario usuarioLogado = usuarioRepository.findByEmail(login);
         venda.setUsuario(usuarioLogado);
 
+        // Vendedor responsável (opcional)
+        if (dto.vendedorId() != null) {
+            Usuario vendedor = usuarioRepository.findByIdAndEmpresaId(dto.vendedorId(), empresaId)
+                    .orElseThrow(() -> new UsuarioNaoEncontradoException("Vendedor não encontrado"));
+            vendaSalva.setVendedor(vendedor);
+        }
 
         return vendaRepository.save(vendaSalva);
+    }
+
+    public Page<ResultadoPesquisaVendaDTO> pesquisar(Integer empresaId,
+                                                     Integer estabelecimentoId,
+                                                     Integer consumidorId,
+                                                     LocalDateTime dataInicio,
+                                                     LocalDateTime dataFim,
+                                                     Integer pagina,
+                                                     Integer tamanhoPagina,
+                                                     String ordenarPor,
+                                                     String direcao) {
+        int tamanho = Math.min(tamanhoPagina, 100);
+
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+
+        // ── resultado ──
+        CriteriaQuery<ResultadoPesquisaVendaDTO> cq = cb.createQuery(ResultadoPesquisaVendaDTO.class);
+        Root<Venda> root = cq.from(Venda.class);
+        Join<Venda, Pagamento> pag   = root.join("pagamento", JoinType.LEFT);
+        Join<Venda, Usuario>   vend  = root.join("vendedor",  JoinType.LEFT);
+        Join<Venda, Usuario>   caixa = root.join("usuario",   JoinType.LEFT);
+
+        cq.select(cb.construct(ResultadoPesquisaVendaDTO.class,
+                root.get("id"),
+                root.get("empresa").get("id"),
+                root.get("estabelecimento").get("id"),
+                root.get("valorTotal"),
+                root.get("parcelas"),
+                root.get("dataCriacao"),
+                root.get("consumidor").get("id"),
+                root.get("consumidor").get("nome"),
+                pag.get("metodoPagamento"),
+                pag.get("statusPagamento"),
+                pag.get("valorFinal"),
+                pag.get("desconto"),
+                vend.get("id"),
+                vend.get("nome"),
+                pag.get("valorRecebido"),
+                caixa.get("nome")
+        ));
+
+        List<Predicate> predicates = buildPredicates(cb, root, empresaId, estabelecimentoId, consumidorId, dataInicio, dataFim);
+        if (!predicates.isEmpty()) cq.where(predicates.toArray(new Predicate[0]));
+
+        if (ordenarPor != null && !ordenarPor.isBlank()) {
+            cq.orderBy("desc".equalsIgnoreCase(direcao)
+                    ? cb.desc(root.get(ordenarPor))
+                    : cb.asc(root.get(ordenarPor)));
+        } else {
+            cq.orderBy(cb.desc(root.get("dataCriacao")));
+        }
+
+        List<ResultadoPesquisaVendaDTO> lista = entityManager.createQuery(cq)
+                .setFirstResult(pagina * tamanho)
+                .setMaxResults(tamanho)
+                .getResultList();
+
+        // ── contagem ──
+        CriteriaQuery<Long> countCq = cb.createQuery(Long.class);
+        Root<Venda> countRoot = countCq.from(Venda.class);
+        countCq.select(cb.count(countRoot));
+        List<Predicate> countPreds = buildPredicates(cb, countRoot, empresaId, estabelecimentoId, consumidorId, dataInicio, dataFim);
+        if (!countPreds.isEmpty()) countCq.where(countPreds.toArray(new Predicate[0]));
+        Long total = entityManager.createQuery(countCq).getSingleResult();
+
+        return new PageImpl<>(lista, PageRequest.of(pagina, tamanho), total);
+    }
+
+    private List<Predicate> buildPredicates(CriteriaBuilder cb, Root<Venda> root,
+                                             Integer empresaId, Integer estabelecimentoId,
+                                             Integer consumidorId,
+                                             LocalDateTime dataInicio, LocalDateTime dataFim) {
+        List<Predicate> predicates = new ArrayList<>();
+        if (empresaId != null)         predicates.add(cb.equal(root.get("empresa").get("id"), empresaId));
+        if (estabelecimentoId != null) predicates.add(cb.equal(root.get("estabelecimento").get("id"), estabelecimentoId));
+        if (consumidorId != null)      predicates.add(cb.equal(root.get("consumidor").get("id"), consumidorId));
+        if (dataInicio != null)        predicates.add(cb.greaterThanOrEqualTo(root.get("dataCriacao"), dataInicio));
+        if (dataFim != null)           predicates.add(cb.lessThanOrEqualTo(root.get("dataCriacao"), dataFim));
+        return predicates;
     }
 
     // -------- MÉTODOS PRIVADOS --------

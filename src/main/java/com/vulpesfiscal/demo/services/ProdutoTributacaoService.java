@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -146,6 +147,28 @@ public class ProdutoTributacaoService {
                 ));
     }
 
+    @Transactional(readOnly = true)
+    public List<ProdutoTributacao> listarTodas() {
+        return produtoTributacaoRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProdutoTributacao> listarPorEmpresa(Integer empresaId) {
+        return produtoTributacaoRepository.findAllByEmpresaId(empresaId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProdutoTributacao> listarPorProduto(Integer empresaId, Integer idProduto) {
+        List<ProdutoTributacao> result =
+                produtoTributacaoRepository.findByEmpresaAndIdProduto(empresaId, idProduto);
+
+        System.out.println("[listarPorProduto] empresaId=" + empresaId
+                + " idProduto=" + idProduto
+                + " encontrados=" + result.size());
+
+        return result;
+    }
+
     // -------- MÉTODOS PRIVADOS --------
 
     private Produto buscarProdutoPorReferencia(Integer empresaId, Integer idProdutoReferencia) {
@@ -161,6 +184,7 @@ public class ProdutoTributacaoService {
     }
 
     private void preencherCampos(ProdutoTributacao tributacao, CadastroProdutoTributacaoDTO dto) {
+        tributacao.setNome(dto.getNome());
         tributacao.setUf(normalizarUf(dto.getUf()));
         tributacao.setCfop(dto.getCfop());
         tributacao.setCstIcms(dto.getCstIcms());

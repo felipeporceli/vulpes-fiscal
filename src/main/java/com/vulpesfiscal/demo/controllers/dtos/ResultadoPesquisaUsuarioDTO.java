@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 public record ResultadoPesquisaUsuarioDTO(
+        Integer id,
         Integer perfilId,
         Integer empresaId,
         Integer estabelecimentoId,
