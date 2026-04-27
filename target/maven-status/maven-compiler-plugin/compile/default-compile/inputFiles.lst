@@ -1,6 +1,9 @@
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/VulpesFiscalApplication.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/common/CustomAccessDeniedHandler.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/common/GlobalExceptionHandler.java
+/home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/config/AppConfig.java
+/home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/config/EncryptionProperties.java
+/home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/config/FocusNfceProperties.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/configuration/AuthorizationServerConfiguration.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/configuration/OpenApiConfiguration.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/configuration/RsaKeyProperties.java
@@ -12,8 +15,10 @@
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/EmpresaController.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/EstabelecimentoController.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/LoginViewController.java
+/home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/NfceController.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/PagamentoController.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/ProdutoController.java
+/home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/ProdutoTributacaoAdminController.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/ProdutoTributacaoController.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/UsuarioController.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/VendaController.java
@@ -40,11 +45,17 @@
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/ResultadoPesquisaConsumidorDTO.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/ResultadoPesquisaEmpresaDTO.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/ResultadoPesquisaEstabelecimentoDTO.java
+/home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/ResultadoPesquisaNfceDTO.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/ResultadoPesquisaPagamentoDTO.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/ResultadoPesquisaProdutoDTO.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/ResultadoPesquisaProdutoTributacaoDTO.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/ResultadoPesquisaUsuarioDTO.java
+/home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/ResultadoPesquisaVendaDTO.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/VendaResponseDTO.java
+/home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/focusnfe/FocusNfceFormaPagamentoDTO.java
+/home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/focusnfe/FocusNfceItemDTO.java
+/home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/focusnfe/FocusNfceRequestDTO.java
+/home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/focusnfe/FocusNfceResponseDTO.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/nfce/AutXMLDTO.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/nfce/AvulsaDTO.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/nfce/DestDTO.java
@@ -168,6 +179,7 @@
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/specs/PagamentoSpecs.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/specs/ProdutoSpecs.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/specs/UsuarioSpecs.java
+/home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/specs/VendaSpecs.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/entities/Client.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/entities/Consumidor.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/entities/Empresa.java
@@ -223,6 +235,7 @@
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/security/JwtTokenCustomizer.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/security/PemUtils.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/security/SecurityService.java
+/home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/security/TokenEncryptionConverter.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/security/oauth2/OAuth2ResourceOwnerPasswordAuthenticationConverter.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/security/oauth2/OAuth2ResourceOwnerPasswordAuthenticationProvider.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/security/oauth2/OAuth2ResourceOwnerPasswordAuthenticationToken.java

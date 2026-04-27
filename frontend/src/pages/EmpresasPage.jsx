@@ -122,6 +122,7 @@ function CreateModal({ token, onClose, onSaved }) {
     porte:             '',
     ambienteSefaz:     'PRODUCAO',
     dataAbertura:      '',
+    tokenFocusNfe:     '',
   };
   const [form,    setForm]    = useState(EMPTY);
   const [loading, setLoading] = useState(false);
@@ -185,6 +186,7 @@ function CreateModal({ token, onClose, onSaved }) {
         body: JSON.stringify({
           ...form,
           cnpj: form.cnpj.replace(/\D/g, ''),
+          tokenFocusNfe: form.tokenFocusNfe.trim() || null,
         }),
       });
       if (!res.ok) {
@@ -312,6 +314,16 @@ function CreateModal({ token, onClose, onSaved }) {
                   className={errCls('dataAbertura')}
                   placeholder="dd/MM/yyyy"
                   maxLength={10}
+                />
+              )}
+            </div>
+            <div className="sm:col-span-2">
+              {field('tokenFocusNfe', 'Token FocusNFE', false,
+                <input
+                  value={form.tokenFocusNfe}
+                  onChange={set('tokenFocusNfe')}
+                  className={inputCls('font-mono')}
+                  placeholder="Token da sua conta FocusNFE (opcional)"
                 />
               )}
             </div>

@@ -40,7 +40,7 @@ public class EstabelecimentoController implements ControllerGenerico{
     Em caso de sucesso, retorna HTTP 201 com a URL do novo recurso no header Location. */
     @PreAuthorize(
             "hasAnyRole('ADMINISTRADOR','SUPORTE') or " +
-                    "(hasAnyRole('EMPRESARIO') and " +
+                    "(hasAnyRole('EMPRESARIO','GERENTE') and " +
                     "#empresaId.toString() == principal.claims['empresaId'].toString())"
     )
 
@@ -65,6 +65,33 @@ public class EstabelecimentoController implements ControllerGenerico{
         return ResponseEntity.created(location).build();
     }
 
+    /* Pesquisa global de estabelecimentos — exclusiva para ADMINISTRADOR e SUPORTE. */
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR','SUPORTE')")
+    @Operation(summary = "Pesquisa global de Estabelecimentos.", description = "Pesquisa estabelecimentos sem restrição de empresa (ADMINISTRADOR/SUPORTE).")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso."),
+            @ApiResponse(responseCode = "403", description = "Usuario nao possui permissao para esse recurso."),
+    })
+    @GetMapping
+    public ResponseEntity<Page<ResultadoPesquisaEstabelecimentoDTO>> pesquisaGlobal(
+            @RequestParam(value = "empresa-id",   required = false)                      Integer empresaId,
+            @RequestParam(value = "cnpj",         required = false)                      String cnpj,
+            @RequestParam(value = "nome-fantasia", required = false)                     String nomeFantasia,
+            @RequestParam(value = "cidade",       required = false)                      String cidade,
+            @RequestParam(value = "estado",       required = false)                      String estado,
+            @RequestParam(value = "status",       required = false)                      StatusEmpresa status,
+            @RequestParam(value = "matriz",       required = false)                      Boolean matriz,
+            @RequestParam(value = "pagina",       defaultValue = "0")                    Integer pagina,
+            @RequestParam(value = "tamanho-pagina", defaultValue = "10")                Integer tamanhoPagina,
+            @RequestParam(value = "ordenar-por",  required = false)                      String ordenarPor,
+            @RequestParam(value = "direcao",      required = false, defaultValue = "asc") String direcao
+    ) {
+        Page<Estabelecimento> paginaResultado = service.pesquisar(
+                cnpj, nomeFantasia, cidade, estado, status, matriz,
+                pagina, tamanhoPagina, empresaId, ordenarPor, direcao);
+        return ResponseEntity.ok(paginaResultado.map(mapper::toDTO));
+    }
+
     /* Obter detalhes por ID obtendo filtros opcionais pela URL, busca Estabelecimentos paginadas no banco e devolve o
     resultado convertido para DTO. */
     @PreAuthorize(
@@ -72,55 +99,29 @@ public class EstabelecimentoController implements ControllerGenerico{
                     "(hasAnyRole('EMPRESARIO','GERENTE','CAIXA','VENDEDOR') and " +
                     "#empresaId.toString() == principal.claims['empresaId'].toString())"
     )
-
     @Operation(summary = "Obter informacoes do Estabelecimento.", description = "Obter informacoes do Estabelecimento por filtros")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso."),
-            @ApiResponse(responseCode = "422", description = "Estabelecimento já cadastrado com o CNPJ."),
             @ApiResponse(responseCode = "403", description = "Usuario nao possui permissao para esse recurso."),
-
     })
-
     @GetMapping("/empresa/{empresaId}")
-    public ResponseEntity<Page<ResultadoPesquisaEstabelecimentoDTO>> pesquisa (
-            @RequestParam (value = "cnpj", required = false)
-            String cnpj,
-
-            @RequestParam (value = "nome-fantasia", required = false)
-            String nomeFantasia,
-
-            @RequestParam (value = "cidade", required = false)
-            String cidade,
-
-            @RequestParam (value = "estado", required = false)
-            String estado,
-
-            @RequestParam (value = "status", required = false)
-            StatusEmpresa status,
-
-            @RequestParam (value = "matriz", required = false)
-            Boolean matriz,
-
-            @RequestParam (value = "pagina", defaultValue = "0")
-            Integer pagina,
-
-            @RequestParam (value = "tamanho-pagina", defaultValue = "10")
-            Integer tamanhoPagina,
-
+    public ResponseEntity<Page<ResultadoPesquisaEstabelecimentoDTO>> pesquisa(
+            @RequestParam(value = "cnpj",         required = false) String cnpj,
+            @RequestParam(value = "nome-fantasia", required = false) String nomeFantasia,
+            @RequestParam(value = "cidade",       required = false) String cidade,
+            @RequestParam(value = "estado",       required = false) String estado,
+            @RequestParam(value = "status",       required = false) StatusEmpresa status,
+            @RequestParam(value = "matriz",       required = false) Boolean matriz,
+            @RequestParam(value = "pagina",       defaultValue = "0") Integer pagina,
+            @RequestParam(value = "tamanho-pagina", defaultValue = "10") Integer tamanhoPagina,
+            @RequestParam(value = "ordenar-por",  required = false) String ordenarPor,
+            @RequestParam(value = "direcao",      required = false, defaultValue = "asc") String direcao,
             @PathVariable Integer empresaId
     ) {
         Page<Estabelecimento> paginaResultado = service.pesquisar(
-                cnpj,
-                nomeFantasia,
-                cidade,
-                estado,
-                status,
-                matriz,
-                pagina,
-                tamanhoPagina,
-                empresaId);
-        Page<ResultadoPesquisaEstabelecimentoDTO> resultado = paginaResultado.map(mapper::toDTO);
-        return ResponseEntity.ok(resultado);
+                cnpj, nomeFantasia, cidade, estado, status, matriz,
+                pagina, tamanhoPagina, empresaId, ordenarPor, direcao);
+        return ResponseEntity.ok(paginaResultado.map(mapper::toDTO));
     }
 
 

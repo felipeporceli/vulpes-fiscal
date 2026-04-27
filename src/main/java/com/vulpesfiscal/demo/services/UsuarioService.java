@@ -1,5 +1,6 @@
 package com.vulpesfiscal.demo.services;
 
+import com.vulpesfiscal.demo.controllers.dtos.AtualizacaoPerfilDTO;
 import com.vulpesfiscal.demo.controllers.dtos.AtualizacaoUsuarioDTO;
 import com.vulpesfiscal.demo.controllers.dtos.CadastroUsuarioDTO;
 import com.vulpesfiscal.demo.controllers.mappers.UsuarioMapper;
@@ -25,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -157,6 +159,10 @@ public class UsuarioService {
         repository.save(usuario);
     }
 
+    public List<Usuario> listarVendedores(Integer empresaId) {
+        return repository.findVendedoresByEmpresaId(empresaId);
+    }
+
     public void deletar(Integer id, Integer empresaId, Integer estabelecimentoId) {
         validator.validarPesquisar(empresaId, estabelecimentoId);
         repository.delete(validator.pesquisarPorId(id));
@@ -164,6 +170,16 @@ public class UsuarioService {
 
     public Usuario obterPorEmail (String email) {
         return repository.findByEmail(email);
+    }
+
+    @Transactional
+    public void atualizarMeuPerfil(String email, AtualizacaoPerfilDTO dto) {
+        Usuario usuario = repository.findByEmail(email);
+        if (usuario == null) throw new UsuarioNaoEncontradoException("Usuário não encontrado.");
+        if (dto.nome()     != null && !dto.nome().isBlank())     usuario.setNome(dto.nome());
+        if (dto.telefone() != null)                              usuario.setTelefone(dto.telefone());
+        if (dto.senha()    != null && !dto.senha().isBlank())    usuario.setSenha(encoder.encode(dto.senha()));
+        repository.save(usuario);
     }
 
 }

@@ -145,7 +145,10 @@ public class EmpresaService {
                 );
     }
 
-
-
-
+    public void salvarTokenFocusNfe(Integer empresaId, String token) {
+        Empresa empresa = repository.findById(empresaId)
+                .orElseThrow(() -> new RecursoNaoEncontradoException("Empresa não encontrada."));
+        empresa.setTokenFocusNfe(token);
+        repository.save(empresa);
+    }
 }

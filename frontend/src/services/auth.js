@@ -10,16 +10,34 @@ const REFRESH_KEY = 'vf_refresh_token';
 
 // ─── Token storage ─────────────────────────────────────────────────────────────
 
+function isTokenExpired(token) {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+    return payload.exp * 1000 < Date.now();
+  } catch {
+    return true;
+  }
+}
+
 export const storeTokens = ({ access_token, refresh_token }) => {
-  localStorage.setItem(TOKEN_KEY, access_token);
-  if (refresh_token) localStorage.setItem(REFRESH_KEY, refresh_token);
+  sessionStorage.setItem(TOKEN_KEY, access_token);
+  if (refresh_token) sessionStorage.setItem(REFRESH_KEY, refresh_token);
 };
 
-export const getStoredToken = () => localStorage.getItem(TOKEN_KEY);
+export const getStoredToken = () => {
+  const token = sessionStorage.getItem(TOKEN_KEY);
+  if (!token) return null;
+  if (isTokenExpired(token)) {
+    sessionStorage.removeItem(TOKEN_KEY);
+    sessionStorage.removeItem(REFRESH_KEY);
+    return null;
+  }
+  return token;
+};
 
 export const removeTokens = () => {
-  localStorage.removeItem(TOKEN_KEY);
-  localStorage.removeItem(REFRESH_KEY);
+  sessionStorage.removeItem(TOKEN_KEY);
+  sessionStorage.removeItem(REFRESH_KEY);
 };
 
 export const getAuthHeaders = () => ({
@@ -102,7 +120,7 @@ export const exchangeCodeForToken = async (code) => {
 // ─── Refresh Token ─────────────────────────────────────────────────────────────
 
 export const refreshAccessToken = async () => {
-  const refreshToken = localStorage.getItem(REFRESH_KEY);
+  const refreshToken = sessionStorage.getItem(REFRESH_KEY);
   if (!refreshToken) throw new Error('Sessão expirada.');
 
   const body = new URLSearchParams({

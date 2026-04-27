@@ -24,11 +24,11 @@ public class Venda {
     private Integer id;
 
     // OneToOne
-    @OneToOne(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "venda", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Pagamento pagamento;
 
     // OneToOne
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "nfce_id")
     private Nfce nfce;
 
@@ -64,9 +64,13 @@ public class Venda {
     @Column(name = "criado_em")
     private LocalDateTime dataCriacao;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "criado_por")
     private Usuario usuario;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vendedor_id")
+    private Usuario vendedor;
 
     @LastModifiedDate
     @Column(name = "atualizado_em")

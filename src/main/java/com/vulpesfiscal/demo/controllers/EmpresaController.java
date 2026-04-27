@@ -147,5 +147,21 @@ public class EmpresaController implements ControllerGenerico{
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR','SUPORTE')")
+    @Operation(summary = "Configurar token FocusNFE da empresa.", description = "Salva o token da conta FocusNFE vinculado à empresa. O token é armazenado criptografado.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Token configurado com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Empresa não encontrada."),
+            @ApiResponse(responseCode = "403", description = "Usuário não possui permissão."),
+    })
+    @PatchMapping("/{empresaId}/token-focus-nfe")
+    public ResponseEntity<Void> configurarTokenFocusNfe(
+            @PathVariable Integer empresaId,
+            @RequestBody TokenFocusNfeDTO dto
+    ) {
+        service.salvarTokenFocusNfe(empresaId, dto.token());
+        return ResponseEntity.noContent().build();
+    }
 
+    record TokenFocusNfeDTO(String token) {}
 }

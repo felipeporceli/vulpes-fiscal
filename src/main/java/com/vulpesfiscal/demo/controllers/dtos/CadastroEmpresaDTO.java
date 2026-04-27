@@ -46,6 +46,8 @@ public record CadastroEmpresaDTO (
         @JsonFormat(pattern = "dd/MM/yyyy")
         @NotNull
         @Past(message = "Não pode ser data futura")
-        LocalDate dataAbertura
+        LocalDate dataAbertura,
+
+        String tokenFocusNfe
 ){
 }

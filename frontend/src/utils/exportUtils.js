@@ -65,6 +65,26 @@ export const EXPORT_COLUMNS = [
   { header: 'CNAE',               key: 'cnae'              },
 ];
 
+// ─── Colunas de Estabelecimento (o campo `id` é intencionalmente omitido) ────
+export const ESTABELECIMENTO_EXPORT_COLUMNS = [
+  { header: 'Nome Fantasia',       key: 'nomeFantasia'       },
+  { header: 'CNPJ',                key: 'cnpj'               },
+  { header: 'Telefone',            key: 'telefone'           },
+  { header: 'E-mail',              key: 'email'              },
+  { header: 'Inscrição Estadual',  key: 'inscricaoEstadual'  },
+  { header: 'Inscrição Municipal', key: 'inscricaoMunicipal' },
+  { header: 'Logradouro',          key: 'logradouro'         },
+  { header: 'Número',              key: 'numero'             },
+  { header: 'Bairro',              key: 'bairro'             },
+  { header: 'Cidade',              key: 'cidade'             },
+  { header: 'Estado',              key: 'estado'             },
+  { header: 'CEP',                 key: 'cep'                },
+  { header: 'Status',              key: 'status'             },
+  { header: 'Tipo',                key: 'matriz'             },
+  { header: 'Data de Abertura',    key: 'dataAbertura'       },
+  { header: 'Data de Fechamento',  key: 'dataFechamento'     },
+];
+
 // ─── Colunas de Consumidor (o campo `id` é intencionalmente omitido) ─────────
 export const CONSUMIDOR_EXPORT_COLUMNS = [
   { header: 'Nome',               key: 'nome'              },
@@ -132,6 +152,28 @@ function toRow(e) {
     sanitize(e.status),
     sanitize(e.dataAbertura),
     sanitize(e.cnae),
+  ];
+}
+
+/** Mapeia estabelecimento → array de strings sanitizadas na ordem de ESTABELECIMENTO_EXPORT_COLUMNS. */
+function toRowEstabelecimento(e) {
+  return [
+    sanitize(e.nomeFantasia),
+    sanitize(fmtCnpj(e.cnpj)),
+    sanitize(e.telefone),
+    sanitize(e.email),
+    sanitize(e.inscricaoEstadual),
+    sanitize(e.inscricaoMunicipal),
+    sanitize(e.logradouro),
+    sanitize(e.numero),
+    sanitize(e.bairro),
+    sanitize(e.cidade),
+    sanitize(e.estado),
+    sanitize(e.cep),
+    sanitize(e.status),
+    sanitize(e.matriz ? 'Matriz' : 'Filial'),
+    sanitize(e.dataAbertura),
+    sanitize(e.dataFechamento),
   ];
 }
 
@@ -296,4 +338,133 @@ export function exportXlsxConsumidor(data, baseName = 'consumidores') {
     { wch: 20 }, // Bairro
     { wch: 20 }, // Inscrição Estadual
   ], 'Consumidores', baseName);
+}
+
+// ─── Colunas de Produto (o campo `id` é intencionalmente omitido) ─────────────
+export const PRODUTO_EXPORT_COLUMNS = [
+  { header: 'ID Produto',    key: 'idProduto'    },
+  { header: 'Descrição',     key: 'descricao'    },
+  { header: 'Código Barras', key: 'codigoBarras' },
+  { header: 'NCM',           key: 'ncm'          },
+  { header: 'CFOP',          key: 'cfop'         },
+  { header: 'CEST',          key: 'cest'         },
+  { header: 'Orig',          key: 'orig'         },
+  { header: 'Unidade',       key: 'unidade'      },
+  { header: 'Preço',         key: 'preco'        },
+  { header: 'Estoque',       key: 'qtdEstoque'   },
+  { header: 'Ativo',         key: 'ativo'        },
+];
+
+/** Mapeia produto → array de strings sanitizadas na ordem de PRODUTO_EXPORT_COLUMNS. */
+function toRowProduto(p) {
+  return [
+    sanitize(p.idProduto),
+    sanitize(p.descricao),
+    sanitize(p.codigoBarras),
+    sanitize(p.ncm),
+    sanitize(p.cfop),
+    sanitize(p.cest),
+    sanitize(p.orig),
+    sanitize(p.unidade),
+    sanitize(p.preco),
+    sanitize(p.qtdEstoque),
+    sanitize(p.ativo ? 'Sim' : 'Não'),
+  ];
+}
+
+// ─── Colunas de Venda ─────────────────────────────────────────────────────────
+export const VENDA_EXPORT_COLUMNS = [
+  { header: 'ID Venda',          key: 'id'              },
+  { header: 'Consumidor',        key: 'consumidorNome'  },
+  { header: 'Valor Total',       key: 'valorTotal'      },
+  { header: 'Desconto',          key: 'desconto'        },
+  { header: 'Valor Final',       key: 'valorFinal'      },
+  { header: 'Parcelas',          key: 'parcelas'        },
+  { header: 'Método Pagamento',  key: 'metodoPagamento' },
+  { header: 'Status Pagamento',  key: 'statusPagamento' },
+  { header: 'Data Criação',      key: 'dataCriacao'     },
+];
+
+/** Mapeia venda → array de strings sanitizadas na ordem de VENDA_EXPORT_COLUMNS. */
+function toRowVenda(v) {
+  return [
+    sanitize(v.id),
+    sanitize(v.consumidorNome),
+    sanitize(v.valorTotal != null ? Number(v.valorTotal).toFixed(2) : ''),
+    sanitize(v.desconto    != null ? Number(v.desconto).toFixed(2)   : '0,00'),
+    sanitize(v.valorFinal  != null ? Number(v.valorFinal).toFixed(2) : ''),
+    sanitize(v.parcelas),
+    sanitize(v.metodoPagamento),
+    sanitize(v.statusPagamento),
+    sanitize(v.dataCriacao ? new Date(v.dataCriacao).toLocaleString('pt-BR') : ''),
+  ];
+}
+
+/** Exporta array de vendas como CSV. */
+export function exportCsvVenda(data, baseName = 'vendas') {
+  exportCsvInternal(data, VENDA_EXPORT_COLUMNS, toRowVenda, baseName);
+}
+
+/** Exporta array de vendas como XLSX. */
+export function exportXlsxVenda(data, baseName = 'vendas') {
+  exportXlsxInternal(data, VENDA_EXPORT_COLUMNS, toRowVenda, [
+    { wch: 10 }, // ID Venda
+    { wch: 32 }, // Consumidor
+    { wch: 14 }, // Valor Total
+    { wch: 12 }, // Desconto
+    { wch: 14 }, // Valor Final
+    { wch: 10 }, // Parcelas
+    { wch: 22 }, // Método Pagamento
+    { wch: 18 }, // Status Pagamento
+    { wch: 20 }, // Data Criação
+  ], 'Vendas', baseName);
+}
+
+/** Exporta array de produtos como CSV. */
+export function exportCsvProduto(data, baseName = 'produtos') {
+  exportCsvInternal(data, PRODUTO_EXPORT_COLUMNS, toRowProduto, baseName);
+}
+
+/** Exporta array de produtos como XLSX. */
+export function exportXlsxProduto(data, baseName = 'produtos') {
+  exportXlsxInternal(data, PRODUTO_EXPORT_COLUMNS, toRowProduto, [
+    { wch: 12 }, // ID Produto
+    { wch: 36 }, // Descrição
+    { wch: 18 }, // Código Barras
+    { wch: 10 }, // NCM
+    { wch: 8  }, // CFOP
+    { wch: 14 }, // CEST
+    { wch: 6  }, // Orig
+    { wch: 10 }, // Unidade
+    { wch: 14 }, // Preço
+    { wch: 10 }, // Estoque
+    { wch: 8  }, // Ativo
+  ], 'Produtos', baseName);
+}
+
+/** Exporta array de estabelecimentos como CSV. */
+export function exportCsvEstabelecimento(data, baseName = 'estabelecimentos') {
+  exportCsvInternal(data, ESTABELECIMENTO_EXPORT_COLUMNS, toRowEstabelecimento, baseName);
+}
+
+/** Exporta array de estabelecimentos como XLSX. */
+export function exportXlsxEstabelecimento(data, baseName = 'estabelecimentos') {
+  exportXlsxInternal(data, ESTABELECIMENTO_EXPORT_COLUMNS, toRowEstabelecimento, [
+    { wch: 32 }, // Nome Fantasia
+    { wch: 20 }, // CNPJ
+    { wch: 18 }, // Telefone
+    { wch: 32 }, // E-mail
+    { wch: 20 }, // Inscrição Estadual
+    { wch: 20 }, // Inscrição Municipal
+    { wch: 36 }, // Logradouro
+    { wch: 8  }, // Número
+    { wch: 20 }, // Bairro
+    { wch: 24 }, // Cidade
+    { wch: 8  }, // Estado
+    { wch: 12 }, // CEP
+    { wch: 12 }, // Status
+    { wch: 10 }, // Tipo
+    { wch: 18 }, // Data de Abertura
+    { wch: 18 }, // Data de Fechamento
+  ], 'Estabelecimentos', baseName);
 }

@@ -5,6 +5,7 @@ import com.vulpesfiscal.demo.entities.enums.AmbienteSefazEmpresa;
 import com.vulpesfiscal.demo.entities.enums.PorteEmpresa;
 import com.vulpesfiscal.demo.entities.enums.RegimeTributarioEmpresa;
 import com.vulpesfiscal.demo.entities.enums.StatusEmpresa;
+import com.vulpesfiscal.demo.security.TokenEncryptionConverter;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
@@ -71,6 +72,10 @@ public class Empresa {
 
     @Column (name = "uf", nullable = false)
     private String uf;
+
+    @Convert(converter = TokenEncryptionConverter.class)
+    @Column(name = "token_focus_nfe", length = 500)
+    private String tokenFocusNfe;
 
     @Column(name = "data_abertura", nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")

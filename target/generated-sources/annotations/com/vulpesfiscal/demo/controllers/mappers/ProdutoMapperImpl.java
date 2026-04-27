@@ -3,6 +3,7 @@ package com.vulpesfiscal.demo.controllers.mappers;
 import com.vulpesfiscal.demo.controllers.dtos.AtualizacaoProdutoDTO;
 import com.vulpesfiscal.demo.controllers.dtos.CadastroProdutoDTO;
 import com.vulpesfiscal.demo.controllers.dtos.ResultadoPesquisaProdutoDTO;
+import com.vulpesfiscal.demo.entities.Empresa;
 import com.vulpesfiscal.demo.entities.Produto;
 import java.math.BigDecimal;
 import javax.annotation.processing.Generated;
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-04-19T00:22:50-0300",
+    date = "2026-04-26T22:16:43-0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
 )
 @Component
@@ -22,19 +23,23 @@ public class ProdutoMapperImpl implements ProdutoMapper {
             return null;
         }
 
+        Integer empresaId = null;
+        Integer idProduto = null;
         String descricao = null;
         String codigoBarras = null;
-        Integer idProduto = null;
         Integer ncm = null;
         Integer cfop = null;
         String unidade = null;
         BigDecimal preco = null;
         boolean ativo = false;
         Integer qtdEstoque = null;
+        String cest = null;
+        Integer orig = null;
 
+        empresaId = produtoEmpresaId( produto );
+        idProduto = produto.getIdProduto();
         descricao = produto.getDescricao();
         codigoBarras = produto.getCodigoBarras();
-        idProduto = produto.getIdProduto();
         if ( produto.getNcm() != null ) {
             ncm = Integer.parseInt( produto.getNcm() );
         }
@@ -43,8 +48,10 @@ public class ProdutoMapperImpl implements ProdutoMapper {
         preco = produto.getPreco();
         ativo = produto.isAtivo();
         qtdEstoque = produto.getQtdEstoque();
+        cest = produto.getCest();
+        orig = produto.getOrig();
 
-        ResultadoPesquisaProdutoDTO resultadoPesquisaProdutoDTO = new ResultadoPesquisaProdutoDTO( descricao, codigoBarras, idProduto, ncm, cfop, unidade, preco, ativo, qtdEstoque );
+        ResultadoPesquisaProdutoDTO resultadoPesquisaProdutoDTO = new ResultadoPesquisaProdutoDTO( empresaId, idProduto, descricao, codigoBarras, ncm, cfop, unidade, preco, ativo, qtdEstoque, cest, orig );
 
         return resultadoPesquisaProdutoDTO;
     }
@@ -116,5 +123,13 @@ public class ProdutoMapperImpl implements ProdutoMapper {
         }
 
         return produto;
+    }
+
+    private Integer produtoEmpresaId(Produto produto) {
+        Empresa empresa = produto.getEmpresa();
+        if ( empresa == null ) {
+            return null;
+        }
+        return empresa.getId();
     }
 }

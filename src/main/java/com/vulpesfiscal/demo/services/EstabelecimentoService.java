@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -58,45 +59,52 @@ public class EstabelecimentoService {
 
     // Metodo para pesquisar com filtro a nível de serviço.
     public Page<Estabelecimento> pesquisar(String cnpj,
-                                   String nomeFantasia,
-                                   String cidade,
-                                   String estado,
-                                   StatusEmpresa status,
-                                   Boolean matriz,
-                                   Integer pagina,
-                                   Integer tamanhoPagina,
-                                           Integer empresaId) {
-        // SELECT * FROM Estabelecimento WHERE 0 = 0
+                                           String nomeFantasia,
+                                           String cidade,
+                                           String estado,
+                                           StatusEmpresa status,
+                                           Boolean matriz,
+                                           Integer pagina,
+                                           Integer tamanhoPagina,
+                                           Integer empresaId,
+                                           String ordenarPor,
+                                           String direcao) {
+        tamanhoPagina = Math.min(tamanhoPagina, 100);
+
         Specification<Estabelecimento> specification = Specification.where
                 ((root, query, cb) -> cb.conjunction());
 
-        specification = specification.and(EstabelecimentoSpecs.empresaIdIgual(empresaId));
+        if (empresaId != null) {
+            specification = specification.and(EstabelecimentoSpecs.empresaIdIgual(empresaId));
+        }
 
         if (cnpj != null) {
             specification = specification.and(EstabelecimentoSpecs.cnpjIgual(cnpj));
-
         }
         if (nomeFantasia != null) {
             specification = specification.and(EstabelecimentoSpecs.nomeFantasiaLike(nomeFantasia));
         }
-
         if (cidade != null) {
             specification = specification.and(EstabelecimentoSpecs.cidadeLike(cidade));
         }
-
         if (estado != null) {
             specification = specification.and(EstabelecimentoSpecs.estadoIgual(estado));
         }
-
         if (status != null) {
             specification = specification.and(EstabelecimentoSpecs.statusIgual(status));
         }
-
         if (matriz != null) {
             specification = specification.and(EstabelecimentoSpecs.matrizIgual(matriz));
         }
 
-        Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina);
+        Sort sort = Sort.unsorted();
+        if (ordenarPor != null && !ordenarPor.isBlank()) {
+            sort = "desc".equalsIgnoreCase(direcao)
+                    ? Sort.by(ordenarPor).descending()
+                    : Sort.by(ordenarPor).ascending();
+        }
+
+        Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina, sort);
         return repository.findAll(specification, pageRequest);
     }
 

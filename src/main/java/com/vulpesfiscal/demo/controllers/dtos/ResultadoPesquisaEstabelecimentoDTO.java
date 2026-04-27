@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 public record ResultadoPesquisaEstabelecimentoDTO(
         Integer id,
+        Integer empresaId,
         String nomeFantasia,
         String cnpj,
         String telefone,

@@ -19,9 +19,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -33,6 +35,23 @@ public class UsuarioController implements ControllerGenerico {
     private final UsuarioMapper mapper;
     private final UsuarioValidator validator;
 
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/me")
+    @Operation(summary = "Obter perfil do usuário autenticado")
+    public ResponseEntity<ResultadoPesquisaUsuarioDTO> obterMeuPerfil(Authentication auth) {
+        Usuario usuario = service.obterPorEmail(auth.getName());
+        if (usuario == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(mapper.toDTO(usuario));
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PatchMapping("/me")
+    @Operation(summary = "Atualizar perfil do usuário autenticado")
+    public ResponseEntity<Void> atualizarMeuPerfil(@RequestBody AtualizacaoPerfilDTO dto, Authentication auth) {
+        service.atualizarMeuPerfil(auth.getName(), dto);
+        return ResponseEntity.noContent().build();
+    }
 
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'SUPORTE')")
     @PostMapping("/empresa/{empresaId}/estabelecimento/{estabelecimentoId}")
@@ -129,6 +148,23 @@ public class UsuarioController implements ControllerGenerico {
         validator.validarPesquisar(empresaId, estabelecimentoId);
         service.atualizar(id, empresaId, estabelecimentoId, dto);
         return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize(
+        "hasAnyRole('ADMINISTRADOR','SUPORTE') or " +
+        "(hasAnyRole('EMPRESARIO','GERENTE','CAIXA','VENDEDOR') and " +
+        "#empresaId.toString() == principal.claims['empresaId'].toString())"
+    )
+    @GetMapping("/empresa/{empresaId}/vendedores")
+    @Operation(summary = "Listar vendedores da empresa", description = "Retorna todos os usuários com role VENDEDOR e ativos da empresa.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso."),
+            @ApiResponse(responseCode = "403", description = "Usuário não possui permissão para esse recurso"),
+    })
+    public ResponseEntity<List<ResultadoPesquisaUsuarioDTO>> listarVendedores(@PathVariable Integer empresaId) {
+        List<ResultadoPesquisaUsuarioDTO> vendedores = service.listarVendedores(empresaId)
+                .stream().map(mapper::toDTO).toList();
+        return ResponseEntity.ok(vendedores);
     }
 
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'SUPORTE')")

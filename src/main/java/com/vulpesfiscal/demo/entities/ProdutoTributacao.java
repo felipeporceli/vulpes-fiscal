@@ -28,6 +28,9 @@ public class ProdutoTributacao {
     @JoinColumn(name = "empresa_id", nullable = false)
     private Empresa empresa;
 
+    @Column(name = "nome")
+    private String nome;
+
     @Column(name = "uf", length = 2, nullable = false)
     private String uf;
 
@@ -75,7 +78,6 @@ public class ProdutoTributacao {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "criado_por")
-
     private Usuario usuario;
 
     @LastModifiedDate
@@ -83,6 +85,6 @@ public class ProdutoTributacao {
     private LocalDateTime atualizadoEm;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "atualido_por")
+    @JoinColumn(name = "atualizado_por")
     private Usuario atualizadoPor;
 }

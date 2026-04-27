@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 @Data
 public class CadastroProdutoTributacaoDTO {
     public Integer idProduto;
+    public String nome;
     public String uf;
     public String cfop;
     public String cstIcms;

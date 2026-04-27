@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/empresa/{empresaId}/produto-tributacao")
 @RequiredArgsConstructor
@@ -50,6 +52,25 @@ public class ProdutoTributacaoController implements ControllerGenerico {
         return ResponseEntity.created(url).build();
     }
 
+    @PreAuthorize(
+            "hasAnyRole('ADMINISTRADOR','SUPORTE') or " +
+                    "(hasAnyRole('EMPRESARIO','GERENTE','CAIXA','VENDEDOR') and " +
+                    "#empresaId.toString() == principal.claims['empresaId'].toString())"
+    )
+    @Operation(summary = "Listar todas as tributações da empresa.", description = "Retorna todas as tributações cadastradas para a empresa.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso."),
+            @ApiResponse(responseCode = "403", description = "Usuário não possui permissão para esse recurso."),
+    })
+    @GetMapping
+    public ResponseEntity<List<ResultadoPesquisaProdutoTributacaoDTO>> listarPorEmpresa(
+            @PathVariable Integer empresaId
+    ) {
+        List<ResultadoPesquisaProdutoTributacaoDTO> result = service.listarPorEmpresa(empresaId)
+                .stream().map(ResultadoPesquisaProdutoTributacaoDTO::fromEntity).toList();
+        return ResponseEntity.ok(result);
+    }
+
     /* Obter detalhes da tributação por produto e UF. */
     @PreAuthorize(
             "hasAnyRole('ADMINISTRADOR','SUPORTE') or " +
@@ -70,6 +91,27 @@ public class ProdutoTributacaoController implements ControllerGenerico {
     ) {
         ProdutoTributacao tributacao = service.buscarPorProdutoEUf(empresaId, idProduto, uf);
         return ResponseEntity.ok(ResultadoPesquisaProdutoTributacaoDTO.fromEntity(tributacao));
+    }
+
+    @PreAuthorize(
+            "hasAnyRole('ADMINISTRADOR','SUPORTE') or " +
+                    "(hasAnyRole('EMPRESARIO','GERENTE','CAIXA','VENDEDOR') and " +
+                    "#empresaId.toString() == principal.claims['empresaId'].toString())"
+    )
+    @Operation(summary = "Listar tributações de um produto.", description = "Retorna todas as tributações cadastradas para um produto da empresa.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Busca realizada com sucesso."),
+            @ApiResponse(responseCode = "404", description = "Produto não encontrado."),
+            @ApiResponse(responseCode = "403", description = "Usuário não possui permissão para esse recurso."),
+    })
+    @GetMapping("/produto/{idProduto}")
+    public ResponseEntity<List<ResultadoPesquisaProdutoTributacaoDTO>> listarPorProduto(
+            @PathVariable Integer empresaId,
+            @PathVariable Integer idProduto
+    ) {
+        List<ResultadoPesquisaProdutoTributacaoDTO> result = service.listarPorProduto(empresaId, idProduto)
+                .stream().map(ResultadoPesquisaProdutoTributacaoDTO::fromEntity).toList();
+        return ResponseEntity.ok(result);
     }
 
     /* Deletar tributação por id na URL. */
