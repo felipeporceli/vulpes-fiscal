@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -34,6 +35,23 @@ public class UsuarioController implements ControllerGenerico {
     private final UsuarioMapper mapper;
     private final UsuarioValidator validator;
 
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/me")
+    @Operation(summary = "Obter perfil do usuário autenticado")
+    public ResponseEntity<ResultadoPesquisaUsuarioDTO> obterMeuPerfil(Authentication auth) {
+        Usuario usuario = service.obterPorEmail(auth.getName());
+        if (usuario == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(mapper.toDTO(usuario));
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PatchMapping("/me")
+    @Operation(summary = "Atualizar perfil do usuário autenticado")
+    public ResponseEntity<Void> atualizarMeuPerfil(@RequestBody AtualizacaoPerfilDTO dto, Authentication auth) {
+        service.atualizarMeuPerfil(auth.getName(), dto);
+        return ResponseEntity.noContent().build();
+    }
 
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'SUPORTE')")
     @PostMapping("/empresa/{empresaId}/estabelecimento/{estabelecimentoId}")

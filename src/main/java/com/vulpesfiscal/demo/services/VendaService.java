@@ -3,8 +3,6 @@ package com.vulpesfiscal.demo.services;
 import com.vulpesfiscal.demo.controllers.dtos.CadastroItemVendaDTO;
 import com.vulpesfiscal.demo.controllers.dtos.CadastroVendaDTO;
 import com.vulpesfiscal.demo.controllers.dtos.ResultadoPesquisaVendaDTO;
-import com.vulpesfiscal.demo.controllers.dtos.nfce.InfNFe;
-import com.vulpesfiscal.demo.controllers.mappers.NfceMapper;
 import com.vulpesfiscal.demo.entities.*;
 import com.vulpesfiscal.demo.entities.enums.MetodoPagamento;
 import com.vulpesfiscal.demo.entities.enums.StatusPagamento;
@@ -49,7 +47,6 @@ public class VendaService {
     private final ConsumidorRepository consumidorRepository;
     private final EstabelecimentoRepository estabelecimentoRepository;
     private final NfceService nfceService;
-    private final NfceMapper nfceMapper;
     private final NfceRepository nfceRepository;
     private final SecurityService securityService;
     private final UsuarioRepository usuarioRepository;
@@ -192,8 +189,7 @@ public class VendaService {
         vendaSalva.setEmitirNfce(dto.emitirNfce());
 
         if (Boolean.TRUE.equals(dto.emitirNfce())) {
-            System.out.println("NFC-e sendo emitida...");
-            InfNFe nfceDTO = nfceService.gerarNfce(vendaSalva, estabelecimentoId);
+            nfceService.gerarNfce(vendaSalva, estabelecimentoId);
         }
 
         // Obter usuario logado

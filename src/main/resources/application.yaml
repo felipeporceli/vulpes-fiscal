@@ -33,3 +33,11 @@ logging:
     org.springframework.security.oauth2: TRACE
 springdoc:
   override-with-generic-response: false
+
+focusnfe:
+  url: "https://homologacao.focusnfe.com.br"
+  mock: true
+
+encryption:
+  # Em produção, defina via variável de ambiente: ENCRYPTION_SECRET_KEY=<chave-forte>
+  secret-key: ${ENCRYPTION_SECRET_KEY:vulpes-fiscal-dev-key-nao-usar-em-prod}

@@ -505,7 +505,7 @@ function CreateModal({ token, isRestrito, userEmpresaId, empresasOptions, onClos
               </Field>
 
               {consumidorSelecionado && (
-                <div className="bg-blue-50 border border-blue-100 rounded-xl px-4 py-3 grid grid-cols-3 gap-3">
+                <div className="bg-blue-50 border border-blue-100 rounded-xl px-4 py-3 grid grid-cols-4 gap-3">
                   <div>
                     <p className="text-sm text-slate-400 mb-0.5">Nome</p>
                     <p className="text-sm font-semibold text-slate-700">{consumidorSelecionado.nome ?? '—'}</p>
@@ -517,6 +517,10 @@ function CreateModal({ token, isRestrito, userEmpresaId, empresasOptions, onClos
                   <div>
                     <p className="text-sm text-slate-400 mb-0.5">Telefone</p>
                     <p className="text-sm font-semibold text-slate-700">{consumidorSelecionado.telefone ?? '—'}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-slate-400 mb-0.5">UF</p>
+                    <p className="text-sm font-semibold text-slate-700">{consumidorSelecionado.uf ?? '—'}</p>
                   </div>
                 </div>
               )}

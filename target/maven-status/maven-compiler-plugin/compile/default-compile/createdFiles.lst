@@ -25,6 +25,7 @@ com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/ibscbs/gibscbs/gcbs/gdif
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/ibscbs/gibscbsmono/gmonoret/GMonoRetDTO.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/IdeDTO.class
 com/vulpesfiscal/demo/validator/ProdutoValidator.class
+com/vulpesfiscal/demo/controllers/NfceController.class
 com/vulpesfiscal/demo/controllers/mappers/VendaMapper.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/ibscbs/gibscbs/gibsuf/gdevtrib/GDevTribDTO.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/ImpostoDTO.class
@@ -34,7 +35,10 @@ com/vulpesfiscal/demo/controllers/dtos/ResultadoPesquisaEstabelecimentoDTO.class
 com/vulpesfiscal/demo/controllers/ProdutoController.class
 com/vulpesfiscal/demo/common/GlobalExceptionHandler.class
 com/vulpesfiscal/demo/controllers/dtos/CadastroProdutoTributacaoDTO.class
+com/vulpesfiscal/demo/security/TokenEncryptionConverter.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/ipi/IPIDTO.class
+com/vulpesfiscal/demo/config/FocusNfceProperties.class
+com/vulpesfiscal/demo/controllers/dtos/focusnfe/FocusNfceResponseDTO.class
 com/vulpesfiscal/demo/controllers/dtos/AtualizacaoEstabelecimentoDTO.class
 com/vulpesfiscal/demo/exceptions/CampoInvalidoException.class
 com/vulpesfiscal/demo/controllers/dtos/ErroResposta$ErroRespostaBuilder.class
@@ -42,6 +46,7 @@ com/vulpesfiscal/demo/security/JwtTokenCustomizer.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/total/ibscbstot/gmono/GMonoDTO.class
 com/vulpesfiscal/demo/exceptions/EstabelecimentoNaoEncontrado.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/DestDTO.class
+com/vulpesfiscal/demo/controllers/EmpresaController$TokenFocusNfeDTO.class
 com/vulpesfiscal/demo/security/oauth2/OAuth2ResourceOwnerPasswordAuthenticationToken.class
 com/vulpesfiscal/demo/exceptions/TributacaoNaoEncontradaException.class
 com/vulpesfiscal/demo/controllers/mappers/ConsumidorMapper.class
@@ -50,8 +55,10 @@ com/vulpesfiscal/demo/services/nfce/det/imposto/CofinsService$1.class
 com/vulpesfiscal/demo/repositories/PagamentoRepository.class
 com/vulpesfiscal/demo/services/nfce/det/DfeReferenciadoService.class
 com/vulpesfiscal/demo/controllers/mappers/EmpresaResponseMapper.class
+com/vulpesfiscal/demo/config/EncryptionProperties.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/icmsufdest/ICMSUFDestDTO.class
 com/vulpesfiscal/demo/controllers/PagamentoController.class
+com/vulpesfiscal/demo/controllers/dtos/focusnfe/FocusNfceRequestDTO$FocusNfceRequestDTOBuilder.class
 com/vulpesfiscal/demo/controllers/dtos/CadastroUsuarioDTO.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/pis/PISQtdeDTO.class
 com/vulpesfiscal/demo/security/CustomUserDetails.class
@@ -89,6 +96,7 @@ com/vulpesfiscal/demo/entities/Client.class
 com/vulpesfiscal/demo/controllers/ConsumidorController.class
 com/vulpesfiscal/demo/security/PemUtils.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/icms/ICMSDTO.class
+com/vulpesfiscal/demo/controllers/dtos/focusnfe/FocusNfceFormaPagamentoDTO.class
 com/vulpesfiscal/demo/controllers/dtos/ResultadoPesquisaProdutoDTO.class
 com/vulpesfiscal/demo/controllers/dtos/AtualizacaoProdutoDTO.class
 com/vulpesfiscal/demo/controllers/dtos/CadastroEmpresaDTO.class
@@ -103,6 +111,7 @@ com/vulpesfiscal/demo/controllers/dtos/nfce/total/ibscbstot/gibs/GIBSDTO.class
 com/vulpesfiscal/demo/controllers/dtos/ResultadoPesquisaUsuarioDTO.class
 com/vulpesfiscal/demo/controllers/mappers/NfceMapperImpl.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/icms/ICMSSTDTO.class
+com/vulpesfiscal/demo/controllers/dtos/focusnfe/FocusNfceFormaPagamentoDTO$FocusNfceFormaPagamentoDTOBuilder.class
 com/vulpesfiscal/demo/controllers/mappers/ProdutoMapperImpl.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/pis/PISAliqDTO.class
 com/vulpesfiscal/demo/controllers/specs/EmpresaSpecs.class
@@ -127,6 +136,7 @@ com/vulpesfiscal/demo/controllers/dtos/AtualizacaoConsumidorDTO.class
 com/vulpesfiscal/demo/controllers/dtos/EstabelecimentoResponseDTO.class
 com/vulpesfiscal/demo/repositories/VendaRepository.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/icms/ICMS90DTO.class
+com/vulpesfiscal/demo/controllers/dtos/focusnfe/FocusNfceItemDTO.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/cofins/COFINSDTO.class
 com/vulpesfiscal/demo/exceptions/PagamentoNaoEncontradoException.class
 com/vulpesfiscal/demo/controllers/dtos/ErroResposta.class
@@ -136,6 +146,7 @@ com/vulpesfiscal/demo/controllers/dtos/nfce/det/impostodevol/ipi/IPIDTO.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/obsitem/ObsItemDTO.class
 com/vulpesfiscal/demo/controllers/dtos/ErroCampo$ErroCampoBuilder.class
 com/vulpesfiscal/demo/services/UsuarioService.class
+com/vulpesfiscal/demo/controllers/dtos/focusnfe/FocusNfceItemDTO$FocusNfceItemDTOBuilder.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/NfceResponseDTO.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/icms/ICMS40DTO.class
 com/vulpesfiscal/demo/exceptions/ConsumidorNaoEncontradoException.class
@@ -168,6 +179,7 @@ com/vulpesfiscal/demo/services/nfce/EmitenteService.class
 com/vulpesfiscal/demo/controllers/mappers/ConsumidorMapperImpl.class
 com/vulpesfiscal/demo/controllers/mappers/NfceMapper.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/icms/ICMSSN900DTO.class
+com/vulpesfiscal/demo/controllers/dtos/focusnfe/FocusNfceRequestDTO.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/DetDTO.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/ibscbs/GCredPresIBSZFMDTO.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/issqn/ISSQNDTO.class
@@ -180,6 +192,7 @@ com/vulpesfiscal/demo/exceptions/TributacaoNaoPertenceAEmpresaException.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/icms/ICMS02DTO.class
 com/vulpesfiscal/demo/repositories/EstabelecimentoRepository.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/ibscbs/gibscbs/gtribregular/GTribRegularDTO.class
+com/vulpesfiscal/demo/config/AppConfig.class
 com/vulpesfiscal/demo/entities/Estabelecimento.class
 com/vulpesfiscal/demo/controllers/LoginViewController.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/icms/ICMSPartDTO.class
@@ -254,6 +267,8 @@ com/vulpesfiscal/demo/services/nfce/det/imposto/ICMSService$1.class
 com/vulpesfiscal/demo/common/CustomAccessDeniedHandler.class
 com/vulpesfiscal/demo/controllers/mappers/ProdutoMapper.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/ibscbs/gibscbs/gibsmun/gdif/GDifDTO.class
+com/vulpesfiscal/demo/controllers/ProdutoTributacaoAdminController.class
+com/vulpesfiscal/demo/controllers/dtos/ResultadoPesquisaNfceDTO.class
 com/vulpesfiscal/demo/controllers/dtos/ResultadoPesquisaProdutoTributacaoDTO.class
 com/vulpesfiscal/demo/entities/Pagamento.class
 com/vulpesfiscal/demo/controllers/ClientController.class

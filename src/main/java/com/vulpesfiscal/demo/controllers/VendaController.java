@@ -5,7 +5,6 @@ import com.vulpesfiscal.demo.controllers.dtos.ResultadoPesquisaVendaDTO;
 import com.vulpesfiscal.demo.controllers.dtos.VendaResponseDTO;
 import com.vulpesfiscal.demo.controllers.mappers.VendaMapper;
 import com.vulpesfiscal.demo.entities.Venda;
-import com.vulpesfiscal.demo.services.NfceService;
 import com.vulpesfiscal.demo.services.VendaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -29,7 +28,6 @@ public class VendaController {
 
     private final VendaService vendaService;
     private final VendaMapper vendaMapper;
-    private final NfceService nfceService;
 
     @PreAuthorize("hasAnyRole('ADMINISTRADOR','SUPORTE')")
     @Operation(summary = "Pesquisa global de Vendas.", description = "Pesquisa vendas sem restrição de empresa (ADMINISTRADOR/SUPORTE).")
@@ -103,19 +101,9 @@ public class VendaController {
             @RequestBody @Valid CadastroVendaDTO dto
     ) {
 
-        Venda venda = vendaService.criarVenda(
-                dto,
-                empresaId,
-                estabelecimentoId
-        );
+        Venda venda = vendaService.criarVenda(dto, empresaId, estabelecimentoId);
 
-        if (dto.emitirNfce() == true) {
-            nfceService.gerarNfce(venda, estabelecimentoId);
-        }
-
-        return ResponseEntity.ok(
-                vendaMapper.toResponseDTO(venda)
-        );
+        return ResponseEntity.ok(vendaMapper.toResponseDTO(venda));
     }
 }
 
