@@ -12,6 +12,9 @@ public interface UsuarioMapper {
     @Mapping(source = "senha", target = "senha")
     Usuario toEntity(CadastroUsuarioDTO dto);
 
+    @Mapping(source = "empresa.id",        target = "empresaId")
+    @Mapping(source = "estabelecimento.id", target = "estabelecimentoId")
+    @Mapping(target = "senhaHash",          ignore = true)
     ResultadoPesquisaUsuarioDTO toDTO(Usuario usuario);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)

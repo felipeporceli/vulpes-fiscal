@@ -1052,7 +1052,6 @@ export default function VendasPage() {
                   <thead>
                     <tr className="bg-slate-50 border-b border-slate-100">
                       {[
-                        { label: 'ID',         col: 'id',             px: 'px-6' },
                         { label: 'Consumidor', col: 'consumidorNome', px: 'px-4' },
                         { label: 'Valor Final',col: 'valorTotal',     px: 'px-4' },
                         { label: 'Parcelas',   col: 'parcelas',       px: 'px-4' },
@@ -1075,7 +1074,6 @@ export default function VendasPage() {
                   <tbody className="divide-y divide-slate-100">
                     {items.map(v => (
                       <tr key={v.id} className="hover:bg-slate-50 transition-colors">
-                        <td className="px-6 py-4 font-semibold text-slate-800 text-xs font-mono">#{v.id}</td>
                         <td className="px-4 py-4 text-slate-700 text-xs max-w-[180px] truncate">{v.consumidorNome ?? '—'}</td>
                         <td className="px-4 py-4 text-slate-700 text-xs font-semibold">{fmtMoeda(v.valorFinal ?? v.valorTotal)}</td>
                         <td className="px-4 py-4 text-slate-500 text-xs text-center">{v.parcelas ?? 1}</td>

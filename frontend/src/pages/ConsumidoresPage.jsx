@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { exportCsvConsumidor, exportXlsxConsumidor, EXPORT_MAX_ROWS } from '../utils/exportUtils';
+import { maskCpf, maskTelefone } from '../utils/masks';
 
 const API = import.meta.env.VITE_API_URL ?? '';
 
@@ -19,13 +20,6 @@ function formatCpf(v) {
     : v;
 }
 
-function maskCpf(raw) {
-  let v = raw.replace(/\D/g, '').slice(0, 11);
-  if (v.length > 9)      v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, '$1.$2.$3-$4');
-  else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3');
-  else if (v.length > 3) v = v.replace(/(\d{3})(\d{0,3})/, '$1.$2');
-  return v;
-}
 
 function isValidCpf(raw) {
   const n = raw.replace(/\D/g, '');
@@ -356,7 +350,7 @@ function CreateModal({ token, isRestrito, userEmpresaId, empresasOptions, onClos
                 <input type="email" value={form.email} onChange={set('email')} className={ec('email')} placeholder="email@exemplo.com" />
               )}
               {field('telefone', 'Telefone', true,
-                <input value={form.telefone} onChange={set('telefone')} className={ec('telefone')} placeholder="(11) 99999-9999" />
+                <input value={form.telefone} onChange={(e) => setForm((p) => ({ ...p, telefone: maskTelefone(e.target.value) }))} className={ec('telefone')} placeholder="(11) 99999-9999" />
               )}
               {field('inscricaoEstadual', 'Inscrição Estadual', false,
                 <input value={form.inscricaoEstadual} onChange={set('inscricaoEstadual')} className={inputCls()} />
@@ -502,10 +496,14 @@ function EditModal({ consumidor, empresaId, token, onClose, onSaved }) {
         {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-          body: JSON.stringify({
-            ...form,
-            cep: form.cep ? form.cep.replace(/\D/g, '') : null,
-          }),
+          body: JSON.stringify(
+            Object.fromEntries(
+              Object.entries({
+                ...form,
+                cep: form.cep ? form.cep.replace(/\D/g, '') : null,
+              }).map(([k, v]) => [k, typeof v === 'string' && v === '' ? null : v])
+            )
+          ),
         }
       );
       if (!res.ok) {
@@ -548,7 +546,7 @@ function EditModal({ consumidor, empresaId, token, onClose, onSaved }) {
             </div>
             <div>
               <label className={labelCls()}>Telefone</label>
-              <input value={form.telefone} onChange={set('telefone')} className={inputCls()} />
+              <input value={form.telefone} onChange={(e) => setForm((p) => ({ ...p, telefone: maskTelefone(e.target.value) }))} className={inputCls()} placeholder="(11) 99999-9999" />
             </div>
             <div>
               <label className={labelCls()}>Inscrição Estadual</label>
@@ -968,7 +966,7 @@ export default function ConsumidoresPage() {
           </div>
           <div>
             <label className="block text-xs font-medium text-slate-500 mb-1">Telefone</label>
-            <input value={filters.telefone} onChange={setF('telefone')} className={inputCls()} placeholder="(11) 99999-9999" />
+            <input value={filters.telefone} onChange={(e) => setFilters((p) => ({ ...p, telefone: maskTelefone(e.target.value) }))} className={inputCls()} placeholder="(11) 99999-9999" />
           </div>
           <div>
             <label className="block text-xs font-medium text-slate-500 mb-1">Município</label>
