@@ -216,6 +216,7 @@ com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/cofins/COFINSAliqDTO.cla
 com/vulpesfiscal/demo/controllers/dtos/nfce/total/ibscbstot/gestornocred/GEstornoCredDTO.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/ibscbs/gibscbs/gibsuf/GIBSUfDTO.class
 com/vulpesfiscal/demo/services/nfce/DestinatarioService.class
+com/vulpesfiscal/demo/controllers/dtos/AtualizacaoPerfilDTO.class
 com/vulpesfiscal/demo/security/oauth2/OAuth2ResourceOwnerPasswordAuthenticationProvider.class
 com/vulpesfiscal/demo/controllers/mappers/EstabelecimentoMapper.class
 com/vulpesfiscal/demo/controllers/dtos/nfce/det/imposto/icms/ICMS20DTO.class

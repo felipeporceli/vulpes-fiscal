@@ -31,9 +31,6 @@ public class Usuario {
     @JoinColumn(name = "estabelecimento_id", nullable = false)
     private Estabelecimento estabelecimento;
 
-    @Column(name = "perfil_id")
-    private Integer perfilId;
-
     @Column(name = "nome")
     private String nome;
 

@@ -9,7 +9,6 @@ import {
   Building2,
   Settings,
   LogOut,
-  Bell,
   TrendingUp,
   TrendingDown,
   ChevronRight,
@@ -42,7 +41,7 @@ const BASE_NAV = [
   { id: 'nfce',             icon: FileText,        label: 'NFC-e'            },
   { id: 'consumidores',     icon: Users,           label: 'Consumidores'     },
   { id: 'estabelecimentos', icon: Building2,       label: 'Estabelecimentos' },
-  { id: 'configuracoes',    icon: Settings,        label: 'Configurações'    },
+  { id: 'usuarios',         icon: UserCircle,      label: 'Usuários'         },
 ];
 
 const PRODUTOS_SUBNAV = [
@@ -708,8 +707,7 @@ export default function MainPage() {
       case 'tributacao':       return <TributacaoPage />;
       case 'consumidores':     return <ConsumidoresPage />;
       case 'estabelecimentos': return <EstabelecimentosPage />;
-      case 'perfil':           return <UsuariosPage />;
-      case 'configuracoes':    return <ComingSoon label="Configurações" />;
+      case 'usuarios':         return <UsuariosPage />;
       default:                 return <DashboardContent token={token} user={user} onNavigate={setActivePage} />;
     }
   }
@@ -736,11 +734,6 @@ export default function MainPage() {
           </button>
 
           <div className="flex items-center gap-3 ml-auto">
-            <button className="relative p-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors">
-              <Bell size={19} />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-vulpes-orange" />
-            </button>
-
             {/* User menu trigger */}
             <div ref={menuRef} className="relative pl-3 border-l border-slate-100 dark:border-slate-700">
               <button
@@ -781,7 +774,7 @@ export default function MainPage() {
                   </button>
 
                   <button
-                    onClick={() => { setShowUserMenu(false); setActivePage('perfil'); }}
+                    onClick={() => { setShowUserMenu(false); setActivePage('usuarios'); }}
                     className="w-full flex items-center gap-3 px-4 py-2.5 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/60 text-sm transition-colors"
                   >
                     <UserCircle size={15} className="flex-shrink-0 text-slate-400" />

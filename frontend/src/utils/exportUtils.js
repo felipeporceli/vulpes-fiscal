@@ -442,6 +442,48 @@ export function exportXlsxProduto(data, baseName = 'produtos') {
   ], 'Produtos', baseName);
 }
 
+// ─── Colunas de Usuário (id omitido intencionalmente) ────────────────────────
+export const USUARIO_EXPORT_COLUMNS = [
+  { header: 'Nome',              key: 'nome'              },
+  { header: 'E-mail',            key: 'email'             },
+  { header: 'Username',          key: 'username'          },
+  { header: 'Telefone',          key: 'telefone'          },
+  { header: 'Perfil',            key: 'roles'             },
+  { header: 'Status',            key: 'ativo'             },
+  { header: 'Empresa ID',        key: 'empresaId'         },
+  { header: 'Estabelecimento ID',key: 'estabelecimentoId' },
+];
+
+function toRowUsuario(u) {
+  return [
+    sanitize(u.nome),
+    sanitize(u.email),
+    sanitize(u.username),
+    sanitize(u.telefone),
+    sanitize((u.roles?.[0] ?? '').replace('ROLE_', '')),
+    sanitize(u.ativo ? 'Ativo' : 'Inativo'),
+    sanitize(u.empresaId),
+    sanitize(u.estabelecimentoId),
+  ];
+}
+
+export function exportCsvUsuario(data, baseName = 'usuarios') {
+  exportCsvInternal(data, USUARIO_EXPORT_COLUMNS, toRowUsuario, baseName);
+}
+
+export function exportXlsxUsuario(data, baseName = 'usuarios') {
+  exportXlsxInternal(data, USUARIO_EXPORT_COLUMNS, toRowUsuario, [
+    { wch: 32 }, // Nome
+    { wch: 36 }, // E-mail
+    { wch: 20 }, // Username
+    { wch: 18 }, // Telefone
+    { wch: 18 }, // Perfil
+    { wch: 10 }, // Status
+    { wch: 12 }, // Empresa ID
+    { wch: 18 }, // Estabelecimento ID
+  ], 'Usuários', baseName);
+}
+
 /** Exporta array de estabelecimentos como CSV. */
 export function exportCsvEstabelecimento(data, baseName = 'estabelecimentos') {
   exportCsvInternal(data, ESTABELECIMENTO_EXPORT_COLUMNS, toRowEstabelecimento, baseName);

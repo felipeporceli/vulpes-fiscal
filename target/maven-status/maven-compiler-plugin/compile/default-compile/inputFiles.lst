@@ -26,6 +26,7 @@
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/AtualizacaoEmpresaDTO.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/AtualizacaoEstabelecimentoDTO.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/AtualizacaoPagamentoDTO.java
+/home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/AtualizacaoPerfilDTO.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/AtualizacaoProdutoDTO.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/AtualizacaoUsuarioDTO.java
 /home/felipe/Desktop/vulpes-fiscal/vulpes-fiscal/src/main/java/com/vulpesfiscal/demo/controllers/dtos/CadastroConsumidorDTO.java

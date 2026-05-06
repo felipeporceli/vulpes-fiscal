@@ -420,8 +420,8 @@ function ContactSection() {
             <div className="space-y-5">
               {[
                 { icon: Mail,   label: 'E-mail',      value: 'contato@vulpesfiscal.com.br' },
-                { icon: Phone,  label: 'Telefone',    value: '(11) 9 0000-0000' },
-                { icon: MapPin, label: 'Localização', value: 'São Paulo, SP — Brasil' },
+                { icon: Phone,  label: 'Telefone',    value: '(14) 99666-1711' },
+                { icon: MapPin, label: 'Localização', value: 'Rua da Cabiuna, 5 — Vila Independência, Assis/SP' },
               ].map((item) => (
                 <div key={item.label} className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-xl bg-vulpes-orange/15 flex items-center justify-center flex-shrink-0">

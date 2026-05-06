@@ -15,9 +15,6 @@ import java.util.List;
 @Schema(name = "Usuario")
 public record CadastroUsuarioDTO(
 
-        @NotNull(message = "Campo obrigatório")
-        Integer perfilId,
-
         @NotBlank(message = "Campo obrigatório")
         String nome,
 

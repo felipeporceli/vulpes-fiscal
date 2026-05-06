@@ -10,6 +10,7 @@ import {
   exportXlsxEstabelecimento,
   EXPORT_MAX_ROWS,
 } from '../utils/exportUtils';
+import { maskTelefone } from '../utils/masks';
 
 const API = import.meta.env.VITE_API_URL ?? '';
 
@@ -291,7 +292,7 @@ function CreateModal({ token, isRestrito, userEmpresaId, empresasOptions, onClos
                 </select>
               </Field>
               <Field k="telefone" label="Telefone" errors={errors}>
-                <input value={form.telefone} onChange={set('telefone')} className={inputCls()} placeholder="(11) 99999-9999" />
+                <input value={form.telefone} onChange={(e) => setForm((p) => ({ ...p, telefone: maskTelefone(e.target.value) }))} className={inputCls()} placeholder="(11) 99999-9999" />
               </Field>
               <Field k="email" label="E-mail" errors={errors}>
                 <input type="email" value={form.email} onChange={set('email')} className={inputCls()} placeholder="email@exemplo.com" />
@@ -577,7 +578,7 @@ function EditModal({ estabelecimento, empresaId, token, onClose, onSaved }) {
               </div>
               <div>
                 <label className={labelCls()}>Telefone</label>
-                <input value={form.telefone} onChange={set('telefone')} className={inputCls()} />
+                <input value={form.telefone} onChange={(e) => setForm((p) => ({ ...p, telefone: maskTelefone(e.target.value) }))} className={inputCls()} placeholder="(11) 99999-9999" />
               </div>
               <div>
                 <label className={labelCls()}>E-mail</label>
