@@ -68,7 +68,6 @@ public class UsuarioService {
     }
 
     public Page<Usuario> pesquisar(Integer id,
-                                     Integer perfilId,
                                      String nome,
                                      String email,
                                      Boolean ativo,
@@ -91,10 +90,6 @@ public class UsuarioService {
             specification = specification.and(UsuarioSpecs.idIgual(id));
 
         }
-        if (perfilId != null) {
-            specification = specification.and(UsuarioSpecs.perfilIdIgual(perfilId));
-        }
-
         if (nome != null) {
             specification = specification.and(UsuarioSpecs.nomeLike(nome));
         }
@@ -176,9 +171,11 @@ public class UsuarioService {
     public void atualizarMeuPerfil(String email, AtualizacaoPerfilDTO dto) {
         Usuario usuario = repository.findByEmail(email);
         if (usuario == null) throw new UsuarioNaoEncontradoException("Usuário não encontrado.");
-        if (dto.nome()     != null && !dto.nome().isBlank())     usuario.setNome(dto.nome());
-        if (dto.telefone() != null)                              usuario.setTelefone(dto.telefone());
-        if (dto.senha()    != null && !dto.senha().isBlank())    usuario.setSenha(encoder.encode(dto.senha()));
+        if (dto.nome()     != null && !dto.nome().isBlank())    usuario.setNome(dto.nome());
+        if (dto.email()    != null && !dto.email().isBlank())   usuario.setEmail(dto.email());
+        if (dto.telefone() != null)                             usuario.setTelefone(dto.telefone());
+        if (dto.senha()    != null && !dto.senha().isBlank())   usuario.setSenha(encoder.encode(dto.senha()));
+        usuario.setAtualizadoPor(usuario);
         repository.save(usuario);
     }
 

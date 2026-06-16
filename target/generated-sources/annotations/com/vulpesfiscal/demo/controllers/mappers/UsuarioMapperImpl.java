@@ -3,6 +3,8 @@ package com.vulpesfiscal.demo.controllers.mappers;
 import com.vulpesfiscal.demo.controllers.dtos.AtualizacaoUsuarioDTO;
 import com.vulpesfiscal.demo.controllers.dtos.CadastroUsuarioDTO;
 import com.vulpesfiscal.demo.controllers.dtos.ResultadoPesquisaUsuarioDTO;
+import com.vulpesfiscal.demo.entities.Empresa;
+import com.vulpesfiscal.demo.entities.Estabelecimento;
 import com.vulpesfiscal.demo.entities.Usuario;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-04-26T22:16:44-0300",
+    date = "2026-05-06T20:31:37-0300",
     comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.10 (Oracle Corporation)"
 )
 @Component
@@ -26,7 +28,6 @@ public class UsuarioMapperImpl implements UsuarioMapper {
         Usuario usuario = new Usuario();
 
         usuario.setSenha( dto.senha() );
-        usuario.setPerfilId( dto.perfilId() );
         usuario.setNome( dto.nome() );
         usuario.setEmail( dto.email() );
         usuario.setUsername( dto.username() );
@@ -47,27 +48,32 @@ public class UsuarioMapperImpl implements UsuarioMapper {
             return null;
         }
 
+        Integer empresaId = null;
+        Integer estabelecimentoId = null;
         Integer id = null;
-        Integer perfilId = null;
         String nome = null;
         String email = null;
         String username = null;
         String telefone = null;
         Boolean ativo = null;
+        List<String> roles = null;
 
+        empresaId = usuarioEmpresaId( usuario );
+        estabelecimentoId = usuarioEstabelecimentoId( usuario );
         id = usuario.getId();
-        perfilId = usuario.getPerfilId();
         nome = usuario.getNome();
         email = usuario.getEmail();
         username = usuario.getUsername();
         telefone = usuario.getTelefone();
         ativo = usuario.getAtivo();
+        List<String> list = usuario.getRoles();
+        if ( list != null ) {
+            roles = new ArrayList<String>( list );
+        }
 
-        Integer empresaId = null;
-        Integer estabelecimentoId = null;
         String senhaHash = null;
 
-        ResultadoPesquisaUsuarioDTO resultadoPesquisaUsuarioDTO = new ResultadoPesquisaUsuarioDTO( id, perfilId, empresaId, estabelecimentoId, nome, email, username, telefone, senhaHash, ativo );
+        ResultadoPesquisaUsuarioDTO resultadoPesquisaUsuarioDTO = new ResultadoPesquisaUsuarioDTO( id, empresaId, estabelecimentoId, nome, email, username, telefone, senhaHash, ativo, roles );
 
         return resultadoPesquisaUsuarioDTO;
     }
@@ -78,9 +84,6 @@ public class UsuarioMapperImpl implements UsuarioMapper {
             return usuario;
         }
 
-        if ( dto.perfilId() != null ) {
-            usuario.setPerfilId( dto.perfilId() );
-        }
         if ( dto.nome() != null ) {
             usuario.setNome( dto.nome() );
         }
@@ -101,5 +104,21 @@ public class UsuarioMapperImpl implements UsuarioMapper {
         }
 
         return usuario;
+    }
+
+    private Integer usuarioEmpresaId(Usuario usuario) {
+        Empresa empresa = usuario.getEmpresa();
+        if ( empresa == null ) {
+            return null;
+        }
+        return empresa.getId();
+    }
+
+    private Integer usuarioEstabelecimentoId(Usuario usuario) {
+        Estabelecimento estabelecimento = usuario.getEstabelecimento();
+        if ( estabelecimento == null ) {
+            return null;
+        }
+        return estabelecimento.getId();
     }
 }

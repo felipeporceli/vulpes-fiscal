@@ -60,7 +60,5 @@ public class UsuarioSpecs {
         return (root, query, cb) -> cb.equal(root.get("ativo"), ativo);
     }
 
-    public static Specification<Usuario> perfilIdIgual (Integer perfilId) {
-        return (root, query, cb) -> cb.equal(root.get("perfilId"), perfilId);
-    }
+
 }

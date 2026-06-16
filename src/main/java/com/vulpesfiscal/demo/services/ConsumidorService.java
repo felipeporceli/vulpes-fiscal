@@ -146,12 +146,13 @@ public class ConsumidorService {
             );
         }
 
+        mapper.toEntityUpdate(dto, consumidor);
+
         // Obter usuario logado
         String login = securityService.obterLoginUsuarioLogado();
         Usuario usuarioLogado = usuarioRepository.findByEmail(login);
         consumidor.setAtualizadoPor(usuarioLogado);
 
-        mapper.toEntityUpdate(dto, consumidor);
         repository.save(consumidor);
     }
 }

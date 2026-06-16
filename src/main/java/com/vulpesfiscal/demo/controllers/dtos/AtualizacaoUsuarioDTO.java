@@ -19,8 +19,7 @@ public record AtualizacaoUsuarioDTO(
         String username,
         String telefone,
         Boolean ativo,
-        Integer estabelecimentoId,
-        Integer perfilId
+        Integer estabelecimentoId
 ){
 }
 

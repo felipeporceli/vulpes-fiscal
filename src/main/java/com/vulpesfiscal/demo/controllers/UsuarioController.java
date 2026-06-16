@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -74,6 +75,39 @@ public class UsuarioController implements ControllerGenerico {
         return ResponseEntity.created(url).build();
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping
+    @Operation(summary = "Pesquisa de usuários", description = "ADMIN/SUPORTE pesquisam livremente; demais perfis veem apenas a própria empresa.")
+    public ResponseEntity<Page<ResultadoPesquisaUsuarioDTO>> pesquisaGlobal(
+            @RequestParam(value = "id",                required = false) Integer id,
+            @RequestParam(value = "nome",              required = false) String  nome,
+            @RequestParam(value = "email",             required = false) String  email,
+            @RequestParam(value = "ativo",             required = false) Boolean ativo,
+            @RequestParam(value = "empresa-id",        required = false) Integer empresaId,
+            @RequestParam(value = "estabelecimento-id",required = false) Integer estabelecimentoId,
+            @RequestParam(value = "username",          required = false) String  username,
+            @RequestParam(value = "cpf",               required = false) String  cpf,
+            @RequestParam(value = "telefone",          required = false) String  telefone,
+            @RequestParam(value = "pagina",            defaultValue = "0")  Integer pagina,
+            @RequestParam(value = "tamanho-pagina",    defaultValue = "10") Integer tamanhoPagina,
+            Authentication auth
+    ) {
+        boolean isAdmin = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMINISTRADOR") || a.getAuthority().equals("ROLE_SUPORTE"));
+
+        if (!isAdmin) {
+            Jwt jwt = (Jwt) auth.getPrincipal();
+            Object claim = jwt.getClaim("empresaId");
+            empresaId = claim != null ? ((Number) claim).intValue() : null;
+        }
+
+        Page<Usuario> paginaResultado = service.pesquisar(
+                id, nome, email, ativo,
+                empresaId, estabelecimentoId, username, cpf, null, telefone,
+                pagina, tamanhoPagina);
+        return ResponseEntity.ok(paginaResultado.map(mapper::toDTO));
+    }
+
     /* Obter detalhes por ID obtendo filtros opcionais pela URL, busca produtos paginados no banco e devolve o
     resultado convertido para DTO. */
     @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'SUPORTE')")
@@ -88,9 +122,6 @@ public class UsuarioController implements ControllerGenerico {
     public ResponseEntity<Page<ResultadoPesquisaUsuarioDTO>> pesquisa (
             @RequestParam (value = "id", required = false)
             Integer id,
-
-            @RequestParam (value = "perfil-id", required = false)
-            Integer perfilId,
 
             @RequestParam (value = "nome", required = false)
             String nome,
@@ -123,7 +154,7 @@ public class UsuarioController implements ControllerGenerico {
 
             @PathVariable Integer estabelecimentoId
     ) {
-        Page<Usuario> paginaResultado = service.pesquisar(id, perfilId, nome, email, ativo, empresaId,
+        Page<Usuario> paginaResultado = service.pesquisar(id, nome, email, ativo, empresaId,
                 estabelecimentoId, username, cpf, roles, telefone, pagina, tamanhoPagina);
         Page<ResultadoPesquisaUsuarioDTO> resultado = paginaResultado.map(mapper::toDTO);
         return ResponseEntity.ok(resultado);
